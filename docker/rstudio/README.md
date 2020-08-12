@@ -1,5 +1,7 @@
 # RStudio
 
+https://hub.docker.com/r/taroyabuki/rstudio
+
 ## 使い方
 
 ```bash
