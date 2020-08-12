@@ -21,8 +21,8 @@ RUN install2.r --error \
   zoo
 
 RUN installGithub.r \
-  vqv/ggbiplot \
-  rstudio/keras
+  rstudio/keras \
+  vqv/ggbiplot
 
 RUN Rscript -e "reticulate::install_miniconda();\
                 keras::install_keras()"

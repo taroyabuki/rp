@@ -3,11 +3,12 @@
 ## 使い方
 
 ```bash
-docker run -e DISABLE_AUTH=true -d -p 8787:8787 -v ${PWD}:/home/rstudio/work --name rs taroyabuki/test-r
-# -e DISABLE_AUTH=true　　パスワードなし（セキュリティ低下）
-# -d　　バックグラウンドで動作させる．
-# -p 8787:8787　　ホストのポート8787をコンテナのポート8787に転送する．
-# --name rs　　名前をrsにする（変更可）
+docker run -e DISABLE_AUTH=true -d -p 8787:8787 -v ${PWD}:/home/rstudio/work --name rs taroyabuki/rstudio
+# -e DISABLE_AUTH=true         パスワードなし（セキュリティ低下）
+# -d                           バックグラウンドで動作させる．
+# -p 8787:8787                 ホストのポート8787をコンテナのポート8787に転送する．
+# -v ${PWD}:/home/rstudio/work 作業フォルダの共有
+# --name rs                    名前をrsにする（変更可）
 ```
 
 ホスト側で8787を使っているなら，`-p 8080:8787`などとして，別のポートを使う．
