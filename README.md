@@ -1,7 +1,5 @@
 # rp
 
-test
-
 ## Docker
 
 * [Jupyter notebookを使う場合（R・Python）](docker/jupyter)
