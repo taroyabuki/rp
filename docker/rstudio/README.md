@@ -16,13 +16,3 @@ docker run -e DISABLE_AUTH=true -d -p 8787:8787 -v ${PWD}:/home/rstudio/work --n
 ホスト側で8787を使っているなら，`-p 8080:8787`などとして，別のポートを使う．
 
 ブラウザでhttp://localhost:8787 を開く．（ポートを変えた場合は数値を変える．）
-
-## 補足
-
-図表作成環境の構築
-
-```bash
-docker exec -it rs bash
-#bash -c "echo 'Acquire::http::Proxy \"http://10.100.192.4:3142/\";' >> /etc/apt/apt.conf.d/02proxy"
-apt-get update && apt-get install -y texlive-extra-utils # for pdfcrop
-```

@@ -1,28 +1,27 @@
-FROM rocker/tidyverse
+FROM rocker/ml
 
 RUN install2.r --error \
   caret \
   doParallel \
   e1071 \
   epitools \
-  feasts \
   forecast \
   furrr \
   ggrepel \
-  glmnet \
   gplots \
   gridExtra \
-  leaps \
-  psych \
   ROCR \
   randomForest \
   rpart.plot \
-  xgboost \
-  zoo
+  tsibble \
+  xgboost
 
 RUN installGithub.r \
-  rstudio/keras \
   vqv/ggbiplot
 
-RUN Rscript -e "reticulate::install_miniconda();\
-                keras::install_keras()"
+# 必要かも
+#  feasts \
+#  glmnet \
+#  leaps \
+#  psych \
+#  zoo
