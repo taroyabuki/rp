@@ -24,7 +24,7 @@ USER rstudio
 RUN Rscript -e '\
   reticulate::install_miniconda();\
   keras::install_keras();\
-  saveRDS(keras::dataset_mnist(), "/home/rstudio/mnist.obj");'
+  saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
 USER root
 
 # 必要かも
