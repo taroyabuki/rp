@@ -10,6 +10,7 @@ RUN install2.r --error \
   ggrepel \
   gplots \
   gridExtra \
+  MLmetrics \
   ROCR \
   randomForest \
   rpart.plot \
