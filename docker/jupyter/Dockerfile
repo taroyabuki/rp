@@ -2,6 +2,7 @@ FROM jupyter/datascience-notebook
 
 RUN pip install \
   keras \
+  pmdarima \
   tensorflow \
   xgboost
 
