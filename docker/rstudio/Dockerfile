@@ -7,6 +7,7 @@ RUN install2.r --error \
   epitools \
   forecast \
   furrr \
+  ggfortify \
   ggrepel \
   gplots \
   gridExtra \
@@ -18,8 +19,7 @@ RUN install2.r --error \
   xgboost
 
 RUN installGithub.r \
-  rstudio/keras \
-  vqv/ggbiplot
+  rstudio/keras
 
 USER rstudio
 RUN Rscript -e '\
