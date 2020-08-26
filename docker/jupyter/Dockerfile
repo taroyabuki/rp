@@ -2,6 +2,7 @@ FROM jupyter/datascience-notebook
 
 RUN pip install \
   keras \
+  pca \
   pmdarima \
   tensorflow \
   xgboost
@@ -11,6 +12,7 @@ RUN R -e 'install.packages(c(\
   "e1071",\
   "epitools",\
   "furrr",\
+  "ggfortify", \
   "ggrepel",\
   "gridExtra",\
   "ROCR",\
@@ -20,8 +22,7 @@ RUN R -e 'install.packages(c(\
   ), repos="https://cran.rstudio.com")'
 
 RUN R -e 'devtools::install_github(c(\
-  "rstudio/keras",\
-  "vqv/ggbiplot"\
+  "rstudio/keras"\
   ))'
 
 RUN Rscript -e '\
