@@ -5,12 +5,13 @@ RUN install2.r --error \
   doParallel \
   e1071 \
   epitools \
+  factoextra \
   forecast \
   furrr \
-  ggfortify \
   ggrepel \
   gplots \
   gridExtra \
+  igraph \
   MLmetrics \
   ROCR \
   randomForest \
@@ -19,7 +20,8 @@ RUN install2.r --error \
   xgboost
 
 RUN installGithub.r \
-  rstudio/keras
+  rstudio/keras \
+  vqv/ggbiplot
 
 USER rstudio
 RUN Rscript -e '\
@@ -27,6 +29,11 @@ RUN Rscript -e '\
   keras::install_keras();\
   saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
 USER root
+
+RUN apt-get update && apt-get install -y \
+  libglpk-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # 必要かも
 #  feasts \
