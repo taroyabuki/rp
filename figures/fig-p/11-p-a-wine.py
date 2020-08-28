@@ -25,20 +25,23 @@ my_model.add(Dense(units=1))
 my_model.compile(loss='mean_squared_error',
                  optimizer='rmsprop')
 
+from keras.callbacks import EarlyStopping
+my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
+                       restore_best_weights = True)] # 最善を保持
+
 my_history = my_model.fit(
-  x=X,                   # 入力変数
-  y=y,                   # 出力変数
-  validation_split=0.25, # 検証データの割合
-  batch_size=1,          # バッチサイズ
-  epochs=50)             # エポック数の上限
+    x=X,                   # 入力変数
+    y=y,                   # 出力変数
+    validation_split=0.25, # 検証データの割合
+    batch_size=10,         # バッチサイズ
+    epochs=500,            # エポック数の上限
+    callbacks=my_cb)       # エポックごとに行う処理
 
 import matplotlib.pyplot as plt
 plt.plot(my_history.history['val_loss'], label='validation')
 plt.plot(my_history.history['loss'], label='training')
-plt.xlabel('epoch')
 plt.ylabel('loss')
 plt.legend()
 plt.savefig('11-p-a-wine.pdf')
 
-for k, v in my_history.history.items():
-    print(f'{k}: {v[-1]}')
+{k: v[-1] for k, v in my_history.history.items()}

@@ -22,13 +22,21 @@ my_model <- keras_model_sequential() %>% # 層状のネットワーク
 my_model %>% compile(loss = "mean_squared_error",
                      optimizer = "rmsprop")
 
+my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
+                                 restore_best_weights = TRUE) # 最善を保持
+
 my_history <- my_model %>%
   fit(x = X,                   # 入力変数
       y = y,                   # 出力変数
       validation_split = 0.25, # 検証データの割合
-      batch_size = 1,          # バッチサイズ
-      epochs = 50)             # エポック数の上限
+      batch_size = 10,         # バッチサイズ
+      epochs = 500,            # エポック数の上限
+      callbacks = my_cb)       # エポックごとに行う処理
 
-plot(my_history)
+#plot(my_history)
+#↑がうまく行かない場合
+tmp <- my_history
+tmp$params$epochs<-length(tmp$metrics$loss)
+plot(tmp)
 
 my_history

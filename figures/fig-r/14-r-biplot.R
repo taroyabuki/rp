@@ -1,4 +1,4 @@
-pdf(file = "14-r-ggbiplot.pdf", width = 5.83, height = 4.13)
+pdf(file = "14-r-biplot.pdf", width = 5.83, height = 4.13)
 
 library(tidyverse)
 
@@ -12,4 +12,4 @@ row.names(my_data) <- c("A", "B", "C", "D", "E", "F")
 
 my_result <- my_data %>% prcomp # 主成分分析（標準化なし）
 
-ggbiplot::ggbiplot(pcobj = my_result, labels = row.names(my_data), scale = 0)
+my_result %>% ggbiplot::ggbiplot(labels = row.names(my_data), scale = 0)

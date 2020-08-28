@@ -24,8 +24,17 @@ my_model.compile(loss = 'sparse_categorical_crossentropy',
                  optimizer = 'rmsprop',
                  metrics = ['accuracy'])
 
-my_history = my_model.fit(x=X, y=y, validation_split=0.25,
-                          batch_size=1, epochs=50)
+from keras.callbacks import EarlyStopping
+my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
+                       restore_best_weights = True)] # 最善を保持
+
+my_history = my_model.fit(
+    x=X,                   # 入力変数
+    y=y,                   # 出力変数
+    validation_split=0.25, # 検証データの割合
+    batch_size=20,         # バッチサイズ
+    epochs=500,            # エポック数の上限
+    callbacks=my_cb)       # エポックごとに行う処理
 
 import matplotlib.pyplot as plt
 def my_plot_loss_acc(history):
@@ -40,24 +49,23 @@ def my_plot_loss_acc(history):
     ax2.set_ylabel('accuracy')
 
 my_plot_loss_acc(my_history)
-plt.savefig('11-p-b-iris-1.pdf')
+plt.savefig('11-p-b-iris.pdf')
 
-for k, v in my_history.history.items():
-    print(f'{k}: {v[-1]}')
+{k: v[-1] for k, v in my_history.history.items()}
 
-print(my_model.evaluate(x=X, y=y))
+my_model.evaluate(x=X, y=y)
 
 my_prob = my_model.predict(X)
-print(my_prob[0:5])
+my_prob[0:5]
 
 import numpy as np
 from math import log
-print(np.mean([-log(my_prob[i, y[i]]) for i in range(len(y))]))
+np.mean([-log(my_prob[i, y[i]]) for i in range(len(y))])
 
 my_pred = my_model.predict_classes(X)
-print(my_pred[0:5])
+my_pred[0:5]
 
 my_pred = np.argmax(my_model.predict(X), axis=-1)
-print(my_pred[0:5])
+my_pred[0:5]
 
-print((my_pred == y).mean())
+(my_pred == y).mean()

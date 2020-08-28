@@ -1,14 +1,20 @@
 pdf(file = "14-r-hclust.pdf", width = 5.83, height = 4.13)
 
-library(tidyverse)
-
-name <- c("A", "B", "C", "D")
-x    <- c(  0, -16,  10,  10)
-y    <- c(  0,   0,  10, -15)
-my_data <- data.frame(x, y, row.names = name)
+my_data <- data.frame(
+  x = c(  0, -16,  10,  10),
+  y = c(  0,   0,  10, -15),
+  row.names = c("A", "B", "C", "D"))
 
 my_dist <- dist(my_data)
 my_result <- hclust(my_dist)
 
-plot(my_result, hang = -1)
-rect.hclust(my_result, k = 3)
+g1 <- factoextra::fviz_dend(my_result,
+                      k = 3,
+                      rect=T, rect_fill=T)
+
+g2 <- factoextra::fviz_dend(my_result,
+                      k = 3,
+                      rect=T, rect_fill=T,
+                      type = "phylogenic")
+
+gridExtra::grid.arrange(g1, g2, ncol = 2)
