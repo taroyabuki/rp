@@ -7,14 +7,17 @@ RUN pip install \
   tensorflow \
   xgboost
 
+RUN R -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org")'
+
 RUN R -e 'install.packages(c(\
   "doParallel",\
   "e1071",\
   "epitools",\
+  "factoextra",\
   "furrr",\
-  "ggfortify", \
   "ggrepel",\
   "gridExtra",\
+  "igraph",\
   "ROCR",\
   "rpart.plot",\
   "tsibble",\
@@ -22,7 +25,8 @@ RUN R -e 'install.packages(c(\
   ), repos="https://cran.rstudio.com")'
 
 RUN R -e 'devtools::install_github(c(\
-  "rstudio/keras"\
+  "rstudio/keras",\
+  "vqv/ggbiplot"\
   ))'
 
 RUN Rscript -e '\
