@@ -1,25 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root xmlns='https://www.example.net/ns/1.0'>
- <description>試験結果</description>
+ <description>examination result</description>
  <records>
   <record english='60'
-      math='70'
-      gender='f'>
+          math='70'
+          gender='f'>
    <name>A</name>
   </record>
   <record english='90'
-      math='80'
-      gender='m'>
+          math='80'
+          gender='m'>
    <name>B</name>
   </record>
   <record english='70'
-      math='90'
-      gender='m'>
+          math='90'
+          gender='m'>
    <name>C</name>
   </record>
   <record english='90'
-      math='100'
-      gender='f'>
+          math='100'
+          gender='f'>
    <name>D</name>
   </record>
  </records>
