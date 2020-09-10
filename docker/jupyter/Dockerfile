@@ -39,5 +39,3 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && apt-get --reinstall install -y man-db coreutils manpages \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-
-USER jovyan

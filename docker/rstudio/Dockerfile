@@ -38,8 +38,6 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-USER rstudio
-
 # 必要かも
 #  feasts \
 #  glmnet \
