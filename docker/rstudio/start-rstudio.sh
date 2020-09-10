@@ -4,6 +4,6 @@ docker run \
 -e PASSWORD=password \
 -e ROOT=TRUE \
 -p 8787:8787 \
--v $(PWD):/home/rstudio \
+-v $(pwd):/home/rstudio/work \
 --name rs \
 taroyabuki/rstudio
