@@ -21,7 +21,7 @@ start-notebook.sh \
 
 ## 起動スクリプト
 
-起動スクリプトをダウンロードしておけば，`sh ~/start-jupyter.sh`で起動できる．（パスワードは`password`．変更したい場合はstart-rstudio.shを編集する．）
+起動スクリプトをダウンロードしておけば，`sh ~/start-jupyter.sh`で起動できる．（パスワードは`password`．変更したい場合は~/start-jupyter.shを編集する．）
 
 ```bash
 curl -o ~/start-jupyter.sh \
