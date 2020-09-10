@@ -32,3 +32,10 @@ RUN R -e 'devtools::install_github(c(\
 
 RUN Rscript -e '\
   saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
+
+USER root
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
+  && apt-get update \
+  && apt-get --reinstall install -y man-db coreutils manpages \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
