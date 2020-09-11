@@ -21,9 +21,9 @@ start-notebook.sh \
 
 ## 起動スクリプト
 
-起動スクリプトをダウンロードしておけば，`sh ~/start-jupyter.sh`で起動できる．（パスワードは`password`．変更したい場合は~/start-jupyter.shを編集する．）
+起動スクリプトをダウンロードしておけば，`sh ~/jupyter.sh`で起動できる．（パスワードは`password`．変更したい場合は~/jupyter.shを編集する．）
 
 ```bash
-curl -o ~/start-jupyter.sh \
-https://raw.githubusercontent.com/taroyabuki/rp/master/docker/jupyter/start-jupyter.sh
+curl -o ~/jupyter.sh \
+https://raw.githubusercontent.com/taroyabuki/rp/master/docker/jupyter/jupyter.sh
 ```

@@ -21,9 +21,9 @@ taroyabuki/rstudio
 
 ## 起動スクリプト
 
-起動スクリプトをダウンロードしておけば，`sh ~/start-rstudio.sh`で起動できる．（パスワードは`password`．変更したい場合は~/start-rstudio.shを編集する．）
+起動スクリプトをダウンロードしておけば，`sh ~/rstudio.sh`で起動できる．（パスワードは`password`．変更したい場合は~/rstudio.shを編集する．）
 
 ```bash
-curl -o ~/start-rstudio.sh \
-https://raw.githubusercontent.com/taroyabuki/rp/master/docker/rstudio/start-rstudio.sh
+curl -o ~/rstudio.sh \
+https://raw.githubusercontent.com/taroyabuki/rp/master/docker/rstudio/rstudio.sh
 ```
