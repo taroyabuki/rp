@@ -24,10 +24,12 @@ RUN installGithub.r \
   vqv/ggbiplot
 
 USER rstudio
+
 RUN Rscript -e '\
   reticulate::install_miniconda();\
   keras::install_keras();\
   saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
+
 USER root
 
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
@@ -36,7 +38,10 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
     libglpk-dev \
   && apt-get --reinstall install -y man-db coreutils manpages \
   && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && yes | unminimize
+
+WORKDIR /home/rstudio
 
 # 必要かも
 #  feasts \
