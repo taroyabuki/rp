@@ -30,10 +30,10 @@ RUN Rscript -e '\
   saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
 USER root
 
-RUN apt-get update \
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
+  && apt-get update \
   && apt-get install -y \
     libglpk-dev \
-  && rm /etc/dpkg/dpkg.cfg.d/excludes \
   && apt-get --reinstall install -y man-db coreutils manpages \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
