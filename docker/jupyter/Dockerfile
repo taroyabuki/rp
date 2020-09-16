@@ -8,29 +8,25 @@ RUN pip install \
   tensorflow \
   xgboost
 
-RUN R -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org")'
-
-RUN R -e 'install.packages(c(\
-  "doParallel",\
-  "e1071",\
-  "epitools",\
-  "factoextra",\
-  "furrr",\
-  "ggrepel",\
-  "gridExtra",\
-  "igraph",\
-  "ROCR",\
-  "rpart.plot",\
-  "tsibble",\
-  "xgboost"\
-  ), repos="https://cran.rstudio.com")'
-
-RUN R -e 'devtools::install_github(c(\
-  "rstudio/keras",\
-  "vqv/ggbiplot"\
-  ))'
-
-RUN Rscript -e '\
+RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
+  install.packages(c(\
+    "doParallel",\
+    "e1071",\
+    "epitools",\
+    "factoextra",\
+    "furrr",\
+    "ggrepel",\
+    "gridExtra",\
+    "igraph",\
+    "ROCR",\
+    "rpart.plot",\
+    "tsibble",\
+    "xgboost"\
+  ), repos="https://cran.rstudio.com");\
+  devtools::install_github(c(\
+    "rstudio/keras",\
+    "vqv/ggbiplot"\
+  ));\
   saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
 
 USER root
