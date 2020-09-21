@@ -35,6 +35,7 @@ USER root
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && apt-get update \
   && apt-get install -y \
+    curl \
     less \
     libglpk-dev \
     vim-tiny \
