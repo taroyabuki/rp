@@ -18,6 +18,7 @@ RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos =
     "ggrepel",\
     "gridExtra",\
     "igraph",\
+    "psych",\
     "ROCR",\
     "rpart.plot",\
     "tsibble",\

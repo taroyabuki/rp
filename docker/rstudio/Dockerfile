@@ -13,6 +13,7 @@ RUN install2.r --error \
   gridExtra \
   igraph \
   MLmetrics \
+  psych \
   ROCR \
   randomForest \
   rpart.plot \
@@ -50,5 +51,4 @@ WORKDIR /home/rstudio
 #  feasts \
 #  glmnet \
 #  leaps \
-#  psych \
 #  zoo
