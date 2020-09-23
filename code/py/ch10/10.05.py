@@ -7,7 +7,7 @@ plt.plot(x, y)
 ### 10.5.2 Pythonの場合
 
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/titanic.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'
 my_data = pd.read_csv(my_url)
 X, y = pd.get_dummies(my_data.iloc[:,0:3], drop_first=True), my_data.Survived
 

@@ -1,28 +1,10 @@
-### 3.6.1 RのNA，Pythonのnan
+### 3.6.1 Rのパッケージ
 
-my_v = c(1, NA, 3)
-my_v
-#> [1]  1 NA  3
+library(tidyverse)
 
-is.na(my_v[2])
-#> [1] TRUE
+# jupyter/datascience-notebookを使う場合
 
-my_v[2] == NA # 誤り
-#> [1] NA
+# rocker/tidyverseを使う場合
 
-### 3.6.2 変数についての調査
-
-x = 123
-typeof(x)
-#> [1] "double"
-
-x <- list("apple"   = "りんご",
-          "orange" = "みかん")
-names(x)
-#> [1] "apple"  "orange"
-
-str(x)
-#> List of 2
-#>  $ apple : chr "りんご"
-#>  $ orange: chr "みかん"
+update.packages(ask = FALSE)
 

@@ -1,115 +1,106 @@
-## 3.4 データフレーム
+### 3.4.1 1次元データ
 
-library(tidyverse)
+my_v <- c("foo", "bar", "baz")
 
-#### 3.4.1.1 データを列ごとに記述する方法
+length(my_v)
+#> [1] 3
 
-my_df <- data.frame(
-  name    = c("A", "B", "C", "D"),
-  english = c( 60,  90,  70,  90),
-  math    = c( 70,  80,  90, 100),
-  gender  = c("f", "m", "m", "f"))
+my_v[2]
+#> [1] "bar"
 
-#### 3.4.1.2 データを行ごとに記述する方法
+my_v[-2]
+#> [1] "foo" "baz"
 
-my_df <- tribble(
-  ~name, ~english, ~math, ~gender,
-  "A",         60,    70,     "f",
-  "B",         90,    80,     "m",
-  "C",         70,    90,     "m",
-  "D",         90,   100,     "f")
+c(my_v, "qux")
+#> [1] "foo" "bar" "baz" "qux"
 
-#### 3.4.1.3 組合せ
+my_v <- c(my_v, "qux")
+my_v
+#> [1] "foo" "bar" "baz" "qux"
 
-my_df2 <- expand.grid(
-  X = c(1, 2, 3),
-  Y = c(10, 100))
-my_df2
-#>   X   Y
-#> 1 1  10
-#> 2 2  10
-#> 3 3  10
-#> 4 1 100
-#> 5 2 100
-#> 6 3 100
+#### 3.4.1.1 等間隔の数値からなる1次元データ
 
-#### 3.4.1.4 列と行の名前
+my_v <- 1:5
+# my_v <- c(1, 2, 3, 4, 5)と同じ
 
-colnames(my_df)
-#> [1] "name"    "english" "math"    "gender" 
+seq(from = 1, to = 9, by = 2)
+#> [1] 1 3 5 7 9
 
-colnames(my_df) <- c("NAME", "ENGLISH", "MATH", "GENDER")
+#### 3.4.1.2 ファクタ（Rのみ）
+
+my_v <- c("グー", "パー", "グー", "パー")
+my_factor <- factor(my_v, levels = c("グー", "チョキ", "パー"))
+my_factor
+#> [1] グー パー グー パー
+#> Levels: グー チョキ パー
+
+### 3.4.2 数値計算やデータ解析用の1次元データ
+
+# 準備不要
+
+my_v <- c(2, 3, 5, 7)
+my_v + 10 # 加算
+#> [1] 12 13 15 17
+
+my_v * 10 # 乗算
+#> [1] 20 30 50 70
+
+my_u <- c(2, 3)
+sin(my_u)
+#> [1] 0.9092974 0.1411200
+
+my_v <- c(2,  3,   5,    7)
+my_w <- c(1, 10, 100, 1000)
+my_v + my_w
+#> [1]    3   13  105 1007
+
+my_v * my_w
+#> [1]    2   30  500 7000
+
+sum(my_v * my_w)
+#> [1] 7532
+
+#### 3.4.2.1 1次元データ同士の比較
+
+u = c(1, 2, 3)
+v = c(1, 2, 3)
+w = c(1, 2, 4)
+
+# 全体の比較
+identical(u, v)
+#> [1] TRUE
+
+identical(u, w)
+#> [1] FALSE
+
+# 要素ごとの比較
+u == v
+#> [1] TRUE TRUE TRUE
+> u == w
+#> [1]  TRUE  TRUE FALSE
+
+# 同じ要素の数
+sum(u == w)
+#> [1] 2
+
+# 同じ要素の割合
+mean(u == w)
+#> [1] 0.6666667
+
+### 3.4.3 複数種類のデータをひとまとめにする
+
+my_list <- list(1, "two")
+
+my_list[[2]]
+#> [1] "two"
+
+### 3.4.4 データのペアをひとまとめにする
+
+my_dic <- list("apple"  = "りんご",
+               "orange" = "みかん")
+
+my_dic$"apple"
 # あるいは
-colnames(my_df) = toupper(colnames(my_df))
-
-my_df
-#>   NAME  ENGLISH  MATH GENDER
-#>   <chr>   <dbl> <dbl> <chr> 
-#> 1 A          60    70 f    
-#> 2 B          90    80 m     
-# 以下略
-
-colnames(my_df) = tolower(colnames(my_df)) # 元に戻す．
-
-my_df2 <- data.frame(
-  english =   c( 60,  90,  70,  90),
-  math    =   c( 70,  80,  90, 100),
-  gender  =   c("f", "m", "m", "f"),
-  row.names = c("A", "B", "C", "D"))
-my_df2
-#>   english math gender
-#> A      60   70      f
-#> B      90   80      m
-#> C      70   90      m
-#> D      90  100      f
-
-#### 3.4.2.1 行の追加
-
-tmp <- data.frame(
-  name = "E",
-  english = 80,
-  math = 80,
-  gender = "m")
-rbind(my_df, tmp)
-
-#### 3.4.2.2 列の追加
-
-my_df %>% mutate(id = c(1, 2, 3, 4))
-
-my_df["id"] <- c(1, 2, 3, 4)
-
-#### 3.4.3.1 1列の取り出し（結果は1次元データ）
-
-my_df$english
-# あるいは
-my_df[["english"]]
-#> [1] 60 90 70 90
-
-#### 3.4.3.2 複数列の取り出し（結果はデータフレーム）
-
-my_df %>% select(name, math)
-
-my_df[, c(1, 3)]
-
-my_df[, -c(2, 4)]
-
-#### 3.4.3.3 複数行の取り出し（結果はデータフレーム）
-
-my_df[c(1, 3), ]
-
-my_df[-c(2, 4), ]
-
-#### 3.4.3.4 検索
-
-my_df %>% filter(gender == "m")
-
-my_df %>% filter(english > 80 & gender == "m")
-
-my_df %>% filter(english == max(my_df$english))
-
-#### 3.4.3.5 並べ替え
-
-my_df %>% arrange(english)
-
-my_df %>% arrange(-english)
+my_dic[["apple"]]
+#> [1] "りんご"
 

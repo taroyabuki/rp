@@ -7,7 +7,7 @@ my_df
 #> 2    C       70    90      m
 #> 3    D       90   100      f
 
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.csv'
 my_df = pd.read_csv(my_url)
 
 import pandas as pd
@@ -33,7 +33,7 @@ my_df = pd.read_csv('exam.csv',
 my_df.to_csv('exam2.csv', index=False, encoding='UTF-8')
 
 import pandas as pd
-my_url = 'https://github.com/taroyabuki/rp/blob/master/data/exam.csv'
+my_url = 'https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv'
 my_tables = pd.read_html(my_url)
 
 #> [   Unnamed: 0 name  english  math gender

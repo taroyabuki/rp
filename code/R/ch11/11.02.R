@@ -1,7 +1,7 @@
 ### 11.2.1 準備
 
 library(tidyverse)
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
 tmp <- read_csv(my_url)
 head(tmp)
 #>   LPRICE2 WRAIN DEGREES HRAIN TIME_SV

@@ -8,6 +8,7 @@ from sklearn.linear_model import LinearRegression
 my_model = LinearRegression()
 my_model.fit(X, y)
 
+import pandas as pd
 my_test = pd.DataFrame({'speed':[21.5]})
 my_model.predict(my_test)
 #> array([66.96769343])
@@ -15,7 +16,6 @@ my_model.predict(my_test)
 y_ = my_model.predict(X) # 訓練データに対する予測
 my_data.assign(model=y_).plot(x='speed', style=['o', '-'])
 
-import pandas as pd
 import numpy as np
 # モデル可視化用のデータフレームを作る．
 my_min, my_max = my_data['speed'].min(), my_data['speed'].max()

@@ -3,7 +3,7 @@
 library(tidyverse)
 library(jsonlite)
 
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.json"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.json"
 my_data <- fromJSON(my_url)
 #my_data <- fromJSON("exam.json") # （ファイルを使う場合）
 my_data
@@ -18,7 +18,7 @@ my_data
 library(tidyverse)
 library(xml2)
 
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.xml"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.xml"
 my_xml <- read_xml(my_url)      # XMLデータの読み込み
 #my_xml <- read_xml("exam.xml") # （ファイルを使う場合）
 xml_ns(my_xml)                  # 名前空間の確認（d1）

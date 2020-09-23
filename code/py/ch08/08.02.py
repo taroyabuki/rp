@@ -5,7 +5,7 @@ my_model = LinearRegression()
 
 import pandas as pd
 tmp = pd.read_csv('wine.csv') # 8.1節で作成したwine.csvを使う．
-#my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv'
+#my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv'
 #tmp = pd.read_csv(my_url)
 X, y = tmp.iloc[:, 1:5], tmp.LPRICE2
 my_model.fit(X, y) # 訓練
@@ -31,7 +31,7 @@ my_scores.mean() # 決定係数（検証）
 
 import pandas as pd
 tmp = pd.read_csv('wine.csv') # 8.1節で作成したwine.csvを使う．
-#my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv'
+#my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv'
 #tmp = pd.read_csv(my_url)
 
 import numpy as np

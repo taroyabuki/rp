@@ -1,5 +1,5 @@
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.json'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.json'
 my_data = pd.read_json(my_url)
 #my_data = pd.read_json('exam.json') # （ファイルを使う場合）
 my_data
@@ -13,7 +13,7 @@ from urllib.request import urlopen
 import xml.etree.ElementTree as ET
 import pandas as pd
 
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.xml'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.xml'
 with urlopen(my_url) as f:
     my_tree = ET.parse(f)       # XMLデータの読み込み
 

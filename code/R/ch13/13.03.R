@@ -62,7 +62,7 @@ library(tidyverse)
 library(tsibble)
 library(forecast)
 
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/tokyo-max-temp-2015--2019.csv"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/tokyo-max-temp-2015--2019.csv"
 tmp <- read_csv(my_url,
                 locale = locale(encoding="sjis"),
                 skip = 5,

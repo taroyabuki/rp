@@ -64,7 +64,7 @@ plt.fill_between(my_df.index,
                  alpha=0.25)
 
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/tokyo-max-temp-2015--2019.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/tokyo-max-temp-2015--2019.csv'
 my_data = pd.read_csv(my_url,
                       encoding='sjis',
                       skiprows=5,

@@ -3,7 +3,7 @@
 library(tidyverse)
 library(caret)
 my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
-#my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv"
+#my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
 #my_data <- read_csv(my_url)
 
 my_model <- train(form = LPRICE2 ~ WRAIN + DEGREES + HRAIN + TIME_SV,

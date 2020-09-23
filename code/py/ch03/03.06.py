@@ -1,15 +1,20 @@
+### 3.6.2 Pythonのモジュール
+
+import math
 import numpy as np
-my_v = [1, np.nan, 3]
-my_v
-#> [1, nan, 3]
+import pandas as pd
 
-np.isnan(my_v[1])
-#> True
+import numpy
+numpy.array([1, 2, 3, 4])
 
-my_v[1] == np.nan # 誤り
-#> False
+import numpy as np
+np.array([1, 2, 3, 4])
 
-x = 123
-type(x)
-#> int
+from numpy import array
+array([1, 2, 3, 4])
+
+from numpy import *
+array([1, 2, 3, 4])
+
+!pip install パッケージ名
 

@@ -1,5 +1,5 @@
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/titanic.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'
 tmp = pd.read_csv(my_url)
 tmp2 = pd.get_dummies(tmp, drop_first=True)
 tmp2.head()

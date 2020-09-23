@@ -1,31 +1,9 @@
-### 3.2.1 関数の利用
-
-log(100, 10)
-#> [1] 2
-
-#### 3.2.1.1 パイプ（Rのみ）
-
-x %>% f
-
-h(g(f(x)))          # 通常の書き方
-
-x %>% f %>% g %>% h # パイプを使う書き方
-
-### 3.2.2 作業ディレクトリ
+## 3.2 作業ディレクトリ
 
 getwd()
 #> '/home/jovyan/work'
 
-setwd("data")
+setwd("fromzero")
 getwd()
-#> '/home/jovyan/work/data'
-
-### 3.2.3 関数の定義
-
-my_f <- function(a, b) {
-  a - b
-}
-
-my_f(3, 5)
-#> [1] -2
+#> '/home/jovyan/work/fromzero'
 

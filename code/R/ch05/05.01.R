@@ -13,7 +13,7 @@ my_df # 後者を実行した場合
 #> 3    C      70   90      m
 #> 4    D      90  100      f
 
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.csv"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.csv"
 my_df <- read_csv(my_url)
 # あるいは
 my_df <- read.csv(my_url, stringsAsFactors = FALSE)
@@ -55,7 +55,7 @@ my_df %>% write.csv(file = "exam2.csv", row.names = FALSE, fileEncoding = "UTF-8
 ### 5.1.4 ウェブ上の表
 
 library(tidyverse)
-my_url <- "https://github.com/taroyabuki/rp/blob/master/data/exam.csv"
+my_url <- "https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv"
 my_tables <- xml2::read_html(my_url) %>% rvest::html_table()
 
 my_tables 
