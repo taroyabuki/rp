@@ -3,7 +3,7 @@ pdf(file = "11-r-a-wine.pdf", width = 5.83, height = 4.13)
 set.seed(0)
 
 library(tidyverse)
-my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv"
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
 tmp <- read_csv(my_url)
 head(tmp)
 

@@ -4,8 +4,8 @@ library(tidyverse)
 library(tsibble)
 library(forecast)
 
-my_data <- read_csv("https://raw.githubusercontent.com/taroyabuki/rp/master/data/an_wld_en.csv")
-my_ts <- my_data %>% select(year, value) %>% as_tsibble(index = year)
-my_ts_model <- my_ts %>% auto.arima()
-my_ts_pred <- my_ts_model %>% forecast(30)
-my_ts_pred %>% autoplot
+tmp <- read_csv("https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/an_wld_en.csv")
+my_data <- tmp %>% as_tsibble(index = year)
+my_model <- my_data %>% auto.arima() # すべてのデータを使う．
+my_df <- my_model %>% forecast(30)   # 30 年分の予測
+autoplot(my_df)

@@ -1,5 +1,5 @@
 import pandas as pd
-my_data = pd.read_csv('https://raw.githubusercontent.com/taroyabuki/rp/master/data/an_wld_en.csv')
+my_data = pd.read_csv('https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/an_wld_en.csv')
 my_data.index = pd.to_datetime(my_data['year'], format='%Y')
 
 my_train = my_data[:109] # 訓練データ

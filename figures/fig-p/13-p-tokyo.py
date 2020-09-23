@@ -1,5 +1,5 @@
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/tokyo-max-temp-2015--2019.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/tokyo-max-temp-2015--2019.csv'
 my_data = pd.read_csv(my_url, encoding='sjis', skiprows=5, names=['month', 'tokyo', 'quality', 'no']) 
 
 my_data.index = pd.to_datetime(my_data['month'], format='%Y/%m')

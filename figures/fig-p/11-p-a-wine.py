@@ -2,7 +2,7 @@ import numpy
 numpy.random.seed(0)
 
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv'
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv'
 tmp = pd.read_csv(my_url)
 
 from sklearn.utils import shuffle

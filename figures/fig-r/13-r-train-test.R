@@ -2,7 +2,7 @@ pdf(file = "13-r-train-test.pdf", width = 5.83, height = 4.13)
 
 library(tidyverse)
 library(tsibble)
-tmp <- read_csv("https://raw.githubusercontent.com/taroyabuki/rp/master/data/an_wld_en.csv")
+tmp <- read_csv("https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/an_wld_en.csv")
 my_data <- tmp %>% as_tsibble(index = year)
 
 my_index = 1:109

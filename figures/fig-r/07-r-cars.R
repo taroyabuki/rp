@@ -4,6 +4,6 @@ library(tidyverse)
 library(caret)
 my_data <- cars
 
-ggplot(data = my_data, mapping = aes(x = speed, y = dist)) +
+my_data %>% ggplot(aes(x = speed, y = dist)) +
   geom_point() +
   stat_smooth(formula = y ~ x, method = "lm", se = FALSE)
