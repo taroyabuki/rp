@@ -1,0 +1,106 @@
+### 13.3.1 訓練データと検証データ
+
+library(tidyverse)
+library(tsibble)
+tmp <- read_csv("an_wld_en.csv")
+my_data <- tmp %>% as_tsibble(index = year)
+
+my_index = 1:109
+my_train <- my_data[ my_index, ] # 訓練データ
+my_test  <- my_data[-my_index, ] # 検証データ
+
+my_data %>%
+  mutate(name = rep(c("train", "test"), c(109, 20))) %>%
+  ggplot(aes(x = year, y = world, color = name)) +
+    geom_line()
+
+#### 13.3.2.1 モデル1：線形単回帰分析
+
+library(caret)
+my_lm_model <- train(form = world ~ year, data = my_train, method = "lm")
+
+y_ <- my_lm_model %>% predict(my_train)
+postResample(y_, my_train$world)
+#>       RMSE   Rsquared        MAE 
+#> 0.11727054 0.73458474 0.09558441 
+
+y_ <- my_lm_model %>% predict(my_test)
+postResample(y_, my_test$world)
+#>      RMSE  Rsquared       MAE 
+#> 0.2205509 0.6369629 0.1965745 
+
+#### 13.3.2.2 モデル2：ARIMA
+
+library(forecast)
+my_arima_model <- my_train %>% auto.arima # モデルの作成
+# summary(my_arima_model)                 # モデルの確認（割愛）
+# checkresiduals(my_arima_model)          # モデルの診断（割愛）
+
+y_ <- my_arima_model %>% forecast(20)     # 20年分の予測
+postResample(y_$mean, my_test$world)      # RMSEの計算
+#>      RMSE  Rsquared       MAE 
+#> 0.1640015 0.6263019 0.1349202 
+
+### 13.3.3 最良モデルの利用
+
+my_model <- my_data %>% auto.arima() # すべてのデータを使う．
+my_df <- my_model %>% forecast(30)   # 30年分の予測
+my_df
+#>      Point Forecast     Lo 80     Hi 80     Lo 95     Hi 95
+#> 2020      0.4112152 0.2859716 0.5364588 0.2196717 0.6027588
+#> 2021      0.3835121 0.2327403 0.5342840 0.1529265 0.6140978
+#> 2022      0.3802712 0.2236842 0.5368582 0.1407921 0.6197504
+#> 2023      0.3989868 0.2392511 0.5587224 0.1546922 0.6432814
+#> 2024      0.3972986 0.2322553 0.5623419 0.1448866 0.6497106
+# 以下略
+
+autoplot(my_df)
+
+### 13.3.4 例2：最高気温の月平均データ
+
+library(tidyverse)
+library(tsibble)
+library(forecast)
+
+my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/tokyo-max-temp-2015--2019.csv"
+tmp <- read_csv(my_url,
+                locale = locale(encoding="sjis"),
+                skip = 5,
+                col_names = c("date", "tokyo", "quality", "no"))
+head(tmp)
+#>   date   tokyo quality    no
+#>   <chr>  <dbl>   <dbl> <dbl>
+#> 1 2015/1  10.4       8     1
+#> 2 2015/2  10.4       8     1
+#> 3 2015/3  15.5       8     1
+#> 4 2015/4  19.3       8     1
+#> 5 2015/5  26.4       8     1
+#> 6 2015/6  26.4       8     1
+
+my_data <- tmp %>%
+  mutate(month = yearmonth(tmp$date)) %>%
+  select(month, tokyo) %>%
+  as_tsibble(index = month)
+head(my_data)
+#>      month tokyo
+#>      <mth> <dbl>
+#> 1 2015 Jan  10.4
+#> 2 2015 Feb  10.4
+#> 3 2015 Mar  15.5
+#> 4 2015 Apr  19.3
+#> 5 2015 May  26.4
+#> 6 2015 Jun  26.4
+
+my_model <- my_data %>% auto.arima
+my_df <- my_model %>% forecast(24)
+my_df
+#>          Point Forecast     Lo 80    Hi 80     Lo 95    Hi 95
+#> Jan 2020       9.907492  7.994020 11.82096  6.981089 12.83390
+#> Feb 2020      10.945820  9.032348 12.85929  8.019417 13.87222
+#> Mar 2020      16.054180 14.140707 17.96765 13.127776 18.98058
+#> Apr 2020      20.351972 18.438499 22.26544 17.425568 23.27838
+#> May 2020      24.994716 23.081244 26.90819 22.068313 27.92112
+# 以下略
+
+autoplot(my_df)
+

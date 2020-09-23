@@ -1,0 +1,18 @@
+### 3.5.1 Rのパッケージ
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+# jupyter/datascience-notebookを使う場合
+```
+
+```{r}
+# rocker/tidyverseを使う場合
+```
+
+```{r}
+update.packages(ask = FALSE)
+```
+

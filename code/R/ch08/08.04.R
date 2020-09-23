@@ -1,0 +1,48 @@
+#### 8.4.1.1 Rの場合
+
+library(tidyverse)
+library(caret)
+my_data <- read.csv("wine.csv")
+
+n <- nrow(my_data) # データの件数
+my_data2 <- my_data %>% mutate(rand1 = runif(n), # 乱数からなる列1
+                               rand2 = runif(n)) # 乱数からなる列2
+
+my_model <- train(form = LPRICE2 ~ .,
+                  data = my_data2,
+                  method = "leapForward") # 変数増加法
+my_model$results
+#>   nvmax      RMSE  Rsquared       MAE     RMSESD RsquaredSD      MAESD
+#> 1     2 0.4569208 0.5293057 0.3732875 0.09644487  0.2028072 0.09831864
+#> 2     3 0.4239871 0.6071033 0.3541027 0.10882958  0.2199566 0.08446131
+#> 3     4 0.4043440 0.6307024 0.3348481 0.11736135  0.2324715 0.09355537
+
+coef(my_model$finalModel, id = 3)
+#>   (Intercept)       DEGREES         HRAIN       TIME_SV 
+#> -10.058633901   0.536709044  -0.004440506   0.025093649 
+
+#### 8.4.2.1 Rの場合
+
+library(tidyverse)
+library(caret)
+my_data <- read.csv("wine.csv")
+
+my_model <- train(form = LPRICE2 ~ .,
+                  data = my_data,
+                  tuneGrid = expand.grid(alpha = seq(0, 0.001, 0.0001),
+                                         lambda = seq(0.01, 0.2, 0.01)),
+                  method = "glmnet") # Elastic Net 回帰
+
+my_model$results %>% filter(RMSE == min(RMSE)) # RMSE（検証）の最小値
+#>   alpha lambda      RMSE  Rsquared       MAE     RMSESD RsquaredSD     MAESD
+#> 1     0   0.12 0.3309999 0.7336179 0.2813216 0.06294584  0.1109651 0.0552441
+
+coef(my_model$finalModel, my_model$bestTune$lambda)
+#> 5 x 1 sparse Matrix of class "dgCMatrix"
+#>                         1
+#> (Intercept) -1.026592e+01
+#> WRAIN        8.905547e-04
+#> DEGREES      5.102242e-01
+#> HRAIN       -3.356299e-03
+#> TIME_SV      2.168751e-02
+

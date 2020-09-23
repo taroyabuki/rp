@@ -1,0 +1,58 @@
+### 11.2.1 準備
+
+library(tidyverse)
+my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/wine.csv"
+tmp <- read_csv(my_url)
+head(tmp)
+#>   LPRICE2 WRAIN DEGREES HRAIN TIME_SV
+#>     <dbl> <dbl>   <dbl> <dbl>   <dbl>
+#> 1  -0.999   600    17.1   160      31
+#> 2  -0.454   690    16.7    80      30
+#> 3  -0.808   502    17.2   130      28
+#> 4  -1.51    420    16.1   110      26
+#> 5  -1.72    582    16.4   187      25
+#> 6  -0.418   485    17.5   187      24
+
+my_data <- tmp[sample(nrow(tmp)), ] %>% scale # シャッフルと標準化
+X <- my_data[, -1] # 入力変数
+y <- my_data[,  1] # 出力変数
+
+library(caret)
+my_model <- train(form = LPRICE2 ~ ., data = my_data, method = "lm")
+my_model$results$RMSE^2
+#> [1] 0.2940522
+
+### 11.2.2 ネットワークの構築
+
+library(keras)
+my_model <- keras_model_sequential() %>% # 層状のネットワーク
+  layer_dense(
+    units = 3,              # 隠れ層のニューロン数
+    activation = "relu",    # 活性化関数
+    input_shape = c(4)) %>% # 入力層のニューロン数
+  layer_dense(units = 1)    # 出力層のニューロン数
+
+my_model %>% compile(loss = "mean_squared_error",
+                     optimizer = "rmsprop")
+
+my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
+                                 restore_best_weights = TRUE) # 最善を保持
+
+my_history <- my_model %>%
+  fit(x = X,                   # 入力変数
+      y = y,                   # 出力変数
+      validation_split = 0.25, # 検証データの割合
+      batch_size = 10,         # バッチサイズ
+      epochs = 500,            # エポック数の上限
+      callbacks = my_cb)       # エポックごとに行う処理
+
+#plot(my_history) # がうまく行かない場合の方法
+tmp <- my_history
+tmp$params$epochs<-length(tmp$metrics$loss)
+plot(tmp)
+
+my_history
+#> Final epoch (plot to see history):
+#>     loss: 0.1301
+#> val_loss: 0.1529
+

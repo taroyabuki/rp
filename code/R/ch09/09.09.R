@@ -1,0 +1,8 @@
+## 9.9 変数の重要度
+
+library(caret)
+my_data <- iris
+my_model <- train(form = Species ~ ., data = my_data, method = "xgbTree")
+
+plot(varImp(my_model)) # 変数の重要度の可視化
+

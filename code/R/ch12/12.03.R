@@ -1,0 +1,120 @@
+### 12.3.1 前処理
+
+library(keras)
+#c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
+#↑がうまく行かない場合
+c(c(x_train, y_train), c(x_test, y_test)) %<-% readRDS("/tmp/mnist.obj")
+
+x_train <- x_train / 255
+x_test  <- x_test  / 255
+
+my_index <- sample(1:60000, 6000)
+x_train <- x_train[my_index, , ]
+y_train <- y_train[my_index]
+
+x_train2d <- array_reshape(x = x_train, dim = c(nrow(x_train), 28, 28, 1))
+x_test2d  <- array_reshape(x = x_test,  dim = c(nrow(x_test),  28, 28, 1))
+
+#### 12.3.2.1 単純なCNN
+
+my_model <- keras_model_sequential() %>%
+  layer_conv_2d(filters = 32, kernel_size = 3, # 畳み込み層
+                activation = "relu",
+                input_shape = c(28, 28, 1)) %>% 
+  layer_max_pooling_2d(pool_size = 2) %>% # プーリング層
+  layer_flatten() %>% 
+  layer_dense(units = 128, activation = "relu") %>% 
+  layer_dense(units = 10, activation = "softmax")
+
+my_model # ネットワークの確認（結果はPythonのものを参照）
+
+my_model %>% compile(
+  loss = "sparse_categorical_crossentropy",
+  optimizer = "rmsprop",
+  metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(patience = 5,                # 訓練停止条件
+                                 restore_best_weights = TRUE) # 最善を保持
+
+my_history <- my_model %>%
+  fit(x = x_train2d,          # 入力変数
+      y = y_train,            # 出力変数
+      validation_split = 0.2, # 検証データの割合
+      batch_size = 128,       # バッチサイズ
+      epochs = 20,            # エポック数の上限
+      callbacks = my_cb)      # エポックごとに行う処理
+
+tmp <- my_history
+tmp$params$epochs<-length(tmp$metrics$loss)
+plot(tmp)
+
+my_model %>%
+  evaluate(x = x_test2d, y = y_test)
+#>      loss  accuracy
+#> 0.1392894 0.9607000
+
+#### 12.3.2.2 LeNet
+
+my_model <- keras_model_sequential() %>%
+  layer_conv_2d(filters = 20, kernel_size = 5, activation = "relu",
+                input_shape = c(28, 28, 1)) %>% 
+  layer_max_pooling_2d(pool_size = 2, strides = 2) %>% 
+  layer_conv_2d(filters = 50, kernel_size = 5, activation = "relu") %>% 
+  layer_max_pooling_2d(pool_size = 2, strides = 2) %>% 
+  layer_dropout(rate = 0.25) %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 500, activation = "relu") %>% 
+  layer_dropout(rate = 0.5) %>% 
+  layer_dense(units = 10, activation = "softmax")
+
+my_model %>% compile(
+  loss = "sparse_categorical_crossentropy",
+  optimizer = "rmsprop",
+  metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(patience = 5,                # 訓練停止条件
+                                 restore_best_weights = TRUE) # 最善を保持
+
+my_history <- my_model %>%
+  fit(x = x_train2d,          # 入力変数
+      y = y_train,            # 出力変数
+      validation_split = 0.2, # 検証データの割合
+      batch_size = 128,       # バッチサイズ
+      epochs = 20,            # エポック数の上限
+      callbacks = my_cb)      # エポックごとに行う処理
+
+tmp <- my_history
+tmp$params$epochs<-length(tmp$metrics$loss)
+plot(tmp)
+
+my_model %>%
+  evaluate(x = x_test2d, y = y_test)
+#>      loss  accuracy
+#> 0.05227623 0.98390001
+
+#### 12.3.2.3 補足：LeNetが自信満々で間違う例
+
+library(tidyverse)
+my_prob <- my_model %>% predict(x_test2d)   # カテゴリに属する確率
+
+my_result <- data.frame(
+  prob = apply(my_prob, 1, max),           # 確率の最大値
+  pred = apply(my_prob, 1, which.max) - 1, # 予測カテゴリ
+  answer = y_test,                         # 正解
+  id = 1:length(y_test)) %>%               # 番号
+  filter(pred != answer) %>%               # 予測がはずれたものを残す
+  arrange(desc(prob))                      # 確率の大きい順に並び替える
+head(my_result)
+#>        prob pred answer   id
+#> 1 0.9999145    1      6 2655
+#> 2 0.9988992    6      5 9730
+#> 3 0.9979954    3      5 2598
+#> 4 0.9975871    3      5 5938
+#> 5 0.9958567    9      4 2131
+#> 6 0.9949815    4      9 1233
+
+my_miss <- x_test[my_result$id[1], , ] # 最初の画像
+2:6 %>% walk(                          # 2から6番目の画像
+  function(i) { my_miss <<- cbind(my_miss, x_test[my_result$id[i], , ])})
+plot(as.raster(my_miss, max = 1))
+

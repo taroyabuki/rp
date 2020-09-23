@@ -1,0 +1,32 @@
+### 7.6.1 Rの場合
+
+library(tidyverse)
+library(caret)
+my_data <- cars
+my_result <- train(form = dist ~ speed, data = my_data, method = "lm") # モデル生成
+my_data$prediction <- my_result %>% predict(my_data)                   # 予測
+
+my_data$residual <- my_data$dist - my_data$prediction # 残差
+head(my_data)
+#>   speed dist prediction  residual
+#> 1     4    2  -1.849460  3.849460
+#> 2     4   10  -1.849460 11.849460
+#> 3     7    4   9.947766 -5.947766
+#> 4     7   22   9.947766 12.052234
+#> 5     8   16  13.880175  2.119825
+#> 6     9   10  17.812584 -7.812584
+
+f <- function(x) { my_result %>% predict(data.frame(speed = x)) }
+
+my_data %>% ggplot(aes(x = speed, y = dist)) +
+  geom_point() +
+  stat_function(fun = f) +
+  geom_linerange(mapping = aes(ymin = dist, ymax = prediction),
+                 linetype = "dotted")
+
+sqrt(mean(my_data$residual^2))
+# あるいは
+RMSE(my_data$prediction, my_data$dist)
+
+#> [1] 15.06886
+

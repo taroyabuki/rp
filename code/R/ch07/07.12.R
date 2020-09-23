@@ -1,0 +1,59 @@
+#### 7.12.1.1 K最近傍法
+
+library(tidyverse)
+library(caret)
+
+modelLookup("knn")
+#>   model parameter      label forReg forClass probModel
+#> 1   knn         k #Neighbors   TRUE     TRUE      TRUE
+
+my_data <- cars
+my_result <- train(form = dist ~ speed, data = my_data, method = "knn")
+
+my_data <- cars
+my_result <- train(form = dist ~ speed, data = my_data, method = "knn",
+                   tuneGrid = data.frame(k = 1:15))
+
+my_result$results %>% filter(RMSE == min(my_result$results$RMSE))
+#>   k     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
+#> 1 5 17.64586 0.6178916 13.93285 3.173842  0.1087155 2.530383
+
+#### 7.12.1.2 ニューラルネットワーク
+
+library(tidyverse)
+library(caret)
+my_data <- cars
+
+modelLookup("nnet")
+#>   model parameter         label forReg forClass probModel
+#> 1  nnet      size #Hidden Units   TRUE     TRUE      TRUE
+#> 2  nnet     decay  Weight Decay   TRUE     TRUE      TRUE
+
+my_result <- train(form = dist ~ speed, data = my_data, method = "nnet",
+                   linout = TRUE,
+                   preProcess = c("center", "scale"))
+
+my_result <-
+  train(form = dist ~ speed, data = my_data, method = "nnet",
+        linout = TRUE,
+        preProcess = c("center", "scale"),
+        tuneGrid = expand.grid(size = 1:10,
+                               decay = c(0, 1e-4, 1e-3, 1e-2, 1e-1)))
+
+my_result$results %>% filter(RMSE == min(my_result$results$RMSE))
+#>   size decay     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
+#> 1    1     0 16.39848 0.5820078 12.75363 3.096083  0.1650226 2.653641
+
+#### 7.12.1.3 関数\texttt{train
+
+my_result <-
+  train(form = dist ~ speed,
+        data = my_data,
+        method = "nnet",
+        linout = TRUE,
+        preProcess = c("center", "scale"),
+        tuneGrid = expand.grid(size = 1:10,
+                               decay = c(0, 1e-4, 1e-3, 1e-2, 1e-1)),
+        tuneLength = 10, # この例では無効
+        trControl = trainControl(method = "boot", number = 50))
+

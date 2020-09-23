@@ -1,0 +1,57 @@
+### 5.2.1 JSONデータの読み込み
+
+```{r}
+library(tidyverse)
+library(jsonlite)
+
+my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.json"
+my_data <- fromJSON(my_url)
+#my_data <- fromJSON("exam.json") # （ファイルを使う場合）
+my_data
+#>   name english math gender
+#> 1    A      60   70      f
+#> 2    B      90   80      m
+#> 3    C      70   90      m
+#> 4    D      90  100      f
+```
+
+### 5.2.2 XMLデータの読み込み
+
+```{r}
+library(tidyverse)
+library(xml2)
+
+my_url <- "https://raw.githubusercontent.com/taroyabuki/rp/master/data/exam.xml"
+my_xml <- read_xml(my_url)      # XMLデータの読み込み
+#my_xml <- read_xml("exam.xml") # （ファイルを使う場合）
+xml_ns(my_xml)                  # 名前空間の確認（d1）
+#> d1 <-> https://www.example.net/ns/1.0
+```
+
+```{r}
+my_records <- xml_find_all(my_xml, ".//d1:record")
+```
+
+```{r}
+f <- function(record) {
+  tmp <- xml_attrs(record)                    # 属性をすべて取り出し，
+  xml_children(record) %>% walk(function(e) {
+    tmp[xml_name(e)] <<- xml_text(e)          # 子要素の名前と内容を追加する．
+  })
+  tmp
+}
+```
+
+```{r}
+my_data <- my_records %>% map_dfr(f)
+my_data$english <- as.numeric(my_data$english)
+my_data$math    <- as.numeric(my_data$math)
+my_data
+#>   english  math gender name 
+#>     <dbl> <dbl> <chr>  <chr>
+#> 1      60    70 f      A    
+#> 2      90    80 m      B    
+#> 3      70    90 m      C    
+#> 4      90   100 f      D  
+```
+

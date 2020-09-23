@@ -1,0 +1,25 @@
+## 9.10 欠損のあるデータでの学習
+
+library(tidyverse)
+library(caret)
+my_data <- iris
+n <- nrow(iris) # データの件数（150）
+
+1:4 %>% walk(function(c) { my_data[runif(n) < 0.1, c] <<- NA; })
+
+psych::describe(my_data)
+#>              vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+#> Sepal.Length    1 130 5.90 0.81    5.8    5.86 0.96 4.4 7.9   3.5  0.36    -0.61 0.07
+#> Sepal.Width     2 138 3.04 0.44    3.0    3.03 0.44 2.0 4.4   2.4  0.34     0.15 0.04
+#> Petal.Length    3 137 3.86 1.76    4.4    3.88 1.63 1.0 6.9   5.9 -0.37    -1.32 0.15
+#> Petal.Width     4 133 1.22 0.77    1.4    1.21 0.89 0.1 2.5   2.4 -0.12    -1.37 0.07
+#> Species*        5 150 2.00 0.82    2.0    2.00 1.48 1.0 3.0   2.0  0.00    -1.52 0.07
+
+my_model <- train(form = Species ~ ., data = my_data, method = "xgbTree",
+                  na.action = na.pass) # 欠損があっても止めない
+my_model$results %>%
+  filter(Accuracy == max(Accuracy)) %>% # 正解率（検証）の最大値
+  select(Accuracy)
+#>    Accuracy
+#> 1 0.9571577
+

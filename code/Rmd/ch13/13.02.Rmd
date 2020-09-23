@@ -1,0 +1,81 @@
+### 13.2.2 日時の列
+
+```{r}
+# 年の列
+2020:2025
+#> [1] 2020 2021 2022 2023 2024 2025
+
+# 年月の列
+seq(from = as.Date("2020/01/01"), to = as.Date("2020/03/01"),
+    by = "1 month") %>% yearmonth
+#> <yearmonth[5]>
+#> [1] "2020 Jan" "2020 Feb" "2020 Mar" "2020 Apr" "2020 May"
+
+# 年月日の列
+seq(from = as.Date("2020/01/01"), to = as.Date("2020/01/05"),
+    by = "1 day")
+#> [1] "2020-01-01" "2020-01-02" "2020-01-03" "2020-01-04" "2020-01-05"
+
+# 時の列
+seq(from = as.POSIXct("2020/01/01 12:00"),
+    to   = as.POSIXct("2020/01/01 14:00"),
+    by = "hour")
+#> [1] "2020-01-01 12:00:00 UTC" "2020-01-01 13:00:00 UTC" "2020-01-01 14:00:00 UTC"
+```
+
+### 13.2.3 時系列データ用のデータフレーム
+
+```{r}
+library(tidyverse)
+library(tsibble)
+tmp <- read_csv("an_wld_en.csv")
+my_data <- tmp %>% as_tsibble(index = year)
+```
+
+### 13.2.4 移動平均
+
+```{r}
+library(tidyverse)
+library(tsibble)
+tmp <- read_csv("an_wld_en.csv")
+my_data <- tmp %>% as_tsibble(index = year) # 時系列データの作成
+
+library(zoo)
+my_data$mean5 <- my_data$world %>%
+  rollmean(k = 5,           # 移動平均（5年）
+           fill = NA,       # 計算できないところはNa
+           align = "right") # 過去の値を使う．
+
+# 回帰分析の結果をデータフレームに追加する．
+library(caret)
+my_data$lm <- train(form = world ~ year, data = my_data, method = "lm") %>%
+  predict(my_data)
+head(my_data)
+#>    year world  mean5     lm
+#>   <dbl> <dbl>  <dbl>  <dbl>
+#> 1  1891 -0.63 NA     -0.775
+#> 2  1892 -0.71 NA     -0.767
+#> 3  1893 -0.75 NA     -0.760
+#> 4  1894 -0.7  NA     -0.752
+#> 5  1895 -0.68 -0.694 -0.745
+#> 6  1896 -0.47 -0.662 -0.738
+```
+
+```{r}
+my_data %>% pivot_longer(-year) %>% head # 整然データ（確認）
+#>    year name   value
+#>   <dbl> <chr>  <dbl>
+#> 1  1891 world -0.63 
+#> 2  1891 mean5 NA    
+#> 3  1891 lm    -0.775
+#> 4  1892 world -0.71 
+#> 5  1892 mean5 NA    
+#> 6  1892 lm    -0.767
+
+# 折れ線（元データ，移動平均，回帰分析）と散布図（元データ）
+my_data %>% pivot_longer(-year) %>%
+  ggplot(aes(x = year)) +
+  geom_line(aes(y = value, color = name)) +
+  geom_point(data = my_data, mapping = aes(y = world))
+```
+

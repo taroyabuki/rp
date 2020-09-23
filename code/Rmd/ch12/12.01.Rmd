@@ -1,0 +1,44 @@
+## 12.1 準備
+
+```{r}
+library(keras)
+#c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
+#↑がうまく行かない場合
+c(c(x_train, y_train), c(x_test, y_test)) %<-% readRDS("/tmp/mnist.obj")
+```
+
+```{r}
+dim(x_train)
+#> [1] 60000    28    28
+```
+
+```{r}
+x_train[5, , ]
+```
+
+```{r}
+plot(as.raster(x = x_train[5, , ],
+               max = max(x_train)))
+```
+
+```{r}
+c(min(x_train), max(x_train))
+#> [1]   0 255
+```
+
+```{r}
+x_train <- x_train / 255
+x_test  <- x_test  / 255
+```
+
+```{r}
+head(y_train)
+#> [1] 5 0 4 1 9 2
+```
+
+```{r}
+my_index <- sample(1:60000, 6000)
+x_train <- x_train[my_index, , ]
+y_train <- y_train[my_index]
+```
+

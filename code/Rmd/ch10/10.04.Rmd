@@ -1,0 +1,29 @@
+### 10.4.1 Rの場合
+
+```{r}
+my_data <- epitools::expand.table(Titanic)
+head(my_data)
+#>   Class  Sex   Age Survived
+#> 1   1st Male Child      Yes
+#> 2   1st Male Child      Yes
+#> 3   1st Male Child      Yes
+#> 4   1st Male Child      Yes
+#> 5   1st Male Child      Yes
+#> 6   1st Male Adult       No
+```
+
+#### 10.4.3.1 Rの場合
+
+```{r}
+library(tidyverse)
+library(caret)
+my_data <- epitools::expand.table(Titanic)
+
+my_model <- train(form = Survived ~ .,data = my_data,  method = "rpart")
+my_model$results %>% filter(Accuracy == max(Accuracy)) # 正解率（検証）の最大値
+#>           cp  Accuracy     Kappa AccuracySD    KappaSD
+#> 1 0.01125176 0.7810916 0.4196713 0.01187911 0.02960261
+
+rpart.plot::rpart.plot(my_model$finalModel, digit = 3, type = 5) # 可視化
+```
+
