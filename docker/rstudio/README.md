@@ -15,15 +15,19 @@ docker run \
 taroyabuki/rstudio
 ```
 
-ホスト側で8787を使っているなら，`-p 8080:8787`などとして，別のポートを使う．
+- パスワードを変える場合は，「`-e PASSWORD=新しいパスワード`」とする．
+- ホスト側で8787を使っているなら，`-p 8080:8787`などとして，別のポートを使う．
 
 ブラウザでhttp://localhost:8787 を開く．（ポートを変えた場合は数値を変える．）
 
 ## 起動スクリプト
 
-起動スクリプトをダウンロードしておけば，`sh ~/rstudio.sh`で起動できる．（パスワードは`password`．変更したい場合は~/rstudio.shを編集する．）
+起動スクリプトをダウンロードしておけば，`sh rstudio.sh`で起動できる．（パスワードやポートを返る場合はrstudio.shを編集する．）
 
 ```bash
-curl -o ~/rstudio.sh \
-https://raw.githubusercontent.com/taroyabuki/rp/master/docker/rstudio/rstudio.sh
+wget https://raw.githubusercontent.com/taroyabuki/rp/master/docker/rstudio.sh
 ```
+
+## 独自イメージ
+
+イメージを変更したい場合は，Dockerfileを編集し，「`docker build -t rstudio .`」，[local-rstudio.sh](../local-rstudio.sh)でコンテナを起動する．

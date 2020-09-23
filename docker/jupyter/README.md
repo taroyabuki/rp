@@ -15,15 +15,19 @@ start-notebook.sh \
 --NotebookApp.token='password'
 ```
 
-ホスト側で8888を使っているなら，`-p 8080:8888`などとして，別のポートを使う．
+- パスワードを変える場合は，「`--NotebookApp.token='新しいパスワード'`」とする．
+- ホスト側で8787を使っているなら，`-p 8080:8888`などとして，別のポートを使う．
 
 ブラウザでhttp://localhost:8888 を開く．（ポートを変えた場合は数値を変える．）
 
 ## 起動スクリプト
 
-起動スクリプトをダウンロードしておけば，`sh ~/jupyter.sh`で起動できる．（パスワードは`password`．変更したい場合は~/jupyter.shを編集する．）
+起動スクリプトをダウンロードしておけば，`sh jupyter.sh`で起動できる．（パスワードやポートを変える場合はjupyter.shを編集する．）
 
 ```bash
-curl -o ~/jupyter.sh \
-https://raw.githubusercontent.com/taroyabuki/rp/master/docker/jupyter/jupyter.sh
+wget https://raw.githubusercontent.com/taroyabuki/rp/master/docker/jupyter.sh
 ```
+
+## 独自イメージ
+
+イメージを変更したい場合は，Dockerfileを編集し，「`docker build -t jupyter .`」，[local-rstudio.sh](../local-jupyter.sh)でコンテナを起動する．
