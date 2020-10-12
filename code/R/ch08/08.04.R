@@ -1,8 +1,10 @@
-#### 8.4.1.1 Rの場合
+### 8.4.1 部分集合選択（R）
 
 library(tidyverse)
 library(caret)
-my_data <- read.csv("wine.csv")
+#my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
+my_data <- read_csv(my_url)
 
 n <- nrow(my_data) # データの件数
 my_data2 <- my_data %>% mutate(rand1 = runif(n), # 乱数からなる列1
@@ -25,7 +27,9 @@ coef(my_model$finalModel, id = 3)
 
 library(tidyverse)
 library(caret)
-my_data <- read.csv("wine.csv")
+#my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
+my_data <- read_csv(my_url)
 
 my_model <- train(form = LPRICE2 ~ .,
                   data = my_data,

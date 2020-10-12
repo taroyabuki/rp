@@ -1,59 +1,32 @@
-#### 7.12.1.1 K最近傍法
+### 7.12.1 Rの場合
 
 library(tidyverse)
 library(caret)
-
 modelLookup("knn")
 #>   model parameter      label forReg forClass probModel
 #> 1   knn         k #Neighbors   TRUE     TRUE      TRUE
 
 my_data <- cars
-my_result <- train(form = dist ~ speed, data = my_data, method = "knn")
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
 
-my_data <- cars
-my_result <- train(form = dist ~ speed, data = my_data, method = "knn",
-                   tuneGrid = data.frame(k = 1:15))
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
+                  tuneGrid = expand.grid(k = 1:15))
 
-my_result$results %>% filter(RMSE == min(my_result$results$RMSE))
-#>   k     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
-#> 1 5 17.64586 0.6178916 13.93285 3.173842  0.1087155 2.530383
+ggplot(my_model)
 
-#### 7.12.1.2 ニューラルネットワーク
+my_model$results %>% filter(RMSE == min(my_model$results$RMSE))
+#>   k     RMSE  Rsquared      MAE   RMSESD RsquaredSD MAESD
+#> 1 5 16.37505 0.6116958 12.84625 3.271331  0.1077829 2.356
 
-library(tidyverse)
-library(caret)
-my_data <- cars
+#### 7.12.1.1 関数\texttt{train
 
-modelLookup("nnet")
-#>   model parameter         label forReg forClass probModel
-#> 1  nnet      size #Hidden Units   TRUE     TRUE      TRUE
-#> 2  nnet     decay  Weight Decay   TRUE     TRUE      TRUE
-
-my_result <- train(form = dist ~ speed, data = my_data, method = "nnet",
-                   linout = TRUE,
-                   preProcess = c("center", "scale"))
-
-my_result <-
-  train(form = dist ~ speed, data = my_data, method = "nnet",
-        linout = TRUE,
-        preProcess = c("center", "scale"),
-        tuneGrid = expand.grid(size = 1:10,
-                               decay = c(0, 1e-4, 1e-3, 1e-2, 1e-1)))
-
-my_result$results %>% filter(RMSE == min(my_result$results$RMSE))
-#>   size decay     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
-#> 1    1     0 16.39848 0.5820078 12.75363 3.096083  0.1650226 2.653641
-
-#### 7.12.1.3 関数\texttt{train
-
-my_result <-
+my_model <-
   train(form = dist ~ speed,
         data = my_data,
-        method = "nnet",
+        method = "knn",
         linout = TRUE,
         preProcess = c("center", "scale"),
-        tuneGrid = expand.grid(size = 1:10,
-                               decay = c(0, 1e-4, 1e-3, 1e-2, 1e-1)),
+        tuneGrid = expand.grid(k = 1:15),
         tuneLength = 10, # この例では無効
         trControl = trainControl(method = "boot", number = 50))
 

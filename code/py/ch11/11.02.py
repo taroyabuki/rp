@@ -24,9 +24,7 @@ from sklearn.model_selection import *
 my_cv = RepeatedKFold(n_splits=5, n_repeats=10)
 
 # 交差検証の実行
-my_scores = cross_val_score(my_model, X, y,
-                            cv=my_cv,
-                            n_jobs=-1,
+my_scores = cross_val_score(my_model, X, y, cv=my_cv,
                             scoring='neg_mean_squared_error') # -MSEを使う．
 -my_scores.mean() # MSE（検証）
 #> 0.2958079750627453
@@ -55,12 +53,10 @@ my_history = my_model.fit(
     epochs=500,            # エポック数の上限
     callbacks=my_cb)       # エポックごとに行う処理
 
-import matplotlib.pyplot as plt
+import pandas as pd
 tmp = my_history.history
-plt.plot(tmp['val_loss'], label='validation')
-plt.plot(tmp['loss'], label='training')
-plt.ylabel('loss')
-plt.legend()
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}).plot(ylabel='loss')
 
 {k: v[-1] for k, v in my_history.history.items()}
 #> {'loss': 0.1775408387184143, 'val_loss': 0.134183868765831}

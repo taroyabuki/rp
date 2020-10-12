@@ -1,4 +1,4 @@
-### 7.7.1 第1の例（訓練誤差が0になる例）
+### 7.7.1 第1の例：RMSE（訓練）が0になる例
 
 library(tidyverse)
 library(caret)
@@ -6,14 +6,14 @@ my_data <- cars
 my_idx <- c(2, 7, 11, 18, 27, 30, 34, 38, 39, 44) # 抜き出すデータの番号
 my_train <- my_data[my_idx, ]                     # データを抜き出す．
 
-my_result <- train(form = dist ~ poly(speed, degree = 10, raw = TRUE),
-                   data = my_train, method = "lm")
+my_model <- train(form = dist ~ poly(speed, degree = 10, raw = TRUE),
+                  data = my_train, method = "lm")
 
-my_pred <- my_result %>% predict(my_train)
-RMSE(my_pred, my_train$dist)
+y_ <- my_model %>% predict(my_train)
+RMSE(y_, my_train$dist)
 #> [1] 4.084382e-07
 
-f <- function(x) { my_result %>% predict(data.frame(speed = x)) }
+f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
 
 my_data %>% ggplot(aes(x = speed, y = dist)) +
   coord_cartesian(ylim = c(0, 120)) + # y座標の描画範囲
@@ -21,10 +21,10 @@ my_data %>% ggplot(aes(x = speed, y = dist)) +
   geom_point(data = my_data[-my_idx, ]) + # 訓練に使わなかったデータ
   stat_function(fun = f)
 
-my_result$results$RMSE
+my_model$results$RMSE
 #> [1] 4016.54
 
-### 7.7.2 第2の例（訓練誤差が同じになるデータ）
+### 7.7.2 第2の例：RMSE（訓練）誤差が同じになるデータ
 
 library(tidyverse)
 library(caret)
@@ -37,8 +37,8 @@ my_data <- data.frame(
   Y4 = c(6.58, 5.76, 7.71, 8.84, 8.47, 7.04, 5.25, 12.50, 5.56, 7.91, 6.89))
 
 my_f <- function(x) {
-  my_result <- train(form = x, data = my_data, method = "lm")
-  my_result$results$RMSE
+  my_model <- train(form = x, data = my_data, method = "lm")
+  my_model$results$RMSE
 }
 
 my_v <- c(Y1 ~ X1, Y2 ~ X1, Y3 ~ X1, Y4 ~ X2)

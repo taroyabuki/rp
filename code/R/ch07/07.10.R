@@ -7,21 +7,20 @@ curve(1 / (1 + exp(-x)), -6, 6)
 library(tidyverse)
 library(caret)
 my_data <- cars
+my_model <- train(form = dist ~ speed, data = my_data, method = "nnet",
+                  linout = TRUE,                     # 回帰
+                  preProcess = c("center", "scale")) # 標準化
 
-my_result <- train(form = dist ~ speed, data = my_data, method = "nnet",
-                   linout = TRUE,                     # 回帰（nnetで回帰を行う際は必須）
-                   preProcess = c("center", "scale")) # 標準化
-
-f <- function(x) { my_result %>% predict(data.frame(speed = x))}
+f <- function(x) { my_model %>% predict(data.frame(speed = x))}
 
 my_data %>% ggplot(aes(x = speed, y = dist)) +
   geom_point() +         # データ
   stat_function(fun = f) # モデル
 
-w <- my_result$finalModel$wts          # 重み（訓練結果）
+w <- my_model$finalModel$wts           # 重み（訓練結果）
 f <- function(x) { 1 / (1 + exp(-x)) } # 隠れ層の活性化関数（標準シグモイド関数）
 g <- function(x) { x }                 # 出力層の活性化関数（何もしない）
-h <- function(x) {                     # 標準化したspeedからdistを計算する関数（ニューロン数は3個）
+h <- function(x) {                     # 標準化したspeedからdistを計算する関数
   g(w[7] +
       w[8]  * f(w[1] + w[2] * x) +
       w[9]  * f(w[3] + w[4] * x) +

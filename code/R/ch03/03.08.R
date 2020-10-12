@@ -1,3 +1,8 @@
+## 3.8 反復処理
+
+library(furrr)
+plan(multisession)
+
 ### 3.8.1 1次元データ→1次元データ
 
 my_f1 <- function(x) {

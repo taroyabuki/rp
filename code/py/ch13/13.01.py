@@ -30,7 +30,7 @@ my_data = pd.read_csv('an_wld_en.csv')
 
 from sklearn.linear_model import LinearRegression
 X, y = my_data[['year']], my_data['world']
-my_data['lm'] = LinearRegression().fit(X, y)
+my_model = LinearRegression().fit(X, y)
 
 [my_model.intercept_, my_model.coef_] # 係数
 #> [-14.844194897883124, array([0.00744024])]

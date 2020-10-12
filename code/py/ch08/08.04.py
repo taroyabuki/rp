@@ -9,18 +9,18 @@ params = {'l1_ratio': np.arange(0, 0.001, 0.0001),
           'alpha': np.arange(0.01, 0.2, 0.01)}
 
 import pandas as pd
-tmp = pd.read_csv('wine.csv')
+#tmp = pd.read_csv('wine.csv') # 8.1節で作成したwine.csvを使う．
+my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv'
+tmp = pd.read_csv(my_url)
 X, y = tmp.iloc[:, 1:5], tmp.LPRICE2
 
 from sklearn.model_selection import *
 my_cv = RepeatedKFold(n_splits=5, n_repeats=25) # 5分割交差検証（10回）
 
-import os
 my_model = GridSearchCV(my_model,
                         params,
                         cv=my_cv,
-                        return_train_score=True, # 訓練正解率の保存
-                        n_jobs=os.cpu_count())   # 並列処理
+                        return_train_score=True) # 訓練正解率の保存
 my_model.fit(X, y) # 訓練
 
 my_model.best_params_ # 最良パラメータ

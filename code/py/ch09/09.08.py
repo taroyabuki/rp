@@ -13,9 +13,7 @@ from sklearn.model_selection import *
 my_cv = RepeatedKFold(n_splits=5, n_repeats=10)
 
 # 交差検証の実行
-my_scores = cross_val_score(my_model, X, y,
-                            cv=my_cv,
-                            n_jobs=-1)
+my_scores = cross_val_score(my_model, X, y, cv=my_cv)
 my_scores.mean() # 正解率（検証）
 #> 0.9560000000000001
 

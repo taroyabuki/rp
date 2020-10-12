@@ -21,17 +21,17 @@ library(caret)
 my_data <- iris
 my_model <- train(form = Species ~ ., data = my_data, method = "knn")
 
-my_pred <- my_model %>% predict(my_data) # 訓練データの再現
-table(my_pred, my_data$Species)           # 混同行列の作成
-#> my_pred      setosa versicolor virginica
+y_ <- my_model %>% predict(my_data) # 訓練データの再現
+table(y_, my_data$Species)           # 混同行列の作成
+#> y_           setosa versicolor virginica
 #>   setosa         50          0         0
 #>   versicolor      0         48         1
 #>   virginica       0          2        49
 
-mean(my_pred == my_data$Species)
+mean(y_ == my_data$Species)
 #> [1] 0.98
 
-confusionMatrix(data = my_pred, reference = my_data$Species)
+y_ %>% confusionMatrix(my_data$Species)
 #> Confusion Matrix and Statistics
 #> 
 #>             Reference

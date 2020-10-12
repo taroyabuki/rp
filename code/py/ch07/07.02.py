@@ -25,5 +25,5 @@ my_data.describe() # 基本統計量
 #> 75%    19.000000   56.000000
 #> max    25.000000  120.000000
 
-my_data.plot('speed', 'dist', kind='scatter') # 結果は割愛
+my_data.plot(x='speed', style='o') # 結果は割愛
 

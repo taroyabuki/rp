@@ -1,3 +1,10 @@
+## 3.8 反復処理
+
+```{r}
+library(furrr)
+plan(multisession)
+```
+
 ### 3.8.1 1次元データ→1次元データ
 
 ```{r}

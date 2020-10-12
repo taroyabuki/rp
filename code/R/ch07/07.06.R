@@ -3,8 +3,8 @@
 library(tidyverse)
 library(caret)
 my_data <- cars
-my_result <- train(form = dist ~ speed, data = my_data, method = "lm") # モデル生成
-my_data$prediction <- my_result %>% predict(my_data)                   # 予測
+my_model <- train(form = dist ~ speed, data = my_data, method = "lm") # 訓練
+my_data$prediction <- my_model %>% predict(my_data)                   # 予測
 
 my_data$residual <- my_data$dist - my_data$prediction # 残差
 head(my_data)
@@ -16,7 +16,7 @@ head(my_data)
 #> 5     8   16  13.880175  2.119825
 #> 6     9   10  17.812584 -7.812584
 
-f <- function(x) { my_result %>% predict(data.frame(speed = x)) }
+f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
 
 my_data %>% ggplot(aes(x = speed, y = dist)) +
   geom_point() +

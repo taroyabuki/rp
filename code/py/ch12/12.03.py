@@ -59,11 +59,20 @@ my_history = my_model.fit(
     epochs=20,            # エポック数の上限
     callbacks=my_cb)      # エポックごとに行う処理
 
-my_plot_loss_acc(my_history)
+import matplotlib.pyplot as plt
+import pandas as pd
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+tmp = my_history.history
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}
+            ).plot(ax=ax1, ylabel='loss', style='o-')
+pd.DataFrame({'valitation':tmp['val_accuracy'],
+              'training':tmp['accuracy']}
+            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False, style='o-')
 
 my_model.evaluate(x=x_test2d, y=y_test)
-#> [0.15736965835094452,
-#>  0.9553999900817871]
+#> [0.12560397386550903,
+#>  0.9670000076293945]
 
 from keras.models import Sequential
 from keras.layers import *
@@ -96,11 +105,20 @@ my_history = my_model.fit(
     epochs=20,            # エポック数の上限
     callbacks=my_cb)      # エポックごとに行う処理
 
-my_plot_loss_acc(my_history)
+import matplotlib.pyplot as plt
+import pandas as pd
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+tmp = my_history.history
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}
+            ).plot(ax=ax1, ylabel='loss', style='o-')
+pd.DataFrame({'valitation':tmp['val_accuracy'],
+              'training':tmp['accuracy']}
+            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False, style='o-')
 
 my_model.evaluate(x=x_test2d, y=y_test)
-#> [0.06864257901906967,
-#>  0.9793999791145325]
+#> [0.06175168976187706,
+#>  0.9790999889373779]
 
 import numpy as np
 import pandas as pd

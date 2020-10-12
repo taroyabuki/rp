@@ -13,7 +13,7 @@ my_cv = RepeatedKFold(n_splits=5, n_repeats=10) # 5分割交差検証（10回）
 def f(x):
     my_model = LinearRegression()
     X_poly = PolynomialFeatures(x).fit_transform(X)
-    my_scores =  cross_validate(my_model, X_poly, y, cv=my_cv, n_jobs=-1,
+    my_scores =  cross_validate(my_model, X_poly, y, cv=my_cv,
                                 return_train_score=True) # 決定係数（訓練）も返す．
     my_train = my_scores['train_score']
     my_test = my_scores['test_score']

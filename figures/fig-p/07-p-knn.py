@@ -1,21 +1,18 @@
-import matplotlib.pyplot as plt
-
 import statsmodels.api as sm
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
+X, y = my_data[['speed']], my_data['dist']
 
 from sklearn.neighbors import KNeighborsRegressor
-my_knr = KNeighborsRegressor() #n_neighbors=5)
-my_knr.fit(my_data[['speed']] , my_data['dist'])
+my_model = KNeighborsRegressor() # (n_neighbors=5)
+my_model.fit(X, y)
 
-import numpy as np # 矢吹が補いました．
-# pltとfig,axのスタイルの違いを，最初にmatplotlibを紹介するところで書きましょう．ここは，pltで．
-# fig, ax = plt.subplots()
-tmp = np.linspace(my_data['speed'].min(), my_data['speed'].max(), num=100)
-y_ = my_knr.predict(tmp[:, np.newaxis])
+import pandas as pd
+import numpy as np
+# モデル可視化用のデータフレームを作る．
+my_min, my_max = my_data['speed'].min(), my_data['speed'].max()
+tmp = pd.DataFrame({'speed':np.linspace(my_min, my_max, num=100)})
+tmp['model'] = my_model.predict(tmp) # 予測結果の列を加える．
 
-plt.scatter(my_data['speed'], my_data['dist'], c='c', label='training')
-plt.plot(tmp, y_, c='k', label='prediction')
-plt.xlabel('speed')
-plt.ylabel('dist')
-plt.legend()
+pd.concat([my_data, tmp]).plot(x='speed', style=['o', '-']) # まとめて描画する．
+import matplotlib.pyplot as plt
 plt.savefig('07-p-knn.pdf')

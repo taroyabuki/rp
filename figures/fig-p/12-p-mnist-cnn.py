@@ -40,18 +40,15 @@ my_history = my_model.fit(
     callbacks=my_cb)      # エポックごとに行う処理
 
 import matplotlib.pyplot as plt
-def my_plot_loss_acc(history):
-    f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-    ax1.plot(history.history['val_loss'], label='validation')
-    ax1.plot(history.history['loss'], label='training')
-    ax1.set_ylabel('loss')
-    ax1.legend()
-    ax2.plot(history.history['val_accuracy'])
-    ax2.plot(history.history['accuracy'])
-    ax2.set_xlabel('epoch')
-    ax2.set_ylabel('accuracy')
-
-my_plot_loss_acc(my_history)
+import pandas as pd
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+tmp = my_history.history
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}
+            ).plot(ax=ax1, ylabel='loss', style='o-')
+pd.DataFrame({'valitation':tmp['val_accuracy'],
+              'training':tmp['accuracy']}
+            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False, style='o-')
 plt.savefig('12-p-mnist-cnn.pdf')
 
 print(my_model.evaluate(x=x_test2d, y=y_test))

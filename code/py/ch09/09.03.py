@@ -1,11 +1,11 @@
 ### 9.3.2 Pythonの場合
 
+from sklearn.neighbors import KNeighborsClassifier
+my_model = KNeighborsClassifier()
+
 import statsmodels.api as sm
 iris = sm.datasets.get_rdataset('iris', 'datasets').data
 X, y = iris.iloc[:, 0:4], iris.Species
-
-from sklearn.neighbors import KNeighborsClassifier
-my_model = KNeighborsClassifier(n_neighbors=5)
 my_model.fit(X, y)
 
 import pandas as pd

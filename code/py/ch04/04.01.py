@@ -58,7 +58,7 @@ s = pd.Series(x)
 s.describe()
 #> count      5.000000 （データ数）
 #> mean     175.000000 （平均）
-#> std        7.905694 （不偏分散の非負の平方根）
+#> std        7.905694 （不偏分散の平方根）
 #> min      165.000000 （最小値）
 #> 25%      170.000000 （第1四分位数）
 #> 50%      175.000000 （中央値）
@@ -115,7 +115,7 @@ iris.describe()
 iris.boxplot('sepal length (cm)',
              by='target')
 
-辻君へ：お願いします．
+コメントY：お願いします．
 
 iris.plot('sepal length (cm)',
           'sepal width (cm)',

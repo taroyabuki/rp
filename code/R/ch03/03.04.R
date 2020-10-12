@@ -76,7 +76,7 @@ identical(u, w)
 # 要素ごとの比較
 u == v
 #> [1] TRUE TRUE TRUE
-> u == w
+u == w
 #> [1]  TRUE  TRUE FALSE
 
 # 同じ要素の数

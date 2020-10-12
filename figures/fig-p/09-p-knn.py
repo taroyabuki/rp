@@ -23,10 +23,10 @@ my_search = GridSearchCV(my_model,
 my_search.fit(X, y) # 訓練
 
 import pandas as pd
-my_plt = pd.DataFrame({
-    'n_neighbors':range(1,21),
-    'train':my_search.cv_results_['mean_train_score'],
-    'test':my_search.cv_results_['mean_test_score']}).plot('n_neighbors')
-my_plt.set_ylabel('Accuracy')
+my_result = my_search.cv_results_
+my_df = pd.DataFrame({'k':range(1,21),
+                      'train':my_result['mean_train_score'],
+                      'test':my_result['mean_test_score']})
+my_df.plot(x='k', ylabel='Accuracy', style='o-')
 import matplotlib.pyplot as plt
 plt.savefig('09-p-knn.pdf')

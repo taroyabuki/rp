@@ -2,9 +2,9 @@
 
 library(tidyverse)
 library(caret)
-my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
-#my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
-#my_data <- read_csv(my_url)
+#my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
+my_data <- read_csv(my_url)
 
 my_model <- train(form = LPRICE2 ~ WRAIN + DEGREES + HRAIN + TIME_SV,
                   data = my_data,
@@ -25,11 +25,15 @@ my_model$results
 
 ### 8.2.3 補足：行列計算による再現
 
+#my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
+my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
+my_data <- read_csv(my_url)
+
 A <- my_data[, -1] %>% # 1列目（LPRICE2）を除外して，
   mutate(b = 1) %>%    # すべて1の列を追加して，
   as.matrix            # 行列にする．
 y <- my_data$LPRICE2
-solve(t(A) %*% A, t(A) %*% y) # AT A = AT yを解く（ATはAの転置行列）
+solve(t(A) %*% A, t(A) %*% y) # t(A) A z = t(A) yを解く（t(A)はAの転置行列）
 #>                  [,1]
 #> WRAIN     0.001166782
 #> DEGREES   0.616392441

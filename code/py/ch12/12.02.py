@@ -1,5 +1,15 @@
-x_train1d = x_train.reshape(-1, 784)
-x_test1d = x_test.reshape(-1, 784)
+from keras.datasets import mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train = x_train / 255
+x_test  = x_test  / 255
+
+import random
+my_index = random.sample(range(60000), 6000)
+x_train = x_train[my_index, :, :]
+y_train = y_train[my_index]
+
+x_train1d = x_train.reshape(len(x_train), 784)
+x_test1d = x_test.reshape(len(x_test), 784)
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -24,28 +34,37 @@ my_history = my_model.fit(
     epochs=20,            # エポック数の上限
     callbacks=my_cb)      # エポックごとに行う処理
 
-my_plot_loss_acc(my_history)
+import matplotlib.pyplot as plt
+import pandas as pd
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+tmp = my_history.history
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}
+            ).plot(ax=ax1, ylabel='loss', style='o-')
+pd.DataFrame({'valitation':tmp['val_accuracy'],
+              'training':tmp['accuracy']}
+            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False, style='o-')
 
 my_prob = my_model.predict(x_test1d)
 my_pred = np.argmax(my_prob, axis=-1)
 
 from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, my_pred)
-#> array([[ 962,    0,    1,    4,    0,    3,    6,    1,    1,    2],
-#>        [   0, 1109,    4,    1,    0,    1,    5,    2,   13,    0],
-#>        [   8,    5,  938,   14,    4,    2,   12,   17,   30,    2],
-#>        [   1,    1,   13,  954,    0,   10,    1,   11,   14,    5],
-#>        [   2,    4,    2,    5,  911,    0,   15,    6,    6,   31],
-#>        [   8,    2,    1,   35,    3,  812,    9,    7,   12,    3],
-#>        [  12,    3,    3,    1,    8,   21,  903,    1,    6,    0],
-#>        [   1,    6,   14,   10,    3,    1,    0,  972,    2,   19],
-#>        [   6,    1,    8,   19,    6,   12,   10,   16,  891,    5],
-#>        [  10,    5,    1,   15,   15,    4,    1,   26,    8,  924]])
+#> array([[ 961,    0,    1,    3,    0,    3,    9,    1,    1,    1],
+#>        [   0, 1115,    3,    1,    1,    2,    5,    0,    8,    0],
+#>        [  11,    2,  952,   17,    5,    3,    9,    9,   22,    2],
+#>        [   2,    0,    6,  943,    1,   27,    1,    6,   16,    8],
+#>        [   2,    1,    4,    1,  918,    0,   14,    1,    3,   38],
+#>        [   5,    2,    0,   15,    2,  843,   11,    1,    7,    6],
+#>        [  11,    3,    2,    1,    7,   13,  920,    0,    1,    0],
+#>        [   2,   11,   19,   11,    1,    3,    0,  955,    2,   24],
+#>        [   9,    2,    5,   22,    6,   18,   11,    7,  886,    8],
+#>        [   9,    7,    3,   11,   19,    7,    1,    7,    7,  938]])
 
 (y_test == my_pred).mean()
-#> 0.9376
+#> 0.9431
 
 my_model.evaluate(x=x_test1d, y=y_test)
-#> [0.21355792880058289,
-#>  0.9376000165939331]
+#> [0.19800357520580292,
+#>  0.9430999755859375]
 

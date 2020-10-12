@@ -14,6 +14,7 @@ from sklearn.linear_model import LinearRegression
 X_train, y_train = my_train[['year']], my_train['world']
 my_lm_model = LinearRegression().fit(X_train, y_train)
 
+import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 y_ = my_lm_model.predict(X_train)
 [np.sqrt(mean_squared_error(y_train, y_)), # RMSE
@@ -22,7 +23,7 @@ y_ = my_lm_model.predict(X_train)
 #> [0.11727053954998497, 0.73458474420936, 0.73458474420936]
 
 X_test, y_test = my_test[['year']], my_test['world']
-y_ = my_lm_model.predict(X)
+y_ = my_lm_model.predict(X_test)
 [np.sqrt(mean_squared_error(y_test, y_)), # RMSE
  r2_score(y_true=y_test, y_pred=y_),      # 決定係数（その1）
  my_lm_model.score(X_test, y_test)]       # 決定係数（その2）

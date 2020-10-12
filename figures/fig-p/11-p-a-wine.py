@@ -37,11 +37,13 @@ my_history = my_model.fit(
     epochs=500,            # エポック数の上限
     callbacks=my_cb)       # エポックごとに行う処理
 
+
+import pandas as pd
+tmp = my_history.history
+pd.DataFrame({'validation':tmp['val_loss'],
+              'training':tmp['loss']}).plot(ylabel='loss')
+
 import matplotlib.pyplot as plt
-plt.plot(my_history.history['val_loss'], label='validation')
-plt.plot(my_history.history['loss'], label='training')
-plt.ylabel('loss')
-plt.legend()
 plt.savefig('11-p-a-wine.pdf')
 
 {k: v[-1] for k, v in my_history.history.items()}

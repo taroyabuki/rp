@@ -4,10 +4,10 @@ library(tidyverse)
 library(caret)
 my_data <- cars
 
-my_result <- train(form = dist ~ speed, data = my_data, method = "lm",
-                   trControl = trainControl(method = "cv", number = 5))
+my_model <- train(form = dist ~ speed, data = my_data, method = "lm",
+                  trControl = trainControl(method = "cv", number = 5))
 
-my_result$results
+my_model$results
 #>   intercept     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
 #> 1      TRUE 15.54312 0.6844412 12.37043 3.497211  0.1979125 3.068685
 

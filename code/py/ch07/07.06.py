@@ -1,11 +1,14 @@
 ### 7.6.2 Pythonの場合
 
+from sklearn.linear_model import LinearRegression
+my_model = LinearRegression()
+
 import statsmodels.api as sm
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
-from sklearn.linear_model import LinearRegression
-lr = LinearRegression()
-my_result = lr.fit(my_data[['speed']], my_data['dist'])
-my_data['prediction'] = my_result.predict(my_data[['speed']])
+X, y = my_data[['speed']], my_data['dist']
+my_model.fit(X, y)
+
+my_data['prediction'] = my_model.predict(X)
 
 my_data['residual'] = my_data['dist'] - my_data['prediction']
 my_data.head()
@@ -16,10 +19,9 @@ my_data.head()
 #> 3      7    22    9.947766  12.052234
 #> 4      8    16   13.880175   2.119825
 
-# 残差計算の前にやってもいいのではないか？と思いました．
 import matplotlib.pyplot as plt
-plt.scatter(my_data['speed'], my_data['dist'], c='c', label='train')
-plt.plot(my_data['speed'], my_data['prediction'], c='k', label='prediction')
+plt.scatter(my_data['speed'], my_data['dist'], label='data')
+plt.plot(my_data['speed'], my_data['prediction'], label='model')
 for i in my_data.index:
     v = my_data.loc[i]
     plt.vlines(v['speed'], v['dist'], v['prediction'], colors='g', linestyles='dashed')
@@ -27,10 +29,10 @@ plt.xlabel('speed')
 plt.ylabel('dist')
 plt.legend()
 
-(my_data['residual'] ** 2).mean()
+(my_data['residual'] ** 2).mean() ** 0.5
 # あるいは
 from sklearn.metrics import mean_squared_error
-mean_squared_error(my_data['dist'], my_data['prediction'])
+mean_squared_error(my_data['dist'], my_data['prediction']) ** 0.5
 
-#> 227.07042102189783
+#> 15.068855995791381
 

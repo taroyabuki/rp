@@ -4,6 +4,3 @@ library(doParallel)
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
 
-library(furrr)
-plan(multisession)
-

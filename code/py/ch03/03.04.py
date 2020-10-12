@@ -68,7 +68,7 @@ all(u == w)
 # 要素ごとの比較
 u == v
 #> array([ True,  True,  True])
-> u == w
+u == w
 #> array([ True,  True, False])
 
 # 同じ要素の数
