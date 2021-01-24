@@ -13,11 +13,11 @@ RUN install2.r --error \
   gridExtra \
   igraph \
   MLmetrics \
+  prophet \
   psych \
   ROCR \
   randomForest \
   rpart.plot \
-  tsibble \
   xgboost
 
 RUN installGithub.r \
@@ -39,6 +39,8 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
     curl \
     less \
     libglpk-dev \
+    libnode64 \
+    libtbb2 \
     vim-tiny \
   && apt-get --reinstall install -y man-db coreutils manpages \
   && apt-get clean \
@@ -51,4 +53,5 @@ WORKDIR /home/rstudio
 #  feasts \
 #  glmnet \
 #  leaps \
+#  tsibble \
 #  zoo
