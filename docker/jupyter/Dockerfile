@@ -1,6 +1,7 @@
 FROM jupyter/datascience-notebook
 
 RUN pip install \
+  fbprophet \
   keras \
   lxml \
   pca \
@@ -8,7 +9,9 @@ RUN pip install \
   tensorflow \
   xgboost
 
-RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
+#RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
+RUN Rscript -e '\
+  Sys.setenv(DOWNLOAD_STATIC_LIBV8=1); \
   install.packages(c(\
     "doParallel",\
     "e1071",\
@@ -18,10 +21,10 @@ RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos =
     "ggrepel",\
     "gridExtra",\
     "igraph",\
+    "prophet",\
     "psych",\
     "ROCR",\
     "rpart.plot",\
-    "tsibble",\
     "xgboost"\
   ), repos="https://cran.rstudio.com");\
   devtools::install_github(c(\
@@ -42,3 +45,6 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && bash -c 'yes | unminimize' # ad hoc
 
 WORKDIR /home/jovyan
+
+#必要かも
+#    "tsibble",\
