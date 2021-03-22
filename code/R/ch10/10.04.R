@@ -1,6 +1,9 @@
-### 10.4.1 Rの場合
+## 10.4 タイタニック
 
-my_data <- epitools::expand.table(Titanic)
+my_url <- str_c("https://raw.githubusercontent.com",
+                "/taroyabuki/fromzero/master/data/titanic.csv")
+my_data <- read_csv(my_url)
+
 head(my_data)
 #>   Class  Sex   Age Survived
 #> 1   1st Male Child      Yes
@@ -10,10 +13,10 @@ head(my_data)
 #> 5   1st Male Child      Yes
 #> 6   1st Male Adult       No
 
-#### 10.4.3.1 Rの場合
+#### 10.4.1.1 Rの場合
 
-library(tidyverse)
 library(caret)
+library(tidyverse)
 my_data <- epitools::expand.table(Titanic)
 
 my_model <- train(form = Survived ~ .,data = my_data,  method = "rpart")

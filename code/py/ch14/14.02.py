@@ -1,28 +1,4 @@
-import pandas as pd
-my_data = pd.DataFrame(
-    {'x': [0, -16, 10, 10],
-     'y': [0, 0, 10, -15]},
-    index=['A', 'B', 'C', 'D'])
-
-from scipy.spatial import distance
-
-# ユークリッド距離
-distance.cdist(my_data, my_data)
-# あるいは
-distance.cdist(my_data, my_data, metric='euclidean')
-#> array([[ 0.        , 16.        , 14.14213562, 18.02775638],
-#>        [16.        ,  0.        , 27.85677655, 30.01666204],
-#>        [14.14213562, 27.85677655,  0.        , 25.        ],
-#>        [18.02775638, 30.01666204, 25.        ,  0.        ]])
-
-# マンハッタン距離
-distance.cdist(my_data, my_data, metric='cityblock')
-#> array([[ 0., 16., 20., 25.],
-#>        [16.,  0., 36., 41.],
-#>        [20., 36.,  0., 25.],
-#>        [25., 41., 25.,  0.]])
-
-#### 14.2.2.2 Pythonの場合
+#### 14.2.1.2 Pythonの場合
 
 import pandas as pd
 my_data = pd.DataFrame(
@@ -46,7 +22,7 @@ hierarchy.cut_tree(my_result, 3)
 #>        [0],
 #>        [2]])
 
-#### 14.2.3.2 Pythonの場合
+#### 14.2.2.2 Pythonの場合
 
 import pandas as pd
 my_data = pd.DataFrame(
@@ -63,7 +39,7 @@ sns.clustermap(my_data,
                metric='euclidean',
                method='complete')
 
-#### 14.2.4.2 Pythonの場合
+#### 14.2.3.2 Pythonの場合
 
 import pandas as pd
 my_data = pd.DataFrame(

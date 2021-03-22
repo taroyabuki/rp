@@ -1,8 +1,8 @@
-### 10.4.2 Pythonの場合
-
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'
+my_url = ('https://raw.githubusercontent.com'
+          '/taroyabuki/fromzero/master/data/titanic.csv')
 my_data = pd.read_csv(my_url)
+
 my_data.head()
 #>   Class   Sex    Age Survived
 #> 0   1st  Male  Child      Yes
@@ -11,7 +11,7 @@ my_data.head()
 #> 3   1st  Male  Child      Yes
 #> 4   1st  Male  Child      Yes
 
-#### 10.4.3.2 Pythonの場合
+#### 10.4.1.2 Pythonの場合
 
 import pandas as pd
 my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'

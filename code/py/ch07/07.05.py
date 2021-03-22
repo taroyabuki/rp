@@ -1,26 +1,32 @@
-### 7.5.2 Pythonの場合
-
-from sklearn.linear_model import LinearRegression
-my_model = LinearRegression()
-
+# 準備
 import statsmodels.api as sm
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 X, y = my_data[['speed']], my_data['dist']
+
+# 訓練
+from sklearn.neighbors import KNeighborsRegressor
+my_model = KNeighborsRegressor()
 my_model.fit(X, y)
 
-import pandas as pd
-my_test = pd.DataFrame({'speed':[21.5]})
-
-my_model.predict(my_test)
-#> array([66.96769343])
-
+# 可視化の準備
 import numpy as np
-my_min, my_max = my_data['speed'].min(), my_data['speed'].max()
-tmp = pd.DataFrame({'speed':np.linspace(my_min, my_max, num=100)})
+import pandas as pd
+tmp = pd.DataFrame({'speed':np.linspace(min(my_data.speed),
+                                        max(my_data.speed),
+                                        100)})
+tmp['model'] = my_model.predict(tmp)
 
-tmp['model'] = my_model.predict(tmp)                        # 予測
-pd.concat([my_data, tmp]).plot(x='speed', style=['o', '-']) # 描画
+pd.concat([my_data, tmp]).plot(
+  x='speed', style=['o', '-'])
 
-y_ = my_model.predict(X) # 訓練データに対する予測
-my_data.assign(model=y_).plot(x='speed', style=['o', '-']) # 結果は割愛
+y_ = my_model.predict(X)
+
+((y - y_)**2).mean()**0.5
+#> 13.087184571174962 # RMSE
+
+my_model.score(X, y)
+#> 0.7368165812204317 # 決定係数1
+
+np.corrcoef(y, y_)[0, 1]**2
+#> 0.7380949412509705 # 決定係数6
 

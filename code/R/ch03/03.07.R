@@ -1,28 +1,101 @@
-### 3.7.1 RのNA，Pythonのnan
+### 3.7.1 指定した回数→1次元データ
 
-my_v = c(1, NA, 3)
-my_v
-#> [1]  1 NA  3
+my_f1 <- function(x) {
+  tmp <- runif(x)
+  mean(tmp)
+}
 
-is.na(my_v[2])
-#> [1] TRUE
+my_f1(10) # 動作確認
+#> [1] 0.5776604 （結果の例）
 
-my_v[2] == NA # 誤り
-#> [1] NA
+replicate(n = 3, expr = my_f1(10))
+#> [1] 0.4672766 0.4712016 0.5579449
 
-### 3.7.2 変数についての調査
+rep(x = my_f1(10), times=3)
+#> [1] 0.481329 0.481329 0.481329
 
-x = 123
-typeof(x)
-#> [1] "double"
+### 3.7.2 1次元データ→1次元データ
 
-x <- list("apple"   = "りんご",
-          "orange" = "みかん")
-names(x)
-#> [1] "apple"  "orange"
+my_v <- c(5, 10, 100)
+my_v %>% map_dbl(my_f1)
+#> [1] 0.4857329 0.5322183 0.5084124
 
-str(x)
-#> List of 2
-#>  $ apple : chr "りんご"
-#>  $ orange: chr "みかん"
+rep(x = 10, times = 3) %>%
+  map_dbl(my_f1)
+# 結果は割愛
+
+### 3.7.3 1次元データ→データフレーム
+
+my_f2 <- function(n) {
+  tmp = runif(n)
+  list(x = n,
+       p = mean(tmp),
+       q = sd(tmp))
+}
+
+my_f2(10) # 動作確認
+#> $x
+#> [1] 10
+#> 
+#> $p
+#> [1] 0.6840032 （平均の例）
+#> 
+#> $q
+#> [1] 0.3750788 （標準偏差の例）
+
+my_v <- c(5, 10, 100)
+my_v %>% map_dfr(my_f2)
+#>       x     p     q
+#>   <dbl> <dbl> <dbl>
+#> 1     5 0.560 0.320
+#> 2    10 0.559 0.271
+#> 3   100 0.507 0.283
+
+### 3.7.4 データフレーム→データフレーム
+
+my_f3 = function(x, y) {
+  tmp <- runif(x, min = 1,
+                  max = y + 1) %>%
+    as.integer
+  list(x = x,
+       y = y,
+       p = mean(tmp),
+       q = sd(tmp))
+}
+
+my_f3(x = 10, y = 6) # 動作確認
+#> $x
+#> [1] 10
+#> 
+#> $y
+#> [1] 6
+#> 
+#> $p
+#> [1] 3.2 （平均の例）
+#> 
+#> $q
+#> [1] 1.316561 （標準偏差の例）
+
+my_df = data.frame(
+  x = c(5, 10, 100, 5, 10, 100),
+  y = c(6, 6, 6, 12, 12, 12))
+
+my_df %>% pmap_dfr(my_f3)
+#>       x     y     p     q
+#>   <dbl> <dbl> <dbl> <dbl>
+#> 1     5     6  3     1.41
+#> 2    10     6  3     1.49
+#> 3   100     6  3.57  1.78
+#> 4     5    12  7.6   5.22
+#> 5    10    12  5.7   3.77
+#> 6   100    12  6.36  3.59
+
+### 3.7.5 反復処理の並列化
+
+library(furrr)
+plan(multisession) # 準備
+
+my_v <- c(5, 10, 100)
+my_v %>% future_map_dbl(my_f1)
+# 結果は割愛
 

@@ -1,34 +1,48 @@
-from scipy import stats
-stats.binom_test(14, n=20, p=0.5)
+## 4.3 乱数
 
-#> 0.11531829833984371
-
-from scipy.stats import binom
-x = 5
-s = binom.cdf(k=x, n=20, p=0.5)
-s
-#> 0.020694732666015625
-
-binom.ppf(q=s, n=20, p=0.5)
-#> 5.0
-
-from scipy.stats import binom
-alpha = 0.05
-binom.ppf(q=[alpha / 2, 1 - alpha / 2], n=20, p=0.5)
-#> array([ 6., 14.]) # 左側の境界は6，右側の境界は14
-
+import matplotlib.pyplot as plt
 import numpy as np
-X = np.array([0] * 6 + [1] * 14)            # 手順1
-tmp = np.random.choice(X, 20, replace=True) # 手順2
-tmp
-#> array([1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1])
 
-np.mean(tmp) # 手順3
-#> 0.8
+x = np.random.randint(
+      1,     # 最小
+      7,     # 最大+1
+      10000) # 個数
+# あるいは
+x = np.random.choice(
+      range(1, 7), # 1から6
+      10000,       # 個数
+      True)        # 重複あり
+plt.hist(x, bins=6) # ヒストグラム
 
-# 手順4
-result = [np.mean(np.random.choice(X, 20, replace=True)) for _ in range(10**5)]
-np.quantile(result, [0.025, 0.975]) # 手順5
+x = np.random.uniform(0, 1, 1000)
+# あるいは
+x = np.random.random(1000)
+plt.hist(x)
 
-#> array([0.5, 0.9])
+tmp = np.random.uniform(1, 7, 1000)
+x = np.array(tmp, dtype=int)
+plt.hist(x, bins=6) # 結果は割愛
+
+x = np.random.binomial(100, 0.5, 1000)
+plt.hist(x)
+
+x = np.random.normal(165, 10, 1000)
+plt.hist(x)
+
+n = 10000
+x = [np.random.normal(
+    size=5, scale=3).var()
+    for i in range(n)]
+
+np.mean(x)
+#> 7.16166215199147
+
+plt.hist(x, bins=14)
+
+x = [np.random.normal(
+    size=5, scale=3).std(ddof=1)
+    for i in range(n)]
+
+np.mean(x)
+#> 2.797564339614321
 

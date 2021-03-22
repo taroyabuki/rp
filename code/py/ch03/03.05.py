@@ -1,92 +1,69 @@
+import numpy as np
+from scipy.spatial import distance
+
+A = np.array([3,   4,  5])
+B = np.array([3,   4, 29])
+C = np.array([9, -18,  8])
+
+distance.euclidean(A, B)
+#> 24.0
+
+distance.euclidean(A, C)
+#> 23.0
+
+distance.cityblock(A, B)
+#> 24
+
+distance.cityblock(A, C)
+#> 31
+
+1 - distance.cosine(A, B)
+#> 0.8169678632647616
+
+1 - distance.cosine(A, C)
+#> -0.032651157422416865
+
+1 - distance.correlation(A, B)
+#> 0.8824975032927698
+
+1 - distance.correlation(A, C)
+#> -0.032651157422416865
+
+# 小数点以下は3桁表示
+np.set_printoptions(precision=3)
 import pandas as pd
 
 my_df = pd.DataFrame({
-    'name':    ['A', 'B', 'C', 'D'],
-    'english': [ 60,  90,  70,  90],
-    'math':    [ 70,  80,  90, 100],
-    'gender':  ['f', 'm', 'm', 'f']})
+    'x':[3,  3,   9],
+    'y':[4,  4, -18],
+    'z':[5, 29,   8]},
+    index=['A', 'B', 'C'])
 
-my_df = pd.DataFrame([
-    ['A', 60, 70, 'f'],
-    ['B', 90, 80, 'm'],
-    ['C', 70, 90, 'm'],
-    ['D', 90, 100, 'f']],
-    columns=['name', 'english',
-             'math', 'gender'])
+# ユークリッド距離
+distance.cdist(my_df, my_df,
+               metric='euclidean')
+#> array([[ 0., 24., 23.],
+#>        [24.,  0., 31.],
+#>        [23., 31.,  0.]])
 
-import itertools
-import pandas as pd
-my_df2 = pd.DataFrame(
-    itertools.product([1, 2, 3],
-                      [10, 100]),
-    columns=['X', 'Y'])
-my_df2
-#>    X    Y
-#> 0  1   10
-#> 1  1  100
-#> 2  2   10
-#> 3  2  100
-#> 4  3   10
-#> 5  3  100
+# マンハッタン距離
+distance.cdist(my_df, my_df,
+               metric='cityblock')
+#> array([[ 0., 24., 31.],
+#>        [24.,  0., 49.],
+#>        [31., 49.,  0.]])
 
-my_df.columns
-#> Index(['name', 'english', 'math', 'gender'], dtype='object')
+# コサイン類似度
+1 - distance.cdist(
+    my_df, my_df, metric='cosine')
+#> array([[ 1.   ,  0.817, -0.033],
+#>        [ 0.817,  1.   ,  0.293],
+#>        [-0.033,  0.293,  1.   ]])
 
-my_df.columns = ['NAME', 'ENGLISH', 'MATH', 'GENDER']
-# あるいは
-my_df.columns = pd.Series(my_df.columns).apply(str.upper)
-
-my_df
-#>   NAME  ENGLISH  MATH GENDER
-#> 0    A       60    70      f
-#> 1    B       90    80      m
-# 以下略
-
-my_df.columns = pd.Series(my_df.columns).apply(str.lower) # 元に戻す．
-
-my_df2 = pd.DataFrame({
-    'english': [ 60,  90,  70,  90],
-    'math':    [ 70,  80,  90, 100],
-    'gender':  ['f', 'm', 'm', 'f']},
-    index=     ['A', 'B', 'C', 'D'])
-my_df2
-#>    english  math gender
-#> A       60    70      f
-#> B       90    80      m
-#> C       70    90      m
-#> D       90   100      f
-
-tmp = pd.DataFrame({
-    'name':['E'],
-    'english': [80],
-    'math': [80],
-    'gender': ['m']})
-pd.concat([my_df, tmp])
-
-my_df.assign(id=[1, 2, 3, 4])
-
-my_df['id'] = [1, 2, 3, 4]
-
-my_df['english']
-#> 0    60
-#> 1    90
-#> 2    70
-#> 3    90
-#> Name: english, dtype: int64
-
-my_df[['name', 'math']]
-
-my_df.iloc[:, [0, 2]]
-
-my_df.iloc[[0, 2], :]
-
-my_df[my_df['gender'] == 'm']
-
-my_df.query('english > 80 and gender == "m"')
-
-my_df[my_df['english'] == my_df['english'].max()]
-
-my_df.sort_values('english')
-
-my_df.sort_values('english', ascending=False)
+# 相関係数
+1 - distance.cdist(
+    my_df, my_df, metric='correlation')
+#> array([[ 1.   ,  0.882, -0.033],
+#>        [ 0.882,  1.   ,  0.441],
+#>        [-0.033,  0.441,  1.   ]])
 

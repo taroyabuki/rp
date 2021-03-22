@@ -59,3 +59,15 @@ apt-get update && apt-get install -y texlive-extra-utils # for pdfcrop
 su rstudio
 cd /home/rstudio/work/fromzero/figures/fig-r && make clean && make
 ```
+
+### まとめて変換
+
+PDFのあるディレクトリで次を実行します．
+
+```bash
+for f in *.pdf; do
+  pdfcrop $f
+  rm $f
+  mv $(basename -s .pdf $f)-crop.pdf $f
+done
+```

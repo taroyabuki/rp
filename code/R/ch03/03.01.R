@@ -48,6 +48,10 @@ my_s <- "abcde"
 nchar(my_s)
 #> [1] 5
 
+library(tidyverse)
+str_c("This is ", "a", " pen.")
+#> [1] "This is a pen."
+
 substr(x = my_s,
        start = 2, stop = 4)
 #> [1] "bcd"
@@ -56,7 +60,7 @@ my_t <- "%s is %s."
 sprintf(my_t, "This", "a pen")
 #> [1] "This is a pen."
 
-### 3.1.4 真偽値
+### 3.1.4 論理値
 
 1 <= 2
 #> [1] TRUE
@@ -72,4 +76,13 @@ TRUE | FALSE # 論理和（または）
 
 !TRUE # 否定（でない）
 #> [1] FALSE
+
+### 3.1.5 作業ディレクトリ
+
+getwd()
+#> '/home/jovyan/work'
+
+setwd("fromzero")
+getwd()
+#> '/home/jovyan/work/fromzero'
 

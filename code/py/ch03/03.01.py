@@ -42,6 +42,9 @@ my_s = 'abcde'
 len(my_s)
 #> 5
 
+'This is ' + 'a' + ' pen.'
+#> 'This is a pen.'
+
 my_s[1:4]
 #> 'bcd'
 
@@ -63,4 +66,17 @@ True or False # 論理和（または）
 
 not True # 否定（でない）
 #> False
+
+%pwd
+# あるいは
+import os
+os.getcwd()
+#> '/home/jovyan/work'
+
+%cd fromzero
+# あるいは
+os.chdir('fromzero')
+
+os.getcwd()
+#> '/home/jovyan/work/fromzero'
 

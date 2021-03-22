@@ -13,14 +13,17 @@ RUN install2.r --error \
   gridExtra \
   igraph \
   MLmetrics \
+  pastecs \
   prophet \
   psych \
   ROCR \
   randomForest \
   rpart.plot \
+  vcd \
   xgboost
 
 RUN installGithub.r \
+  haleyjeppson/ggmosaic \
   rstudio/keras \
   vqv/ggbiplot
 
@@ -52,6 +55,9 @@ WORKDIR /home/rstudio
 # 必要かも
 #  feasts \
 #  glmnet \
+#  glmnetUtils \
+#  ggfortify \
 #  leaps \
+#  neuralnet \
 #  tsibble \
 #  zoo

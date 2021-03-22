@@ -1,47 +1,68 @@
-### 7.7.1 第1の例：RMSE（訓練）が0になる例
+## 7.7 パラメータチューニング
 
-library(tidyverse)
 library(caret)
+library(tidyverse)
 my_data <- cars
-my_idx <- c(2, 7, 11, 18, 27, 30, 34, 38, 39, 44) # 抜き出すデータの番号
-my_train <- my_data[my_idx, ]                     # データを抜き出す．
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
+my_model$results
+#>   k     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
+#> 1 5 15.72114 0.6615765 12.54588 3.013243 0.11043907 2.372245
+#> 2 7 16.19047 0.6601173 12.68464 3.165330 0.09990158 2.329326
+#> 3 9 16.30276 0.6556700 12.84811 3.367423 0.09645747 2.471620
 
-my_model <- train(form = dist ~ poly(speed, degree = 10, raw = TRUE),
-                  data = my_train, method = "lm")
+my_params <- expand.grid(k = 1:15)
 
-y_ <- my_model %>% predict(my_train)
-RMSE(y_, my_train$dist)
-#> [1] 4.084382e-07
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
+                  tuneGrid = my_params,
+                  trControl = trainControl(method = "LOOCV"))
+my_model$results
+#>     k     RMSE  Rsquared      MAE
+#> 1   1 17.22299 0.5777197 13.84900
+#> 2   2 16.81462 0.5936438 13.03469
+#> 3   3 16.32874 0.6218866 12.74524
+# 以下略
 
-f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
+ggplot(my_model)
 
-my_data %>% ggplot(aes(x = speed, y = dist)) +
-  coord_cartesian(ylim = c(0, 120)) + # y座標の描画範囲
-  geom_point(data = my_train, color = "red", size = 3) + # 訓練データ
-  geom_point(data = my_data[-my_idx, ]) + # 訓練に使わなかったデータ
-  stat_function(fun = f)
+my_model$bestTune
+#>   k
+#> 5 5
 
-my_model$results$RMSE
-#> [1] 4016.54
+my_model$results %>%
+  filter(RMSE == min(RMSE))
+#>   k     RMSE  Rsquared      MAE
+#> 1 5 15.79924 0.6169267 11.96067
 
-### 7.7.2 第2の例：RMSE（訓練）誤差が同じになるデータ
+y  <- my_data$dist
+y_ <- my_model %>% predict(my_data)
+RMSE(y_, y)
+#> [1] 13.96845
 
-library(tidyverse)
+### 7.7.1 補足：ハイパーパラメータとRMSE（訓練）
+
 library(caret)
-my_data <- data.frame(
-  X1 = c(10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5),
-  X2 = c(8, 8, 8, 8, 8, 8, 8, 19, 8, 8, 8),
-  Y1 = c(8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68),
-  Y2 = c(9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74),
-  Y3 = c(7.46, 6.77, 12.74, 7.11, 7.81, 8.84, 6.08, 5.39, 8.15, 6.42, 5.73),
-  Y4 = c(6.58, 5.76, 7.71, 8.84, 8.47, 7.04, 5.25, 12.50, 5.56, 7.91, 6.89))
+library(tidyverse)
+my_data <- cars
 
-my_f <- function(x) {
-  my_model <- train(form = x, data = my_data, method = "lm")
-  my_model$results$RMSE
+f <- function(k) {
+  my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
+                    tuneGrid = data.frame(k = k),
+                    trControl = trainControl(method = "LOOCV"))
+  y  <- my_data$dist
+  y_ <- my_model %>% predict(my_data)
+  list(k = k,
+       training = RMSE(y_, y),             # RMSE（訓練）
+       validation = my_model$results$RMSE) # RMSE（検証）
 }
 
-my_v <- c(Y1 ~ X1, Y2 ~ X1, Y3 ~ X1, Y4 ~ X2)
-my_v %>% map_dbl(my_f)
-#> [1] 1.447843 1.534242 1.312634 2.112059
+my_results <- 1:15 %>% map_dfr(f)
+
+my_results %>%
+  pivot_longer(-k) %>%
+  ggplot(aes(x = k, y = value,
+             color = name)) +
+  geom_line() + geom_point() +
+  xlab("#Neighbors") + ylab("RMSE") +
+  theme(legend.position = c(1, 0),
+        legend.justification = c(1, 0))
 

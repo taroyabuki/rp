@@ -1,17 +1,6 @@
-### 8.1.2 Pythonの場合
-
 import pandas as pd
-
 my_url = 'http://www.liquidasset.com/winedata.html'
 tmp = pd.read_table(my_url, skiprows=62, nrows=38, sep='\s+', na_values='.')
-tmp.head()
-#>    OBS  VINT  LPRICE2  WRAIN  DEGREES  HRAIN  TIME_SV
-#> 0    1  1952 -0.99868    600  17.1167    160       31
-#> 1    2  1953 -0.45440    690  16.7333     80       30
-#> 2    3  1954      NaN    430  15.3833    180       29
-#> 3    4  1955 -0.80796    502  17.1500    130       28
-#> 4    5  1956      NaN    440  15.6500    140       27
-
 tmp.describe()
 #>              OBS         VINT    LPRICE2       WRAIN    DEGREES       HRAIN    TIME_SV
 #> count  38.000000    38.000000  27.000000   38.000000  37.000000   38.000000  38.000000
@@ -23,7 +12,7 @@ tmp.describe()
 #> 75%    28.750000  1979.750000  -1.052200  713.500000  17.066700  171.000000  21.750000
 #> max    38.000000  1989.000000   0.000000  845.000000  17.650000  292.000000  31.000000
 
-my_data = tmp.iloc[:, 2:7].dropna()
+my_data = tmp.iloc[:, 2:].dropna()
 my_data.head()
 #>    LPRICE2  WRAIN  DEGREES  HRAIN  TIME_SV
 #> 0 -0.99868    600  17.1167    160       31
@@ -32,5 +21,15 @@ my_data.head()
 #> 5 -1.50926    420  16.1333    110       26
 #> 6 -1.71655    582  16.4167    187       25
 
-my_data.to_csv('wine.csv', index=False) # CSV 形式で保存する．
+len(my_data)
+#> 27
+
+my_data.to_csv('wine.csv',
+               index=False)
+
+import pandas as pd
+#my_data = pd.read_csv('wine.csv') # 作ったファイルを使う場合
+my_url = ('https://raw.githubusercontent.com'
+          '/taroyabuki/fromzero/master/data/wine.csv')
+my_data = pd.read_csv(my_url)
 

@@ -1,40 +1,42 @@
-### 7.5.1 Rの場合
+### 7.5.2 K最近傍法の実践
 
 ```{r}
-library(tidyverse)
+# 準備
 library(caret)
+library(tidyverse)
 my_data <- cars
-my_model <- train(form = dist ~ speed, data = my_data, method = "lm")
+
+# 訓練
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
+
+# 可視化の準備
+f <- function(x) { my_model %>% predict(data.frame(speed = x))}
 ```
 
 ```{r}
-my_test <- data.frame(speed = 21.5) # 予測対象の準備
-```
-
-```{r}
-my_model %>% predict(my_test) # 予測対象に対する予測
-
-#>        1 
-#> 66.96769 
-```
-
-```{r}
-f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
-f(21.5)
-
-#>        1 
-#> 66.96769 
-```
-
-```{r}
-my_data %>% ggplot(aes(x = speed, y = dist)) +
+my_data %>%
+  ggplot(aes(x = speed,
+             y = dist,
+             color = "data")) +
   geom_point() +
-  stat_function(fun = f) # 結果は割愛
+  stat_function(
+    fun = f,
+    mapping = aes(color = "model"))
 ```
 
 ```{r}
-my_data %>% ggplot(aes(x = speed, y = dist)) +
-  geom_point() +
-  stat_smooth(formula = y ~ x, method = "lm", se = FALSE)
+y  <- my_data$dist
+y_ <- my_model %>% predict(my_data)
+
+RMSE(y_ , y)
+#> [1] 13.96845 # RMSE
+
+R2(pred = y_, obs = y,
+   form = "traditional")
+#> [1] 0.7001789 # 決定係数1
+
+R2(pred = y_, obs = y,
+   form = "corr")
+#> [1] 0.7017314 # 決定係数6
 ```
 

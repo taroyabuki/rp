@@ -1,8 +1,0 @@
-### 7.13.1 Rの場合
-
-```{r}
-library(doParallel)
-cl <- makeCluster(detectCores())
-registerDoParallel(cl)
-```
-

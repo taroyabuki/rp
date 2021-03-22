@@ -2,8 +2,10 @@ FROM jupyter/datascience-notebook
 
 RUN pip install \
   fbprophet \
+  japanize_matplotlib \
   keras \
   lxml \
+  pandarallel \
   pca \
   pmdarima \
   tensorflow \
@@ -16,18 +18,26 @@ RUN Rscript -e '\
     "doParallel",\
     "e1071",\
     "epitools",\
+    "fable",\
     "factoextra",\
     "furrr",\
     "ggrepel",\
     "gridExtra",\
+    "ggfortify",\
+    "glmnetUtils",\
     "igraph",\
+    "neuralnet",\
+    "pastecs",\
     "prophet",\
     "psych",\
     "ROCR",\
     "rpart.plot",\
+    "tsibble",\
+    "vcd",\
     "xgboost"\
   ), repos="https://cran.rstudio.com");\
   devtools::install_github(c(\
+    "haleyjeppson/ggmosaic",\
     "rstudio/keras",\
     "vqv/ggbiplot"\
   ));\
@@ -47,4 +57,4 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
 WORKDIR /home/jovyan
 
 #必要かも
-#    "tsibble",\
+

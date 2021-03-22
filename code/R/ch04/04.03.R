@@ -1,51 +1,50 @@
-### 4.3.1 検定
+### 4.3.1 一様乱数（整数）
 
-binom.test(x = 14,                # 表が出た回数
-           n = 20,                # コインを投げた回数
-           p = 0.5,               # 表が出る確率（仮説）
-           conf.level = 1 - 0.05) # 信頼係数（後述） = 1 - 有意水準
+x <- sample(x = 1:6,        # 範囲
+            size = 10000,   # 個数
+            replace = TRUE) # 重複あり
+hist(x, breaks = 0:6) # ヒストグラム
 
-#>         Exact binomial test
-#> 
-#> data:  14 and 20
-#> number of successes = 14, number of trials = 20, p-value = 0.1153
-#> alternative hypothesis: true probability of success is not equal to 0.5
-#> 95 percent confidence interval:
-#>  0.4572108 0.8810684
-#> sample estimates:
-#> probability of success 
-#>                    0.7 
+### 4.3.2 一様乱数（連続）
 
-x = 5
-s = pbinom(q = x,
-           size = 20,
-           prob = 0.5)
-s
-#> [1] 0.02069473
+x <- runif(n = 1000, # 個数
+           min = 0,  # これ以上
+           max = 1)  # これ未満
+hist(x)
 
-qbinom(p = s, size = 20, prob = 0.5)
-#> [1] 5
+x <- runif(n = 1000,
+           min = 1,
+           max = 7) %>% as.integer
+hist(x) # 結果は割愛
 
-alpha = 0.05
-qbinom(p = c(alpha / 2,      # 左側 2.5%
-             1 - alpha / 2), # 右側97.5%
-       size = 20,            # コインを投げた回数
-       prob = 0.5)           # 表が出る確率（仮説）
-#> [1]  6 14 # 左側の境界は6，右側の境界は14
+### 4.3.3 二項乱数
 
-#### 4.3.2.2 ブートストラップ
+x <- rbinom(n = 1000,   # 乱数の数
+            size = 100, # 試行回数
+            prob = 0.5) # 確率
+hist(x)
 
-X <- rep(0:1, c(6,14))                      # 手順1
-tmp <- sample(X, size = 20, replace = TRUE) # 手順2
-tmp
-#>  [1] 1 0 1 0 1 0 0 0 1 0 0 1 0 1 1 1 1 1 1 1
+### 4.3.4 正規乱数
 
-mean(tmp) # 手順3
-#> [1] 0.75
+x <- rnorm(n = 1000,   # 乱数の数
+           mean = 165, # 平均
+           sd = 10)    # 標準偏差
+hist(x)
 
-result <- replicate(10^5, mean(sample(X, size = 20, replace = TRUE))) # 手順4
-quantile(result, c(0.025, 0.975))                                     # 手順5
+#### 4.3.4.1 不偏性の具体例
 
-#>  2.5% 97.5% 
-#>   0.5   0.9 
+n <- 100000
+x <- replicate(n = n,
+  expr = var(rnorm(n = 5, sd = 3)))
+
+mean(x)
+#> [1] 9.013718
+
+hist(x)
+
+x <- replicate(n = n,
+  expr = sd(rnorm(n = 5, sd = 3)))
+
+mean(x)
+#> [1] 2.805624
 

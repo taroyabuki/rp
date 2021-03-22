@@ -1,47 +1,49 @@
-### 5.2.1 JSONデータの読み込み
+### 5.2.1 標準化
 
+x1 <- c(1, 2, 3)
+
+z1 <- scale(x1)
+# あるいは
+z1 <- (x1 - mean(x1)) / sd(x1)
+
+z1
+#> [1] -1  0  1
+
+c(mean(z1), sd(z1))
+#> [1] 0 1
+
+z1 * sd(x1) + mean(x1)
+#> [1] 1 2 3
+
+x2 <- c(1, 3, 5)
+z2 <- (x2 - mean(x1)) / sd(x1)
+c(mean(z2), sd(z2))
+#> [1] 1 2
+
+### 5.2.2 ワンホットエンコーディング
+
+library(caret)
 library(tidyverse)
-library(jsonlite)
 
-my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.json"
-my_data <- fromJSON(my_url)
-#my_data <- fromJSON("exam.json") # （ファイルを使う場合）
-my_data
-#>   name english math gender
-#> 1    A      60   70      f
-#> 2    B      90   80      m
-#> 3    C      70   90      m
-#> 4    D      90  100      f
+my_df <- data.frame(
+  id = c(1, 2, 3),
+  class = as.factor(
+    c("A", "B", "C")))
 
-### 5.2.2 XMLデータの読み込み
+my_enc <- my_df %>%
+  dummyVars(formula = ~ .)
+my_enc %>% predict(my_df)
+#>   id class.A class.B class.C
+#> 1  1       1       0       0
+#> 2  2       0       1       0
+#> 3  3       0       0       1
 
-library(tidyverse)
-library(xml2)
-
-my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.xml"
-my_xml <- read_xml(my_url)      # XMLデータの読み込み
-#my_xml <- read_xml("exam.xml") # （ファイルを使う場合）
-xml_ns(my_xml)                  # 名前空間の確認（d1）
-#> d1 <-> https://www.example.net/ns/1.0
-
-my_records <- xml_find_all(my_xml, ".//d1:record")
-
-f <- function(record) {
-  tmp <- xml_attrs(record)                    # 属性をすべて取り出し，
-  xml_children(record) %>% walk(function(e) {
-    tmp[xml_name(e)] <<- xml_text(e)          # 子要素の名前と内容を追加する．
-  })
-  tmp
-}
-
-my_data <- my_records %>% map_dfr(f)
-my_data$english <- as.numeric(my_data$english)
-my_data$math    <- as.numeric(my_data$math)
-my_data
-#>   english  math gender name 
-#>     <dbl> <dbl> <chr>  <chr>
-#> 1      60    70 f      A    
-#> 2      90    80 m      B    
-#> 3      70    90 m      C    
-#> 4      90   100 f      D  
+my_df2 <- data.frame(
+  id = c(4, 5, 6),
+  class = c("B", "C", "B"))
+my_enc %>% predict(my_df2)
+#>   id class.A class.B class.C
+#> 1  4       0       1       0
+#> 2  5       0       0       1
+#> 3  6       0       1       0
 

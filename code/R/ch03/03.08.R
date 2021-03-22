@@ -1,85 +1,56 @@
-## 3.8 反復処理
+### 3.8.1 よく遭遇するエラーとその対処方法
 
-library(furrr)
-plan(multisession)
+my_model <- train(form = dist ~ ., data = cars, method = "lm")
+#> Error in train(form = dist ~ speed, data = cars, method = "lm"):
+#> could not find function "train"
+# trainという関数が見つからないというエラーです．
+# trainを含んだパッケージcaretを読み込むことで対応します．
 
-### 3.8.1 1次元データ→1次元データ
+library(caret)
+#> Error in library(caret): there is no package called ‘caret’
+# caretというパッケージが見つからないというエラーです．
+# caretをインストールすることで対応します．
 
-my_f1 <- function(x) {
-  tmp <- runif(x)
-  mean(tmp)
-}
+install.packages("caret")
 
-my_f1(10) # 動作確認
-#> [1] 0.5776604 （結果の例）
+### 3.8.2 変数や関数についての調査
 
-my_v <- c(5, 10, 100)
-my_v %>% map_dbl(my_f1)
-#> [1] 0.4857329 0.5322183 0.5084124
+x <- 123
+typeof(x)
+#> [1] "double"
 
-### 3.8.2 1次元データ→データフレーム
+library(caret)
+library(tidyverse)
+my_data <- cars
+my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
+my_model$results
+# 結果は割愛
 
-my_f2 <- function(n) {
-  tmp = runif(n)
-  list(x = n,
-       p = mean(tmp),
-       q = sd(tmp))
-}
-
-my_f2(10) # 動作確認
-#> $x
-#> [1] 10
+attributes(my_model)
+#> $names
+#>  [1] "method"       "modelInfo"    "modelType"    "results"     
+#>  [5] "pred"         "bestTune"     "call"         "dots"        
+#>  [9] "metric"       "control"      "finalModel"   "preProcess"  
+#> [13] "trainingData" "resample"     "resampledCM"  "perfNames"   
+#> [17] "maximize"     "yLimits"      "times"        "levels"      
+#> [21] "terms"        "coefnames"    "xlevels"    
 #> 
-#> $p
-#> [1] 0.6840032 （平均の例）
-#> 
-#> $q
-#> [1] 0.3750788 （標準偏差の例）
+#> $class
+#> [1] "train"         "train.formula"
 
-my_v <- c(5, 10, 100)
-my_v %>% map_dfr(my_f2)
-#>       x     p     q
-#>   <dbl> <dbl> <dbl>
-#> 1     5 0.560 0.320
-#> 2    10 0.559 0.271
-#> 3   100 0.507 0.283
+?log
+# あるいは
+help(log)
 
-### 3.8.3 データフレーム→データフレーム
+### 3.8.3 RのNA，Pythonのnan
 
-my_f3 = function(x, y) {
-  tmp <- runif(x, min = 1,
-                  max = y + 1) %>%
-    as.integer
-  list(x = x,
-       y = y,
-       p = mean(tmp),
-       q = sd(tmp))
-}
+my_v = c(1, NA, 3)
+my_v
+#> [1]  1 NA  3
 
-my_f3(x = 10, y = 6) # 動作確認
-#> $x
-#> [1] 10
-#> 
-#> $y
-#> [1] 6
-#> 
-#> $p
-#> [1] 3.2 （平均の例）
-#> 
-#> $q
-#> [1] 1.316561 （標準偏差の例）
+is.na(my_v[2])
+#> [1] TRUE
 
-my_df = data.frame(
-  x = c(5, 10, 100, 5, 10, 100),
-  y = c(6, 6, 6, 12, 12, 12))
-
-my_df %>% pmap_dfr(my_f3)
-#>       x     y     p     q
-#>   <dbl> <dbl> <dbl> <dbl>
-#> 1     5     6  3     1.41
-#> 2    10     6  3     1.49
-#> 3   100     6  3.57  1.78
-#> 4     5    12  7.6   5.22
-#> 5    10    12  5.7   3.77
-#> 6   100    12  6.36  3.59
+my_v[2] == NA # 誤り
+#> [1] NA
 

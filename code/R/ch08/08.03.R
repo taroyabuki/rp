@@ -1,26 +1,36 @@
-## 8.3 入力変数の数と訓練誤差・検証誤差の関係
+## 8.3 標準化
 
 library(tidyverse)
-library(caret)
-#my_data <- read_csv("wine.csv") # 8.1節で作成したwine.csvを使う．
-my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
+my_url <- str_c("https://raw.githubusercontent.com",
+                "/taroyabuki/fromzero/master/data/wine.csv")
 my_data <- read_csv(my_url)
-my_model1 <- train(form = LPRICE2 ~ ., data = my_data, method = "lm")
-y_ <- my_model1 %>% predict(my_data)
-RMSE(y_, my_data$LPRICE2) # RMSE（訓練）
-#> [1] 0.2586167
 
-n <- nrow(my_data) # データの件数
-my_data2 <- my_data %>% mutate(rand1 = runif(n)) # 乱数からなる列の追加
+my_data %>%
+  mutate_if(is.numeric, scale) %>% # 数値の列の標準化
+  pivot_longer(-LPRICE2) %>%
+  ggplot(aes(x = name, y = value)) +
+  geom_boxplot() +
+  xlab(NULL)
 
-my_model2 <- train(form = LPRICE2 ~ ., data = my_data2, method = "lm")
+my_model <- train(
+  form = LPRICE2 ~ .,
+  data = my_data,
+  method = "lm",
+  preProcess = c("center", "scale"))
 
-y2_ <- my_model2 %>% predict(my_data2)
-RMSE(y2_, my_data$LPRICE2) # RMSE（訓練）
-#> [1] 0.2534026
+coef(my_model$finalModel) %>%
+  as.data.frame
+#>                      .
+#> (Intercept) -1.4517652
+#> WRAIN        0.1505557
+#> DEGREES      0.4063194
+#> HRAIN       -0.2820746
+#> TIME_SV      0.1966549
 
-c(my_model1$result$RMSE,  # RMSE（検証）（rand1なしのモデル）
-  my_model22$result$RMSE) # RMSE（検証）（rand1ありのモデル）
-
-#> [1] 0.3680248 0.3842703
+my_test <- data.frame(
+  WRAIN = 500, DEGREES = 17,
+  HRAIN = 120, TIME_SV = 2)
+my_model %>% predict(my_test)
+#>         1 
+#> -1.498843
 

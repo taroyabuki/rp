@@ -1,28 +1,4 @@
-### 14.2.1 距離
-
-my_data <- data.frame(
-  x = c(  0, -16,  10,  10),
-  y = c(  0,   0,  10, -15),
-  row.names = c("A", "B", "C", "D"))
-
-# ユークリッド距離
-my_data %>% dist
-# あるいは
-my_data %>% dist("euclidian")
-
-#>          A        B        C
-#> B 16.00000                  
-#> C 14.14214 27.85678         
-#> D 18.02776 30.01666 25.00000
-
-# マンハッタン距離
-my_data %>% dist("manhattan")
-#>    A  B  C
-#> B 16      
-#> C 20 36   
-#> D 25 41 25
-
-#### 14.2.2.1 Rの場合
+#### 14.2.1.1 Rの場合
 
 library(tidyverse)
 my_data <- data.frame(
@@ -52,7 +28,7 @@ my_result %>% cutree(3)
 #> A B C D 
 #> 1 2 1 3 
 
-#### 14.2.3.1 Rの場合
+#### 14.2.2.1 Rの場合
 
 library(tidyverse)
 my_data <- data.frame(
@@ -72,7 +48,7 @@ my_data %>%
     cexRow = 1, # 行ラベルのサイズ
     cexCol = 1) # 列ラベルのサイズ
 
-#### 14.2.4.1 Rの場合
+#### 14.2.3.1 Rの場合
 
 my_data <- data.frame(
   x = c(  0, -16,  10,  10),
@@ -88,7 +64,7 @@ my_cluster
 #> A B C D 
 #> 2 3 2 1 
 
-### 14.2.5 主成分分析とクラスター分析
+### 14.2.4 主成分分析とクラスター分析
 
 library(tidyverse)
 # アヤメのデータ
