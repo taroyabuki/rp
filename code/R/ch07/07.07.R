@@ -44,7 +44,7 @@ library(caret)
 library(tidyverse)
 my_data <- cars
 
-f <- function(k) {
+my_loocv <- function(k) {
   my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                     tuneGrid = data.frame(k = k),
                     trControl = trainControl(method = "LOOCV"))
@@ -55,7 +55,7 @@ f <- function(k) {
        validation = my_model$results$RMSE) # RMSE（検証）
 }
 
-my_results <- 1:15 %>% map_dfr(f)
+my_results <- 1:15 %>% map_dfr(my_loocv)
 
 my_results %>%
   pivot_longer(-k) %>%

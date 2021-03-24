@@ -1,7 +1,7 @@
 # データの準備
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_score, RepeatedKFold
+from sklearn.model_selection import cross_val_score
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 X, y = my_data[['speed']], my_data['dist']
 
@@ -26,7 +26,7 @@ import numpy as np
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import make_scorer, mean_squared_error, r2_score
-from sklearn.model_selection import cross_val_score, RepeatedKFold
+from sklearn.model_selection import cross_val_score, LeaveOneOut, RepeatedKFold
 
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 X, y = my_data[['speed']], my_data['dist']
@@ -73,13 +73,13 @@ cross_val_score(my_model, X, y, cv=RepeatedKFold(),
 #> 0.6417227070606119
 
 # 方法1
-my_scores = cross_val_score(my_model, X, y, cv=len(y),
+my_scores = cross_val_score(my_model, X, y, cv=LeaveOneOut(),
                             scoring='neg_mean_squared_error')
 (-my_scores.mean())**0.5
 #> 15.697306009399101 # RMSE（検証）
 
 # 方法2
-my_scores = cross_val_score(my_model, X, y, cv=len(y),
+my_scores = cross_val_score(my_model, X, y, cv=LeaveOneOut(),
                             scoring='neg_root_mean_squared_error')
 (my_scores**2).mean()**0.5 # my_scores.mean()ではない
 #> 15.697306009399101 # RMSE（検証）

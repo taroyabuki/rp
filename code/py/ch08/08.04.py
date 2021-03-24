@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, LeaveOneOut
 
 my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/wine.csv')
@@ -26,8 +26,8 @@ mean_squared_error(y_, y)**0.5
 #> 0.2530051445030606 # RMSE（訓練）
 
 my_scores = cross_val_score(my_model2, X, y,
-                            cv=len(y),                        # LOOCV           
-                            scoring='neg_mean_squared_error') # MSE
+                            cv=LeaveOneOut(),
+                            scoring='neg_mean_squared_error')
 (-my_scores.mean())**0.5
 #> 0.35191104236501053 # RMSE（検証）
 

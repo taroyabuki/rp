@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import ElasticNet, enet_path
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import zscore
@@ -59,8 +59,8 @@ my_pipeline = Pipeline([('sc', StandardScaler()),
 my_search = GridSearchCV(
     estimator=my_pipeline,
     param_grid={'enet__alpha': As, 'enet__l1_ratio': Bs},
-    cv=len(y),                        # LOOCV
-    scoring='neg_mean_squared_error', # MSE
+    cv=LeaveOneOut(),
+    scoring='neg_mean_squared_error',
     n_jobs=-1).fit(X, y)
 my_search.best_params_
 #> {'enet__alpha': 0.075, 'enet__l1_ratio': 0.0}

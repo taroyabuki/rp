@@ -7,7 +7,7 @@ plt.plot(x, y)
 import pandas as pd
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import cross_val_score, GridSearchCV, RepeatedKFold
+from sklearn.model_selection import cross_val_score, GridSearchCV, LeaveOneOut
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -21,8 +21,8 @@ my_model = Pipeline([('sc', StandardScaler()),        # 標準化
 my_model.fit(X, y)                                    # 訓練
 
 my_scores = cross_val_score(my_model, X, y,
-                            cv=len(y),                        # LOOCV
-                            scoring='neg_mean_squared_error') # MSE
+                            cv=LeaveOneOut(),
+                            scoring='neg_mean_squared_error')
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5
@@ -41,8 +41,8 @@ my_params = {'mlp__activation': ('logistic', 'tanh', 'relu'), # 活性化関数
              'mlp__hidden_layer_sizes': my_layers}            # 隠れ層の構造
 my_search = GridSearchCV(estimator=my_pipeline,
                          param_grid=my_params,
+                         cv=LeaveOneOut(),
                          scoring='neg_root_mean_squared_error',
-                         cv=RepeatedKFold(n_splits=5, n_repeats=10),
                          n_jobs=-1).fit(X, y)
 my_search.best_params_               # チューニング結果
 #> {'mlp__activation': 'logistic', 'mlp__hidden_layer_sizes': 5}

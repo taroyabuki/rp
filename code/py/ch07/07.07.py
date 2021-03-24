@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.neighbors import KNeighborsRegressor
 
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
@@ -12,7 +12,7 @@ my_params = {'n_neighbors':range(1, 16)} # 探索範囲（1以上15以下の整�
 
 my_search = GridSearchCV(estimator=KNeighborsRegressor(),
                          param_grid=my_params,
-                         cv=len(y),
+                         cv=LeaveOneOut(),
                          scoring='neg_mean_squared_error')
 my_search.fit(X, y)
 
@@ -39,27 +39,30 @@ mean_squared_error(y_, y)**0.5
 
 import pandas as pd
 import statsmodels.api as sm
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.neighbors import KNeighborsRegressor
 
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 X, y = my_data[['speed']], my_data['dist']
 
-def f(k):
-    my_model = KNeighborsRegressor(n_neighbors=k)
-    my_scores = cross_val_score(my_model, X, y,
-                                cv=len(y),                        # LOOCV
-                                scoring='neg_mean_squared_error') # MSE
-    y_ = my_model.fit(X, y).predict(X)
-    return pd.Series([k,
-                      (-my_scores.mean())**0.5,        # RMSE（検証）
-                      mean_squared_error(y_, y)**0.5], # RMSE（訓練）
-                     index=['n_neighbors', 'validation', 'training'])
+my_params = {'n_neighbors':range(1, 16)} # 探索範囲（1以上15以下の整数）
 
-my_results = pd.Series(range(1, 16)).apply(f)
+my_search = GridSearchCV(estimator=KNeighborsRegressor(),
+                         param_grid=my_params,
+                         cv=LeaveOneOut(),
+                         scoring='neg_mean_squared_error',
+                         return_train_score=True)
+my_search.fit(X, y)
 
-my_results.plot(x='n_neighbors',
-                style='o-',
-                ylabel='RMSE')
+tmp = my_search.cv_results_
+my_df = pd.DataFrame(
+    {'n_neighbors':
+     my_params['n_neighbors'],
+     'validation':
+     (-tmp['mean_test_score'])**0.5,
+     'training':
+     (-tmp['mean_train_score'])**0.5})
+my_df.plot(x='n_neighbors',
+           style='o-',
+           ylabel='RMSE')
 
