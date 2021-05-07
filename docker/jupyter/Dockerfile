@@ -1,8 +1,7 @@
-FROM jupyter/datascience-notebook
+FROM jupyter/datascience-notebook:python-3.8.8
 
-# use pystan==2.18.0.0 for fbprophet (2021/05)
+# pystan==2.18.0.0 for fbprophet
 RUN pip install \
-  fbprophet \
   graphviz \
   h2o \
   japanize_matplotlib \
@@ -11,14 +10,17 @@ RUN pip install \
   pandarallel \
   pca \
   pmdarima \
-  pystan \
+  pystan==2.18.0.0 \
   tensorflow \
   xgboost
+
+RUN pip install fbprophet
 
 #RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
 RUN Rscript -e '\
   Sys.setenv(DOWNLOAD_STATIC_LIBV8=1); \
-  install.packages(c(\
+  install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/"); \
+  pak::pkg_install(c(\
     "doParallel",\
     "e1071",\
     "epitools",\
@@ -40,9 +42,7 @@ RUN Rscript -e '\
     "rpart.plot",\
     "tsibble",\
     "vcd",\
-    "xgboost"\
-  ), repos="https://cran.rstudio.com");\
-  devtools::install_github(c(\
+    "xgboost",\
     "haleyjeppson/ggmosaic",\
     "rstudio/keras",\
     "vqv/ggbiplot"\
