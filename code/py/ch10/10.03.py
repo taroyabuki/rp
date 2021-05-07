@@ -1,19 +1,60 @@
-### 10.3.2 Pythonの場合
-
+import graphviz
 import pandas as pd
-my_data = pd.DataFrame({
-  'answer': [  0,   1,   1,   0,   1,   0,    1,   0,   0,   1],  # 正解
-  'prob':   [0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5]}) # 陽性確率
+from sklearn import tree
+from sklearn.metrics import roc_curve, RocCurveDisplay, auc
+from sklearn.model_selection import cross_val_score, LeaveOneOut
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
 
-from sklearn.metrics import roc_curve
-fpr, tpr, _ = roc_curve(my_data.answer, my_data.prob)
+my_url = ('https://raw.githubusercontent.com'
+          '/taroyabuki/fromzero/master/data/titanic.csv')
+my_data = pd.read_csv(my_url)
 
-import matplotlib.pyplot as plt
-plt.plot(fpr, tpr)
-plt.xlabel('False positive rate')
-plt.ylabel('True positive rate')
+my_data.head()
+#>   Class   Sex    Age Survived
+#> 0   1st  Male  Child      Yes
+#> 1   1st  Male  Child      Yes
+#> 2   1st  Male  Child      Yes
+#> 3   1st  Male  Child      Yes
+#> 4   1st  Male  Child      Yes
 
-from sklearn.metrics import auc
-auc(fpr, tpr)
-#> 0.8
+X, y = my_data.iloc[:, 0:3], my_data.Survived
+
+my_pipeline = Pipeline([
+    ('ohe', OneHotEncoder(drop='first')),
+    ('tree', tree.DecisionTreeClassifier(max_depth=2,
+                                         min_impurity_decrease=0.01))])
+my_pipeline.fit(X, y)
+
+my_enc  = my_pipeline.named_steps['ohe']  # パイプラインからエンコーダを取り出す．
+my_tree = my_pipeline.named_steps['tree'] # パイプラインから木を取り出す．
+
+my_dot = tree.export_graphviz(
+    decision_tree=my_tree,
+    out_file=None,
+    feature_names=my_enc.get_feature_names(),
+    class_names=my_pipeline.classes_,
+    filled=True)
+graphviz.Source(my_dot)
+
+my_scores = cross_val_score(
+    my_pipeline, X, y,
+    cv=LeaveOneOut(),
+    n_jobs=-1)
+my_scores.mean()
+#> 0.7832803271240345
+
+tmp = pd.DataFrame(
+    my_pipeline.predict_proba(X),
+    columns = my_pipeline.classes_)
+y_score = tmp.Yes
+
+my_fpr, my_tpr, _ = roc_curve(y_true=y,
+                              y_score=y_score,
+                              pos_label='Yes')
+my_auc = auc(x=my_fpr, y=my_tpr)
+my_auc
+#> 0.7114886868858494
+
+RocCurveDisplay(fpr=my_fpr, tpr=my_tpr, roc_auc=my_auc).plot()
 

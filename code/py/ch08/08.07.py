@@ -16,15 +16,15 @@ my_url = ('https://raw.githubusercontent.com'
 my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
-my_model = Pipeline([('sc', StandardScaler()),        # 標準化
+my_pipeline = Pipeline([('sc', StandardScaler()),        # 標準化
                      ('mlp', MLPRegressor())])        # ニューラルネットワーク
-my_model.fit(X, y)                                    # 訓練
+my_pipeline.fit(X, y)                                    # 訓練
 
-my_scores = cross_val_score(my_model, X, y,
+my_scores = cross_val_score(my_pipeline, X, y,
                             cv=LeaveOneOut(),
                             scoring='neg_mean_squared_error')
 
-y_ = my_model.predict(X)
+y_ = my_pipeline.predict(X)
 mean_squared_error(y_, y)**0.5
 #> 0.1759231326772027  # RMSE（訓練）
 

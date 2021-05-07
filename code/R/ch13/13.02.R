@@ -1,143 +1,92 @@
-### 13.2.1 データの準備
-
-my_data <- as.vector(AirPassengers)
-
-n <- length(my_data) # データ数（144）
-k <- 108             # 訓練データ数
+### 13.2.1 階層的クラスタ分析
 
 library(tidyverse)
-library(tsibble)
 
-my_ds <- seq(
-  from = yearmonth("1949/01"),
-  to   = yearmonth("1960/12"),
-  by   = 1)
-my_label <- rep(
-  c("train", "test"),
-  c(k, n - k))
-my_df <- tsibble(
-  ds    = my_ds,
-  x     = 0:(n - 1),
-  y     = my_data,
-  label = my_label,
-  index = ds) # 日時の列の指定
+my_data <- data.frame(
+  x         = c(  0, -16,  10,  10),
+  y         = c(  0,   0,  10, -15),
+  row.names = c("A", "B", "C", "D"))
 
-head(my_df)
-#> # A tsibble: 6 x 4 [1M]
-#>       ds     x     y label
-#>    <mth> <int> <dbl> <chr>
-#> 1 1949 1     0   112 train
-#> 2 1949 2     1   118 train
-#> 3 1949 3     2   132 train
-#> 4 1949 4     3   129 train
-#> 5 1949 5     4   121 train
-#> 6 1949 6     5   135 train
+my_result <- my_data %>%
+  dist("euclidian") %>% # 個体間距離
+  hclust("complete")    # クラスタ間距離
 
-my_train <- my_df[  1:k,]
-my_test  <- my_df[-(1:k),]
-y <- my_test$y
+factoextra::fviz_dend(
+  my_result,
+  k = 3, # クラスタ数
+  rect=T, rect_fill=T)
 
-my_plot <- my_df %>%
-  ggplot(aes(x = ds,
-             y = y,
-             color = label)) +
-  geom_line()
-my_plot
+factoextra::fviz_dend(
+  my_result,
+  k = 3,
+  rect=T, rect_fill=T,
+  type = "phylogenic")
 
-### 13.2.2 線形回帰分析による時系列予測
+my_result %>% cutree(3)
+#> A B C D 
+#> 1 2 1 3 
 
-# 訓練
-library(caret)
-my_lm_model <- train(form = y ~ x, data = my_train, method = "lm")
+### 13.2.2 階層的クラスタ分析とヒートマップ
 
-# テスト
-y_ <- my_lm_model %>% predict(my_test)
-y_ %>% postResample(y)
-#>       RMSE   Rsquared        MAE 
-#> 70.6370708  0.2758569 53.3019355
+library(tidyverse)
 
-y_ <- my_lm_model %>%
-  predict(my_df)
-tmp <- my_df %>%
-  mutate(y = y_, label = "model")
-my_plot + geom_line(data = tmp)
+my_data <- data.frame(
+  language  = c(  0,  20,  20,  25,  22,  17),
+  english   = c(  0,  20,  40,  20,  24,  18),
+  math      = c(100,  20,   5,  30,  17,  25),
+  science   = c(  0,  20,   5,  25,  16,  23),
+  society   = c(  0,  20,  30,   0,  21,  17),
+  row.names = c("A", "B", "C", "D", "E", "F"))
 
-import matplotlib.pyplot as plt
-y_ = my_lm_model.predict(my_df[['x']])
-tmp = pd.DataFrame(y_, index=my_df.index)
-plt.plot(my_train[['y']], label='train')
-plt.plot(my_test[['y']],  label='test')
-plt.plot(tmp, label='model')
-plt.legend()
+my_data %>% scale %>% # 列ごとの標準化
+  gplots::heatmap.2()
 
-#### 13.2.3.2 モデルの構築
+### 13.2.3 非階層的クラスタ分析
 
-library(fable)
-my_arima_model <- my_train %>% model(ARIMA(y))
-my_arima_model
-#> # A mable: 1 x 1
-#>                  `ARIMA(y)`
-#>                     <model>
-#> 1 <ARIMA(1,1,0)(0,1,0)[12]>
+library(tidyverse)
 
-#### 13.2.3.3 予測
+my_data <- data.frame(
+  x         = c(  0, -16,  10,  10),
+  y         = c(  0,   0,  10, -15),
+  row.names = c("A", "B", "C", "D"))
 
-my_arima_result <- my_arima_model %>% forecast(h = "3 years")
-head(my_arima_result)
-#> # A fable: 6 x 4 [1M]
-#> # Key:     .model [1]
-#> .model       ds           y .mean
-#> <chr>     <mth>      <dist> <dbl>
-#> 1 ARIMA(y) 1958 1  N(346, 94)  346.
-#> 2 ARIMA(y) 1958 2 N(332, 148)  332.
-#> 3 ARIMA(y) 1958 3 N(387, 210)  387.
-#> 4 ARIMA(y) 1958 4 N(379, 271)  379.
-#> 5 ARIMA(y) 1958 5 N(386, 332)  386.
-#> 6 ARIMA(y) 1958 6 N(453, 393)  453.
+my_result <- my_data %>% kmeans(3)
 
-library(caret)
-y_ <- my_arima_result$.mean
-y_ %>% postResample(y)
-#> RMSE   Rsquared        MAE 
-#> 22.1322287  0.9613352 17.8078083
+my_result$cluster
+#> A B C D 
+#> 2 3 2 1 
 
-# 予測結果のみでよい場合
-# my_arima_result %>% autoplot
+### 13.2.4 クラスタ数の決定
 
-my_arima_result %>% autoplot +
-  geom_line(data = my_df,
-            aes(x = ds,
-                y = y,
-                color=label))
+library(tidyverse)
+library(factoextra)
 
-### 13.2.4 Prophetによる時系列予測
+my_data <- iris[, -5]
 
-library(prophet)
-my_prophet_model <- my_train %>%
-  prophet(seasonality.mode = "multiplicative")
+f <- 2:5 %>% map(function(k) {
+  my_data %>% kmeans(k) %>%
+    fviz_cluster(data = my_data, geom = "point") +
+    ggtitle(sprintf("k = %s", k))
+})
+gridExtra::grid.arrange(f[[1]], f[[2]], f[[3]], f[[4]], ncol = 2)
 
-library(prophet)
-my_prophet_result <- my_prophet_model %>% predict(my_test)
-head(my_prophet_result[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
-#> # A tibble: 6 x 4
-#>   ds                   yhat yhat_lower yhat_upper
-#>   <dttm>              <dbl>      <dbl>      <dbl>
-#> 1 1958-01-01 00:00:00  359.       350.       368.
-#> 2 1958-02-01 00:00:00  350.       342.       360.
-#> 3 1958-03-01 00:00:00  407.       398.       416.
-#> 4 1958-04-01 00:00:00  398.       389.       407.
-#> 5 1958-05-01 00:00:00  402.       393.       411.
-#> 6 1958-06-01 00:00:00  459.       450.       469.
+fviz_nbclust(my_data, kmeans, method = "wss")
 
-y_ <- my_prophet_result$yhat
-y_ %>% postResample(y)
-#>       RMSE   Rsquared        MAE 
-#> 33.1451579  0.9585967 29.1368658 
+### 13.2.5 主成分分析とクラスタ分析
 
-# my_prophet_model %>% plot(my_prophet_result) # 予測結果のみでよい場合
+library(tidyverse)
+my_data <- iris[, -5] %>% scale
 
-my_aes = aes(x = as.POSIXct(ds))
-my_prophet_model %>% plot(my_prophet_result) +
-  geom_line(data = my_train, my_aes) +
-  geom_line(data = my_test,  my_aes, color = "red")
+my_result <- prcomp(my_data)$x %>% as.data.frame # 主成分分析
+
+# 非階層的クラスタ分析の場合
+my_result$cluster <- (my_data %>% scale %>% kmeans(3))$cluster %>% as.factor
+
+# 階層的クラスタ分析の場合
+#my_result$cluster <- my_data %>% dist %>% hclust %>% cutree(3) %>% as.factor
+
+my_result %>%
+  ggplot(aes(x = PC1, y = PC2, color = cluster)) +
+  geom_point(shape = iris$Species) +
+  theme(legend.position = "none")
 

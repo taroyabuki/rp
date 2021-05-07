@@ -10,12 +10,12 @@ iris.head()
 
 iris.hist('Sepal.Length')
 
-import matplotlib.pyplot as plt
-x = [10, 20, 30]
-plt.hist(x, bins=2) # 階級数は2
+import pandas as pd
+my_df = pd.DataFrame({'x':[10, 20, 30]})
+my_df.hist('x', bins=2) # 階級数は2
 
-iris.plot('sepal length (cm)',
-          'sepal width (cm)',
+iris.plot('Sepal.Length',
+          'Sepal.Width',
           kind='scatter')
 
 iris.boxplot()

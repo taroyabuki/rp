@@ -23,14 +23,9 @@ my_data.head()
 #> 3      7    22  9.95     12.05
 #> 4      8    16 13.88      2.12
 
-plt.scatter(my_data['speed'], my_data['dist'], label='data')
-plt.plot(my_data['speed'], my_data['y_'], label='model')
-for i in my_data.index:
-    v = my_data.loc[i]
-    plt.vlines(x=v['speed'], ymin=v['y_'], ymax=v['dist'], linestyles='dashed')
-plt.xlabel('speed')
-plt.ylabel('dist')
-plt.legend()
+ax = my_data.plot(x='speed', y='dist', style='o', legend=False)
+my_data.plot(x='speed', y='y_', style='-', legend=False, ax=ax)
+ax.vlines(x=X, ymin=y, ymax=y_, linestyles='dotted')
 
 mean_squared_error(y, y_)**0.5
 # あるいは

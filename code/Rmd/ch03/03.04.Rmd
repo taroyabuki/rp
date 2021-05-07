@@ -124,14 +124,16 @@ my_df["id"] <- c(1, 2, 3, 4)
 #### 3.4.3.1 1列の取り出し（結果は1次元データ）
 
 ```{r}
-my_df$english
+my_df[, 2]         # 参照
 # あるいは
-my_df$"english"
+my_df$english      # 参照
 # あるいは
-my_df[["english"]]
+my_df$"english"    # 参照
+# あるいは
+my_df[["english"]] # 参照
 # あるいは
 tmp <- "english"
-my_df[[tmp]]
+my_df[[tmp]]       # 参照
 
 #> [1] 60 90 70 90
 ```
@@ -143,41 +145,41 @@ my_df %>% select(name, math)
 ```
 
 ```{r}
-my_df[, c(1, 3)]
+my_df[, c(1, 3)] # 参照
 ```
 
 ```{r}
 my_df %>% select(-c(english, gender))
 # あるいは
-my_df[, -c(2, 4)]
+my_df[, -c(2, 4)] # 参照
 ```
 
 #### 3.4.3.3 複数行の取り出し（結果はデータフレーム）
 
 ```{r}
-my_df[c(1, 3), ]
+my_df[c(1, 3), ] # 参照
 ```
 
 ```{r}
-my_df[-c(2, 4), ]
+my_df[-c(2, 4), ] # 参照
 ```
 
 #### 3.4.3.4 検索
 
 ```{r}
-my_df[my_df$gender == "m", ]
+my_df[my_df$gender == "m", ] # 参照
 # あるいは
 my_df %>% filter(gender == "m")
 ```
 
 ```{r}
-my_df[my_df$english > 80 & my_df$gender == "m", ]
+my_df[my_df$english > 80 & my_df$gender == "m", ] # 参照
 # あるいは
 my_df %>% filter(english > 80 & gender == "m")
 ```
 
 ```{r}
-my_df[my_df$english == max(my_df$english), ]
+my_df[my_df$english == max(my_df$english), ] # 参照
 # あるいは
 my_df %>% filter(english == max(my_df$english))
 ```
@@ -250,35 +252,50 @@ t(A) %*% A
 #> [4,] 1074 1341 1505 1779
 ```
 
-### 3.4.5 整然データ（R）
+### 3.4.5 縦型と横型
 
 ```{r}
 library(tidyverse)
 
-my_df <- data.table(
-  名前 = c("A", "B"),
-  身長 = c(160, 170),
-  体重 = c(60, 70)
-)
-
-my_tidy <- my_df %>% pivot_longer(c(身長, 体重))
-# あるいは
-my_tidy <- my_df %>% pivot_longer(-名前)
-
-my_tidy
-#>   名前  name  value
-#>   <chr> <chr> <dbl>
-#> 1 A     身長    160
-#> 2 A     体重     60
-#> 3 B     身長    170
-#> 4 B     体重     70
+my_wider <- data.frame(
+  day = c(25, 26, 27),
+  min = c(20, 21, 15),
+  max = c(24, 27, 21))
 ```
 
 ```{r}
-my_tidy %>% pivot_wider()
-#>   名前   身長  体重
-#>   <chr> <dbl> <dbl>
-#> 1 A       160    60
-#> 2 B       170    70
+my_longer <- my_wider %>%
+  pivot_longer(-day)
+my_longer
+#> # A tibble: 6 x 3
+#>     day name  value
+#>   <dbl> <chr> <dbl>
+#> 1    25 min      20
+#> 2    25 max      24
+#> 3    26 min      21
+#> 4    26 max      27
+#> 5    27 min      15
+#> 6    27 max      21
+```
+
+```{r}
+my_longer %>% pivot_wider()
+#> # A tibble: 3 x 3
+#>     day   min   max
+#>   <dbl> <dbl> <dbl>
+#> 1    25    20    24
+#> 2    26    21    27
+#> 3    27    15    21
+```
+
+```{r}
+my_longer %>%
+  ggplot(aes(x = day, y = value,
+             color = name)) +
+  geom_point() +
+  geom_line() +
+  ylab("temperature") +
+  scale_x_continuous(
+    breaks = my_longer$day)
 ```
 

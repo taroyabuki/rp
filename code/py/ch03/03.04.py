@@ -82,10 +82,14 @@ my_df.assign(id=[1, 2, 3, 4])
 
 my_df['id'] = [1, 2, 3, 4]
 
-my_df['english']
+my_df.iloc[:, 1] # 参照
+# あるいは
+my_df['english'] # 参照
+# あるいは
+my_df.english    # 参照
 # あるいは
 tmp = 'english'
-my_df[tmp]
+my_df[tmp]       # 参照
 
 #> 0    60
 #> 1    90
@@ -93,27 +97,33 @@ my_df[tmp]
 #> 3    90
 #> Name: english, dtype: int64
 
-my_df[['name', 'math']]
+my_df[['name', 'math']]        # 参照
+# あるいは
+my_df.loc[:, ['name', 'math']] # 参照
 
-my_df.iloc[:, [0, 2]]
+my_df.take([0, 2], axis=1)
+# あるいは
+my_df.iloc[:, [0, 2]] # 参照
 
 my_df.drop(columns=['english', 'gender'])
 # あるいは
 my_df.drop(columns=my_df.columns[[1, 3]])
 
 my_df.take([0, 2])
+# あるいは
+my_df.iloc[[0, 2], :] # 参照
 
 my_df.drop([1, 3])
 
-my_df[my_df['gender'] == 'm']
+my_df[my_df['gender'] == 'm'] # 参照
 # あるいは
 my_df.query('gender == "m"')
 
-my_df[(my_df['english'] > 80) & (my_df['gender'] == "m")]
+my_df[(my_df['english'] > 80) & (my_df['gender'] == "m")] # 参照
 # あるいは
 my_df.query('english > 80 and gender == "m"')
 
-my_df[my_df['english'] == my_df['english'].max()]
+my_df[my_df['english'] == my_df['english'].max()] # 参照
 # あるいは
 tmp = my_df['english'].max()
 my_df.query('english == @tmp')
@@ -154,4 +164,36 @@ A.T @ A
 #>        [ 816, 1019, 1135, 1341],
 #>        [ 910, 1135, 1275, 1505],
 #>        [1074, 1341, 1505, 1779]])
+
+import pandas as pd
+
+my_df = pd.DataFrame({
+  'day':[25, 26, 27],
+  'min':[20, 21, 15],
+  'max':[24, 27, 21]})
+
+my_longer = my_df.melt(id_vars='day')
+my_longer
+#>    day variable  value
+#> 0   25      min     20
+#> 1   26      min     21
+#> 2   27      min     15
+#> 3   25      max     24
+#> 4   26      max     27
+#> 5   27      max     21
+
+my_wider = my_longer.pivot(
+    index='day',
+    columns='variable',
+    values='value')
+my_wider
+#> variable  max  min
+#> day
+#> 25         24   20
+#> 26         27   21
+#> 27         21   15
+
+my_wider.plot(style='o-',
+              xticks=my_wider.index,
+              ylabel='temperature')
 

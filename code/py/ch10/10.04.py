@@ -1,42 +1,46 @@
+import numpy as np
+x = np.arange(-6, 6, 0.1)
+y = 1 / (1 + np.exp(-x))
+import matplotlib.pyplot as plt
+plt.plot(x, y)
+
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_curve, RocCurveDisplay, auc
+from sklearn.model_selection import cross_val_score, LeaveOneOut
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+
 my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/titanic.csv')
 my_data = pd.read_csv(my_url)
 
-my_data.head()
-#>   Class   Sex    Age Survived
-#> 0   1st  Male  Child      Yes
-#> 1   1st  Male  Child      Yes
-#> 2   1st  Male  Child      Yes
-#> 3   1st  Male  Child      Yes
-#> 4   1st  Male  Child      Yes
+X, y = my_data.iloc[:, 0:3], my_data.Survived
 
-#### 10.4.1.2 Pythonの場合
+my_pipeline = Pipeline([('ohe', OneHotEncoder(drop='first')),
+                        ('lr', LogisticRegression(penalty='none'))])
+my_pipeline.fit(X, y)
 
-import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'
-my_data = pd.read_csv(my_url)
+my_ohe = my_pipeline.named_steps.ohe
+my_lr  = my_pipeline.named_steps.lr
 
-X, y = pd.get_dummies(my_data.iloc[:,0:3], drop_first=True), my_data.Survived
-X.head()
-#>    Class_2nd  Class_3rd  Class_Crew  Sex_Male  Age_Child
-#> 0          0          0           0         1          1
-#> 1          0          0           0         1          1
-#> 2          0          0           0         1          1
-#> 3          0          0           0         1          1
-#> 4          0          0           0         1          1
+my_lr.intercept_[0]
+#> 2.043878162056783
 
-from sklearn import tree
-my_model = tree.DecisionTreeClassifier(max_depth=3)
+tmp = my_ohe.get_feature_names()
+pd.Series(my_lr.coef_[0],
+          index = tmp)
+#> x0_2nd     -1.018069
+#> x0_3rd     -1.777746
+#> x0_Crew    -0.857708
+#> x1_Male    -2.420090
+#> x2_Child    1.061531
+#> dtype: float64
 
-# 5分割交差検証（10回）
-from sklearn.model_selection import *
-my_cv = RepeatedKFold(n_splits=5, n_repeats=10)
-
-my_scores = cross_val_score(my_model, X, y, cv=my_cv)
-my_scores.mean() # 正解率（検証）
-#> 0.7892313955885385
-
-my_model.fit(X, y)
-tree.plot_tree(my_model, filled=True)
+my_scores = cross_val_score(
+    my_pipeline, X, y,
+    cv=LeaveOneOut(),
+    n_jobs=-1)
+my_scores.mean()
+#> 0.7782825988187188
 

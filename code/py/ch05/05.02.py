@@ -32,18 +32,24 @@ from sklearn.preprocessing \
 import OneHotEncoder
 
 my_enc = OneHotEncoder()
-my_enc.fit_transform(
+tmp = my_enc.fit_transform(
     my_df[['class']]).toarray()
-#> array([[1., 0., 0.],
-#>        [0., 1., 0.],
-#>        [0., 0., 1.]])
+
+my_names = my_enc.get_feature_names()
+pd.DataFrame(tmp, columns = my_names)
+#>    x0_A  x0_B  x0_C
+#> 0   1.0   0.0   0.0
+#> 1   0.0   1.0   0.0
+#> 2   0.0   0.0   1.0
 
 my_df2 = pd.DataFrame({
     'id': [4, 5, 6],
     'class': ['B', 'C', 'B']})
-my_enc.transform(
+tmp = my_enc.transform(
     my_df2[['class']]).toarray()
-#> array([[0., 1., 0.],
-#>        [0., 0., 1.],
-#>        [0., 1., 0.]])
+pd.DataFrame(tmp, columns = my_names)
+#>    x0_A  x0_B  x0_C
+#> 0   0.0   1.0   0.0
+#> 1   0.0   0.0   1.0
+#> 2   0.0   1.0   0.0
 

@@ -1,58 +1,63 @@
-### 11.2.1 準備
-
-library(tidyverse)
-my_url <- "https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv"
-tmp <- read_csv(my_url)
-head(tmp)
-#>   LPRICE2 WRAIN DEGREES HRAIN TIME_SV
-#>     <dbl> <dbl>   <dbl> <dbl>   <dbl>
-#> 1  -0.999   600    17.1   160      31
-#> 2  -0.454   690    16.7    80      30
-#> 3  -0.808   502    17.2   130      28
-#> 4  -1.51    420    16.1   110      26
-#> 5  -1.72    582    16.4   187      25
-#> 6  -0.418   485    17.5   187      24
-
-my_data <- tmp[sample(nrow(tmp)), ] %>% scale # シャッフルと標準化
-X <- my_data[, -1] # 入力変数
-y <- my_data[,  1] # 出力変数
-
-library(caret)
-my_model <- train(form = LPRICE2 ~ ., data = my_data, method = "lm")
-my_model$results$RMSE^2
-#> [1] 0.2940522
-
-### 11.2.2 ネットワークの構築
+## 11.2 Kerasによる分類
 
 library(keras)
-my_model <- keras_model_sequential() %>% # 層状のネットワーク
-  layer_dense(
-    units = 3,              # 隠れ層のニューロン数
-    activation = "relu",    # 活性化関数
-    input_shape = c(4)) %>% # 入力層のニューロン数
-  layer_dense(units = 1)    # 出力層のニューロン数
+library(tidyverse)
 
-my_model %>% compile(loss = "mean_squared_error",
-                     optimizer = "rmsprop")
+my_data <- iris[sample(nrow(iris)), ]
 
-my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
-                                 restore_best_weights = TRUE) # 最善を保持
+X <- my_data %>%
+  select(-Species) %>% scale
+y <- as.integer(my_data$Species) - 1
+
+my_model <- keras_model_sequential() %>%
+  layer_dense(units = 3, activation = "relu", input_shape = c(4)) %>%
+  layer_dense(units = 3, activation = "softmax")
+
+my_model %>% compile(loss = "sparse_categorical_crossentropy",
+                     optimizer = "rmsprop",
+                     metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(
+  patience = 20,
+  restore_best_weights = TRUE)
 
 my_history <- my_model %>%
-  fit(x = X,                   # 入力変数
-      y = y,                   # 出力変数
-      validation_split = 0.25, # 検証データの割合
-      batch_size = 10,         # バッチサイズ
-      epochs = 500,            # エポック数の上限
-      callbacks = my_cb)       # エポックごとに行う処理
+  fit(x = X,
+    y = y,
+    validation_split = 0.25,
+    batch_size = 10,
+    epochs = 500,
+    callbacks = list(my_cb),
+    verbose = 0)
 
-#plot(my_history) # がうまく行かない場合の方法
-tmp <- my_history
-tmp$params$epochs<-length(tmp$metrics$loss)
-plot(tmp)
+plot(my_history)
 
 my_history
 #> Final epoch (plot to see history):
-#>     loss: 0.1301
-#> val_loss: 0.1529
+#>         loss: 0.04358
+#>     accuracy: 0.9911
+#>     val_loss: 0.0863
+#> val_accuracy: 0.9737
+
+### 11.2.1 交差エントロピー
+
+-mean(log(c(0.8, 0.7, 0.3, 0.8)))
+#> 0.5017337
+
+-mean(log(c(0.7, 0.6, 0.2, 0.7)))
+#> 0.7084034
+
+y <- c(2, 1, 0, 1)
+y_1 <- list(c(0.1, 0.1, 0.8),
+            c(0.1, 0.7, 0.2),
+            c(0.3, 0.4, 0.3),
+            c(0.1, 0.8, 0.1))
+y_2 <- list(c(0.1, 0.2, 0.7),
+            c(0.2, 0.6, 0.2),
+            c(0.2, 0.5, 0.3),
+            c(0.2, 0.7, 0.1))
+
+c(mean(as.array(loss_sparse_categorical_crossentropy(y_true = y, y_pred = y_1))),
+  mean(as.array(loss_sparse_categorical_crossentropy(y_true = y, y_pred = y_2))))
+#> [1] 0.5017337 0.7084033
 

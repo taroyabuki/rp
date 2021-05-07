@@ -1,108 +1,85 @@
-from pmdarima.datasets import airpassengers
-my_data = airpassengers.load_airpassengers()
+import pandas as pd
+from scipy.cluster import hierarchy
 
-n = len(my_data) # データ数（144）
-k = 108          # 訓練データ数
+my_data = pd.DataFrame(
+    {'x': [  0, -16,  10,  10],
+     'y': [  0,   0,  10, -15]},
+    index=['A', 'B', 'C', 'D'])
+
+my_result = hierarchy.linkage(
+    my_data,
+    metric='euclidean', # 個体間距離
+    method='complete')  # クラスタ間距離
+
+hierarchy.dendrogram(
+    my_result,
+    labels=my_data.index)
+
+hierarchy.cut_tree(my_result, 3)
+#> array([[0], [1], [0], [2]])
 
 import pandas as pd
+import seaborn as sns
+
+my_data = pd.DataFrame(
+    {'language': [  0,  20,  20,  25,  22,  17],
+     'english':  [  0,  20,  40,  20,  24,  18],
+     'math':     [100,  20,   5,  30,  17,  25],
+     'science':  [  0,  20,   5,  25,  16,  23],
+     'society':  [  0,  20,  30,   0,  21,  17]},
+    index=       ['A', 'B', 'C', 'D', 'E', 'F'])
+
+sns.clustermap(my_data,
+               z_score=1) # 列ごとの標準化
+
 import pandas as pd
-my_ds = pd.date_range(
-    start='1949/01/01',
-    end='1960/12/01',
-    freq='MS')
+from sklearn.cluster import KMeans
+
+my_data = pd.DataFrame(
+    {'x': [  0, -16,  10,  10],
+     'y': [  0,   0,  10, -15]},
+    index=['A', 'B', 'C', 'D'])
+
+my_result = KMeans(
+    n_clusters=3).fit(my_data)
+
+my_result.labels_
+#> array([1, 0, 1, 2], dtype=int32)
+
+import pandas as pd
+import statsmodels.api as sm
+from sklearn.cluster import KMeans
+
+iris = sm.datasets.get_rdataset('iris', 'datasets').data
+my_data = iris.iloc[:, 0:4]
+
+k = range(1, 11)
 my_df = pd.DataFrame({
-    'ds':my_ds,
-    'x':range(n),
-    'y':my_data},
-    index=my_ds)
-my_df.head()
-#>                    ds  x      y
-#> 1949-01-01 1949-01-01  0  112.0
-#> 1949-02-01 1949-02-01  1  118.0
-#> 1949-03-01 1949-03-01  2  132.0
-#> 1949-04-01 1949-04-01  3  129.0
-#> 1949-05-01 1949-05-01  4  121.0
+    'k': k,
+    'inertia': [KMeans(k).fit(my_data).inertia_ for k in range(1, 11)]})
+my_df.plot(x='k', style='o-', legend=False)
 
-my_train = my_df[        :k]
-my_test  = my_df[-(n - k): ]
-y = my_test.y
+import seaborn as sns
+import statsmodels.api as sm
+from pca import pca
+from scipy.cluster import hierarchy
+from scipy.stats import zscore
+from sklearn.cluster import KMeans
 
-import matplotlib.pyplot as plt
-plt.plot(my_train.y, label='train')
-plt.plot(my_test.y,  label='test')
-plt.legend()
+iris = sm.datasets.get_rdataset('iris', 'datasets').data
+my_data = zscore(iris.iloc[:, 0:4])
 
-# 訓練
-from sklearn.linear_model import LinearRegression
-my_lm_model = LinearRegression()
-my_lm_model.fit(my_train[['x']], my_train[['y']])
+my_model = pca() # 主成分分析
+my_result = my_model.fit_transform(my_data)['PC']
+my_result['Species'] = list(iris.Species)
 
-# テスト
-from sklearn.metrics import mean_squared_error, r2_score
-X = my_test[['x']]
-y_ = my_lm_model.predict(X)
+# 非階層的クラスタ分析の場合
+my_result['cluster'] = KMeans(n_clusters=3).fit(my_data).labels_
 
-[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
- r2_score(y_true=y, y_pred=y_),  # 決定係数B（テストその1）
- my_lm_model.score(X, y)]        # 決定係数B（テストその2）
-#> [70.63707081783771, 0.18448078010854552, 0.18448078010854552]
+# 階層的クラスタ分析の場合
+#my_result['cluster'] = hierarchy.cut_tree(
+#    hierarchy.linkage(my_data, method='complete'), 3)[:,0]
 
-import pmdarima as pm
-my_arima_model = pm.auto_arima(my_train.y, m=12, trace=True)
-#> （省略）
-#> Best model:  ARIMA(1,1,0)(0,1,0)[12]          
-#> Total fit time: 0.838 seconds
-
-y_, my_ci = my_arima_model.predict(len(my_test),
-                                   return_conf_int=True) # 信頼区間を求める．
-my_df = pd.DataFrame({'y': y_,
-                      'Lo': my_ci[:, 0],
-                      'Hi': my_ci[:, 1]},
-                     index=my_test.index)
-my_df.head()
-#>                      y          Lo          Hi
-#> 1958-01-01  345.964471  327.088699  364.840243
-#> 1958-02-01  331.731920  308.036230  355.427610
-#> 1958-03-01  386.787992  358.515741  415.060244
-#> 1958-04-01  378.774472  346.695454  410.853490
-#> 1958-05-01  385.777732  350.270765  421.284700
-
-from sklearn.metrics import mean_squared_error, r2_score
-[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
- r2_score(y_true=y, y_pred=y_)]  # 決定係数B（テスト）
-#> [22.132236727738697, 0.9199392874179217]
-
-import matplotlib.pyplot as plt
-plt.plot(my_train[['y']], label='train')
-plt.plot(my_test[['y']],  label='test')
-plt.plot(tmp.y, label='model')
-plt.fill_between(tmp.index,
-                 tmp.Lo,
-                 tmp.Hi,
-                 alpha=0.25)
-plt.legend(loc='upper left')
-
-from fbprophet import Prophet
-my_prophet_model = Prophet(seasonality_mode='multiplicative')
-my_prophet_model.fit(my_train)
-
-my_prophet_result = my_prophet_model.predict(my_test)
-my_prophet_result[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
-#>           ds        yhat  yhat_lower  yhat_upper
-#> 0 1958-01-01  359.239305  350.910898  368.464588
-#> 1 1958-02-01  350.690546  341.748862  359.964881
-#> 2 1958-03-01  407.188556  398.483316  415.463759
-#> 3 1958-04-01  398.481739  389.244105  406.742333
-#> 4 1958-05-01  402.595604  393.721421  411.331761
-
-from sklearn.metrics import mean_squared_error, r2_score
-[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
- r2_score(y_true=y, y_pred=y_)]  # 決定係数（テスト）
-#> [33.795549086036466, 0.8133242729288646]
-
-# my_prophet_model.plot(my_prophet_result) # 予測結果のみでよい場合
-
-fig = my_prophet_model.plot(my_prophet_result)
-fig.axes[0].plot(my_train.ds, my_train.y)
-fig.axes[0].plot(my_test.ds, my_test.y, color = 'red')
+sns.scatterplot(x='PC1', y='PC2', data=my_result, legend=False,
+                hue='cluster', style='Species', palette='bright')
 

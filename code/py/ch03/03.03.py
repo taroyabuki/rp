@@ -92,15 +92,14 @@ my_list = [1, "two"]
 my_list[1]
 #> 'two'
 
-my_dic = {'apple'  : 'りんご'}
+my_map = {'apple' :'りんご',
+          'orange':'みかん'}
 
-# ペアの追加
-my_dic['orange'] = 'みかん'
+my_map['grape'] = 'ぶどう'
 
-# 値の取得
-my_dic['apple']
+my_map['apple']
 # あるいは
 tmp = 'apple'
-my_dic[tmp]
+my_map[tmp]
 #> 'りんご'
 

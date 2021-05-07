@@ -1,38 +1,43 @@
-import numpy as np
-# 正解
-y = np.array(['serosa', 'setosa'])
-
-# 予測
-y_A = np.array(['serosa', 'versicolor'])
-
-# 比較
-y_A == y
-#> array([ True, False])
-
-# 正解率
-(y_A == y).mean()
-#> 0.5
-
-### 9.4.2 Pythonの場合
-
+import pandas as pd
 import statsmodels.api as sm
-iris = sm.datasets.get_rdataset('iris', 'datasets').data
-X, y = iris.iloc[:, 0:4], iris.Species
+import xgboost
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, LeaveOneOut
 
-from sklearn.neighbors import KNeighborsClassifier
-my_model = KNeighborsClassifier()
-my_model.fit(X, y)
-y_ = my_model.predict(X)
+my_data = sm.datasets.get_rdataset('iris', 'datasets').data
+X, y = my_data.iloc[:, 0:4], my_data.Species
 
-from sklearn.metrics import confusion_matrix
-confusion_matrix(y, y_) # Rの仕様に合わせる．
-#> array([[50,  0,  0],
-#>        [ 0, 47,  2],
-#>        [ 0,  3, 48]])
+my_search = GridSearchCV(RandomForestClassifier(),
+                         param_grid={'max_features':[2, 3, 4]},
+                         cv=LeaveOneOut(),
+                         n_jobs=-1).fit(X, y)
+my_search.best_params_
+#> {'max_features': 2}
 
-my_model.score(X, y)
-# あるいは
-y_ = my_model.predict(X)
-(y_ == y).mean()
-#> 0.9666666666666667
+my_search.cv_results_['mean_test_score']
+#> array([0.96      , 0.96      , 0.95333333])
+
+my_search = GridSearchCV(xgboost.XGBClassifier(),
+                         param_grid={'n_estimators':[50, 100, 150],
+                                     'max_depth':[1, 2, 3],
+                                     'learning_rate':[0.3, 0.4],
+                                     'gamma':[0],
+                                     'colsample_bytree':[0.6, 0.8],
+                                     'min_child_weight':[1],
+                                     'subsample':[0.5, 0.75, 1]},
+                         cv=LeaveOneOut(),
+                         n_jobs=1).fit(X, y) # n_jobs=-1ではない．
+my_search.best_params_
+#> {'colsample_bytree': 0.6,
+#>  'learning_rate': 0.3,
+#>  'max_depth': 1,
+#>  'n_estimators': 50,
+#>  'subsample': 0.5}
+
+my_search.best_score_
+#> 0.9533333333333334
+
+my_model = RandomForestClassifier().fit(X, y)
+tmp = pd.Series(my_model.feature_importances_, index=X.columns)
+tmp.sort_values().plot(kind='barh')
 

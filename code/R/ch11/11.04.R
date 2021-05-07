@@ -1,60 +1,88 @@
-### 11.4.1 準備
+### 11.4.1 H2Oの起動と停止
 
+library(h2o)
 library(keras)
-tmp <- epitools::expand.table(Titanic)
-tmp2 <- caret::dummyVars(formula = ~ ., data = tmp, fullRank = TRUE) %>%
-  predict(tmp)
-head(tmp2)
-#>   Class.2nd Class.3rd Class.Crew Sex.Female Age.Adult Survived.Yes
-#> 1         0         0          0          0         0            1
-#> 2         0         0          0          0         0            1
-#> 3         0         0          0          0         0            1
-#> 4         0         0          0          0         0            1
-#> 5         0         0          0          0         0            1
-#> 6         0         0          0          0         1            0
+library(tidyverse)
 
-my_data <- tmp2[sample(nrow(tmp2)), ] # シャッフル
-X <- my_data[, -6] # 入力変数
-y <- my_data[,  6] # 出力変数
+h2o.init()
+h2o.no_progress()
 
-### 11.4.2 ネットワークの構築
+h2o.shutdown(prompt = FALSE)
 
-my_model <- keras_model_sequential() %>%
-  layer_dense(units = 5, activation = "relu", input_shape = c(5)) %>%
-  layer_dense(units = 1, activation = "sigmoid") # 変更箇所1
+### 11.4.2 H2Oのデータフレーム
 
-my_model %>% compile(
-  loss = "binary_crossentropy", # 変更箇所2
-  optimizer = "rmsprop",
-  metric = c("accuracy"))
+my_url <- str_c("https://raw.githubusercontent.com",
+                "/taroyabuki/fromzero/master/data/wine.csv")
+my_data <- read_csv(my_url)
+my_frame <- as.h2o(my_data) # 通常のデータフレームをH2OFrameに変換する．
+# あるいは
+my_frame <- h2o.importFile(my_url, header=TRUE) # データを読み込む（1行目はラベル）．
 
-my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
-                                 restore_best_weights = TRUE) # 最善を保持
+my_frame
+#>    LPRICE2 WRAIN DEGREES HRAIN ...
+#> 1 -0.99868   600 17.1167   160 ...
+#> 2 -0.45440   690 16.7333    80 ...
+#> 3 -0.80796   502 17.1500   130 ...
+#> 4 -1.50926   420 16.1333   110 ...
+#> 5 -1.71655   582 16.4167   187 ...
+#> 6 -0.41800   485 17.4833   187 ...
+#>
+#> [27 rows x 5 columns] 
 
-my_history <- my_model %>%
-  fit(x = X,                   # 入力変数
-      y = y,                   # 出力変数
-      validation_split = 0.25, # 検証データの割合
-      batch_size = 10,         # バッチサイズ
-      epochs = 500,            # エポック数の上限
-      callbacks = my_cb)       # エポックごとに行う処理
+# 通常のデータフレームに戻す．
+my_frame %>% as.data.frame %>% head
+# 結果は割愛（見た目は同じ）
 
-my_model %>% evaluate(x = X, y = y)
-#>      loss  accuracy 
-#> 0.4797515 0.7891867 
+### 11.4.3 AutoMLによる回帰
 
-# 予測確率
-p_A <- my_model %>% predict(X)
+my_model <- h2o.automl(
+    y = "LPRICE2",
+    training_frame = my_frame,
+    max_runtime_secs = 60)
 
-# 予測カテゴリ
-y_A <- p_A > 0.5
+min(my_model@leaderboard$rmse)
+#> [1] 0.2941663
 
-# 正解率（訓練）
-mean(y_A == y)
-#> [1] 0.7891867
+tmp <- my_model %>%
+  predict(my_frame) %>%
+  as.data.frame
+y_ <- tmp$predict
+y  <- my_data$LPRICE2
 
-# 交差エントロピー（訓練）
--mean(log(
-  p_A * y + (1 - p_A) * (!y)))
-#> [1] 0.4797515
+plot(y, y_)
+
+### 11.4.4 AutoMLによる分類
+
+c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
+my_index <- sample(1:60000, 6000)
+x_train <- x_train[my_index, , ]
+y_train <- y_train[my_index]
+
+tmp <- x_train %>%
+  array_reshape(c(-1, 28 * 28)) %>%
+  as.data.frame
+tmp$y <- as.factor(y_train)
+my_train <- as.h2o(tmp)
+
+tmp <- x_test %>%
+  array_reshape(c(-1, 28 * 28)) %>%
+  as.data.frame
+my_test <- as.h2o(tmp)
+
+my_model <- h2o.automl(
+    y = "y",
+    training_frame = my_train,
+    max_runtime_secs = 120)
+
+min(my_model@leaderboard$
+    mean_per_class_error)
+#> [1] 0.0806190885648608
+
+tmp <- my_model %>%
+  predict(my_test) %>%
+  as.data.frame
+y_ <- tmp$predict
+
+mean(y_ == y_test)
+#> [1] 0.9306
 

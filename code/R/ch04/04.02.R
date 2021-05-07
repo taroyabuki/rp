@@ -37,7 +37,8 @@ my_df %>% select(mean, sd, se)
 #> Petal.Length 3.76 1.77 0.14
 #> Petal.Width  1.20 0.76 0.06
 
-my_df %>% ggplot(aes(x = row.names(my_df), y = mean)) +
+tmp = rownames(my_df)
+my_df %>% ggplot(aes(x = factor(tmp, levels = tmp), y = mean)) +
   geom_col() +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se)) +
   xlab(NULL)

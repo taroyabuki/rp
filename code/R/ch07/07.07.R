@@ -10,17 +10,20 @@ my_model$results
 #> 2 7 16.19047 0.6601173 12.68464 3.165330 0.09990158 2.329326
 #> 3 9 16.30276 0.6556700 12.84811 3.367423 0.09645747 2.471620
 
-my_params <- expand.grid(k = 1:15)
+my_params <- expand.grid(k = 1:15) # data.frame(k = 1:15)も可
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                   tuneGrid = my_params,
                   trControl = trainControl(method = "LOOCV"))
-my_model$results
-#>     k     RMSE  Rsquared      MAE
-#> 1   1 17.22299 0.5777197 13.84900
-#> 2   2 16.81462 0.5936438 13.03469
-#> 3   3 16.32874 0.6218866 12.74524
-# 以下略
+
+#> head(my_model$results)
+#>   k     RMSE  Rsquared      MAE
+#> 1 1 17.22299 0.5777197 13.84900
+#> 2 2 16.81462 0.5936438 13.03469
+#> 3 3 16.32874 0.6218866 12.74524
+#> 4 4 15.98970 0.6086993 12.27888
+#> 5 5 15.79924 0.6169267 11.96067
+#> 6 6 15.98720 0.6079396 12.26667
 
 ggplot(my_model)
 

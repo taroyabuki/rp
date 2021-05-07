@@ -45,24 +45,22 @@ section|Open in Colab
 section|Open in Colab
 --|--
 [09.01](ch09/09.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.01.ipynb)
+[09.02](ch09/09.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.02.ipynb)
 [09.03](ch09/09.03.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.03.ipynb)
 [09.04](ch09/09.04.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.04.ipynb)
 [09.05](ch09/09.05.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.05.ipynb)
 [09.06](ch09/09.06.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.06.ipynb)
-[09.07](ch09/09.07.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.07.ipynb)
-[09.08](ch09/09.08.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.08.ipynb)
-[09.09](ch09/09.09.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.09.ipynb)
-[09.10](ch09/09.10.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch09/09.10.ipynb)
 ## Chapter 10
 section|Open in Colab
 --|--
+[10.01](ch10/10.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch10/10.01.ipynb)
 [10.02](ch10/10.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch10/10.02.ipynb)
 [10.03](ch10/10.03.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch10/10.03.ipynb)
 [10.04](ch10/10.04.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch10/10.04.ipynb)
-[10.05](ch10/10.05.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch10/10.05.ipynb)
 ## Chapter 11
 section|Open in Colab
 --|--
+[11.01](ch11/11.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch11/11.01.ipynb)
 [11.02](ch11/11.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch11/11.02.ipynb)
 [11.03](ch11/11.03.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch11/11.03.ipynb)
 [11.04](ch11/11.04.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch11/11.04.ipynb)
@@ -71,8 +69,6 @@ section|Open in Colab
 --|--
 [12.01](ch12/12.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch12/12.01.ipynb)
 [12.02](ch12/12.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch12/12.02.ipynb)
-[12.03](ch12/12.03.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch12/12.03.ipynb)
-[12.04](ch12/12.04.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch12/12.04.ipynb)
 ## Chapter 13
 section|Open in Colab
 --|--
@@ -81,5 +77,4 @@ section|Open in Colab
 ## Chapter 14
 section|Open in Colab
 --|--
-[14.01](ch14/14.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch14/14.01.ipynb)
-[14.02](ch14/14.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch14/14.02.ipynb)
+[*](ch14/*.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/Python-notebook/ch14/*.ipynb)

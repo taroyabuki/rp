@@ -1,60 +1,82 @@
+import h2o
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/titanic.csv'
-tmp = pd.read_csv(my_url)
-tmp2 = pd.get_dummies(tmp, drop_first=True)
-tmp2.head()
-#>    Class_2nd  Class_3rd  Class_Crew  Sex_Male  Age_Child  Survived_Yes
-#> 0          0          0           0         1          1             1
-#> 1          0          0           0         1          1             1
-#> 2          0          0           0         1          1             1
-#> 3          0          0           0         1          1             1
-#> 4          0          0           0         1          1             1
+from h2o.automl import H2OAutoML
+from keras import datasets
+from random import sample
 
-from sklearn.utils import shuffle
-my_data = shuffle(tmp2) # シャッフル
-X = my_data.iloc[:, 0:5] # 入力変数
-y = my_data.iloc[:, 5]   # 出力変数
+h2o.init()
+h2o.no_progress()
 
-from keras.models import Sequential
-from keras.layers import Dense
+h2o.cluster().shutdown()
 
-my_model = Sequential()
-my_model.add(Dense(units=5, activation='relu', input_dim=5))
-my_model.add(Dense(units=1, activation='sigmoid')) # 変更箇所1
+my_url = ('https://raw.githubusercontent.com'
+          '/taroyabuki/fromzero/master/data/wine.csv')
+my_data = pd.read_csv(my_url)
+my_frame = h2o.H2OFrame(my_data) # 通常のデータフレームをH2OFrameに変換する．
+# あるいは
+my_frame = h2o.import_file(my_url, header=1) # データを読み込む（1行目はラベル）．
 
-my_model.compile(loss = 'binary_crossentropy', # 変更箇所2
-                 optimizer = 'rmsprop',
-                 metrics = ['accuracy'])
+my_frame.head(5)
+#>   LPRICE2    WRAIN    DEGREES  ...
+#> ---------  -------  ---------  ...
+#>  -0.99868      600    17.1167  ...
+#>  -0.4544       690    16.7333  ...
+#>  -0.80796      502    17.15    ...
+#>  -1.50926      420    16.1333  ...
+#>  -1.71655      582    16.4167  ...
 
-from keras.callbacks import EarlyStopping
-my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
-                       restore_best_weights = True)] # 最善を保持
+# 通常のデータフレームに戻す．
+h2o.as_list(my_frame).head()
+# 結果は割愛（見た目は同じ）
 
-my_history = my_model.fit(
-    x=X,                   # 入力変数
-    y=y,                   # 出力変数
-    validation_split=0.25, # 検証データの割合
-    batch_size=20,         # バッチサイズ
-    epochs=500,            # エポック数の上限
-    callbacks=my_cb)       # エポックごとに行う処理
+my_model = H2OAutoML(
+    max_runtime_secs=60)
+my_model.train(
+    y='LPRICE2',
+    training_frame=my_frame)
 
-my_model.evaluate(x=X, y=y)
-#> [0.4836958348751068,
-#>  0.7891867160797119]
+my_model.leaderboard['rmse'].min()
+#> 0.2704643402377778
 
-# 予測確率
-p_A = my_model.predict(X)[:, 0]
+tmp = h2o.as_list(
+    my_model.predict(my_frame))
 
-# 予測カテゴリ
-y_A = p_A > 0.5
+pd.DataFrame({
+    'y':my_data['LPRICE2'],
+    'y_':tmp['predict']}
+).plot('y', 'y_', kind='scatter')
 
-# 正解率（訓練）
-(y_A == y).mean()
-#> 0.7891867333030441
+(x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
+my_index = sample(range(60000), 6000)
+x_train = x_train[my_index, :, :]
+y_train = y_train[my_index]
 
-# 交差エントロピー（訓練）
-import numpy as np
--np.mean(np.log(
-    p_A * y + (1 - p_A) * (y != 1)))
-#> 0.4836979806423187
+tmp = pd.DataFrame(
+    x_train.reshape(-1, 28 * 28))
+y = 'y'
+tmp[y] = y_train
+my_train = h2o.H2OFrame(tmp)
+my_train[y] = my_train[y].asfactor()
+
+tmp = pd.DataFrame(
+    x_test.reshape(-1, 28 * 28))
+my_test = h2o.H2OFrame(tmp)
+
+my_model = H2OAutoML(
+    max_runtime_secs=120)
+my_model.train(
+    y=y,
+    training_frame=my_train)
+
+my_model.leaderboard[
+    'mean_per_class_error'].min()
+#> 0.07962009694497166
+
+tmp <- my_model %>%
+  predict(my_test) %>%
+  as.data.frame
+y_ <- tmp$predict
+
+mean(y_ == y_test)
+#> [1] 0.9306
 

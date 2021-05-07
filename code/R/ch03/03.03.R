@@ -101,21 +101,20 @@ my_list <- list(1, "two")
 my_list[[2]]
 #> [1] "two"
 
-### 3.3.4 データのペアをひとまとめにする
+### 3.3.4 文字列とデータのペアのコレクション
 
-my_dic <- list("apple"  = "りんご")
+my_map <- list("apple"  = "りんご",
+               "orange" = "みかん")
 
-# ペアの追加
-my_dic[["orange"]] <- "みかん"
+my_map[["grape"]] <- "ぶどう"
 
-# 値の取得
-my_dic$apple
+my_map$apple
 # あるいは
-my_dic$"apple"
+my_map$"apple"
 # あるいは
-my_dic[["apple"]]
+my_map[["apple"]]
 # あるいは
 tmp <- "apple"
-my_dic[[tmp]]
+my_map[[tmp]]
 #> [1] "りんご"
 

@@ -1,85 +1,51 @@
-## 10.3 ROC曲線
+### 10.3.1 質的入力変数を含むデータでの学習
 
+library(caret)
+library(PRROC)
 library(tidyverse)
 
-my_data <- data.frame(
-  answer = factor(c(  0,   1,   1,   0,   1,   0,    1,   0,   0,   1)),
-  prob =          c(0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5)) %>%
-  arrange(desc(prob)) # probが大きい順に並び替える．
+my_url <- str_c("https://raw.githubusercontent.com",
+                "/taroyabuki/fromzero/master/data/titanic.csv")
+my_data <- read_csv(my_url)
 
-my_data
-#>    answer prob
-#> 1       1 0.99
-#> 2       1 0.90
-#> 3       1 0.80
-#> 4       0 0.70
-#> 5       0 0.60
-#> 6       1 0.50
-#> 7       0 0.40
-#> 8       1 0.30
-#> 9       0 0.20
-#> 10      0 0.10
+head(my_data)
+#> # A tibble: 6 x 4
+#>   Class Sex   Age   Survived
+#>   <chr> <chr> <chr> <chr>   
+#> 1 1st   Male  Child Yes     
+#> 2 1st   Male  Child Yes     
+#> 3 1st   Male  Child Yes     
+#> 4 1st   Male  Child Yes     
+#> 5 1st   Male  Child Yes     
+#> 6 1st   Male  Adult No
 
-n <- nrow(my_data)                             # データの件数
-m <- 6                                         # 陽性確率上位6人を陽性とする．
-my_pred <- factor(c(rep(1, m), rep(0, n - m))) # m=6個の1とn-6=4個の0
-FP <- sum(my_pred == 1 & my_data$answer == 0)  # 偽陽性
-TP <- sum(my_pred == 1 & my_data$answer == 1)  # 真陽性
-X  <- sum(my_data$answer == 0)                 # 病気でない
-Y  <- sum(my_data$answer == 1)                 # 病気である
-FPR <- FP / X                                  # 偽陽性率
-TPR <- TP / Y                                  # 真陽性率
+### 10.3.2 分類木
 
-list(FPR = FPR, TPR = TPR)                     # 結果をリストにまとめる．
-#> $FPR
-#> [1] 0.4
-#> 
-#> $TPR
-#> [1] 0.8
+my_model <- train(form = Survived ~ ., data = my_data, method = "rpart2",
+                  tuneGrid = data.frame(maxdepth = 2),
+                  trControl = trainControl(method = "LOOCV"))
 
-f <- function(m) {
-  my_pred <- factor(c(rep(1, m), rep(0, n - m))) # m個の1とn-m個の0
-  FP <- sum(my_pred == 1 & my_data$answer == 0)  # 偽陽性
-  TP <- sum(my_pred == 1 & my_data$answer == 1)  # 真陽性
-  X  <- sum(my_data$answer == 0)                 # 病気でない
-  Y  <- sum(my_data$answer == 1)                 # 病気である
-  FPR <- FP / X                                  # 偽陽性率
-  TPR <- TP / Y                                  # 真陽性率
-  list(FPR = FPR, TPR = TPR)                     # 結果をリストにまとめる．
-}
+#### 10.3.2.1 分類木の描画
 
-my_model <- 1:10 %>% map_dfr(f)
-my_model
-#>      FPR   TPR
-#>    <dbl> <dbl>
-#>  1   0     0.2
-#>  2   0     0.4
-#>  3   0     0.6
-#>  4   0.2   0.6
-#>  5   0.4   0.6
-#>  6   0.4   0.8
-#>  7   0.6   0.8
-#>  8   0.6   1  
-#>  9   0.8   1  
-#> 10   1     1 
+rpart.plot::rpart.plot(my_model$finalModel, extra = 1)
 
-my_model %>%
-  ggplot(aes(x = FPR, y = TPR)) +
-  geom_line() # 結果は割愛
+#### 10.3.2.2 分類木の評価
 
-### 10.3.1 Rの場合
+my_model$results
+#>   maxdepth  Accuracy     Kappa
+#> 1        2 0.7832803 0.4096365
 
-library(tidyverse)
+y <- my_data$Survived
+tmp <- my_model %>% predict(newdata = my_data, type = "prob")
+y_score <- tmp$Yes
 
-my_data <- data.frame(
-  answer = factor(c(  0,   1,   1,   0,   1,   0,    1,   0,   0,   1)),
-  prob =          c(0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5))
+my_roc <- roc.curve(scores.class0 = y_score[y == "Yes"],
+                    scores.class1 = y_score[y == "No"],
+                    curve = TRUE)
+my_roc$auc
+#> [1] 0.7114887
 
-library(ROCR)
-my_data$prob %>%
-  prediction(labels = my_data$answer) %>%
-  performance(measure = "tpr", x.measure = "fpr") %>% plot
-
-MLmetrics::AUC(my_data$prob, my_data$answer)
-#> [1] 0.8
+my_roc %>% plot(xlab = "False Positive Rate",
+                ylab = "True Positive Rate",
+                legend = FALSE)
 

@@ -1,70 +1,108 @@
-from keras.datasets import mnist
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train = x_train / 255
-x_test  = x_test  / 255
+from pmdarima.datasets import airpassengers
+my_data = airpassengers.load_airpassengers()
 
-import random
-my_index = random.sample(range(60000), 6000)
-x_train = x_train[my_index, :, :]
-y_train = y_train[my_index]
+n = len(my_data) # データ数（144）
+k = 108          # 訓練データ数
 
-x_train1d = x_train.reshape(len(x_train), 784)
-x_test1d = x_test.reshape(len(x_test), 784)
+import pandas as pd
+import pandas as pd
+my_ds = pd.date_range(
+    start='1949/01/01',
+    end='1960/12/01',
+    freq='MS')
+my_df = pd.DataFrame({
+    'ds':my_ds,
+    'x':range(n),
+    'y':my_data},
+    index=my_ds)
+my_df.head()
+#>                    ds  x      y
+#> 1949-01-01 1949-01-01  0  112.0
+#> 1949-02-01 1949-02-01  1  118.0
+#> 1949-03-01 1949-03-01  2  132.0
+#> 1949-04-01 1949-04-01  3  129.0
+#> 1949-05-01 1949-05-01  4  121.0
 
-from keras.models import Sequential
-from keras.layers import Dense
-
-my_model = Sequential()
-my_model.add(Dense(units = 256, activation = "relu", input_dim = 784))
-my_model.add(Dense(units = 10, activation = "softmax"))
-
-my_model.compile(loss = 'sparse_categorical_crossentropy',
-                 optimizer = 'rmsprop',
-                 metrics = ['accuracy'])
-
-from keras.callbacks import EarlyStopping
-my_cb = [EarlyStopping(patience=5,                   # 訓練停止条件
-                       restore_best_weights = True)] # 最善を保持
-
-my_history = my_model.fit(
-    x=x_train1d,          # 入力変数
-    y=y_train,            # 出力変数
-    validation_split=0.2, # 検証データの割合
-    batch_size=128,       # バッチサイズ
-    epochs=20,            # エポック数の上限
-    callbacks=my_cb)      # エポックごとに行う処理
+my_train = my_df[        :k]
+my_test  = my_df[-(n - k): ]
+y = my_test.y
 
 import matplotlib.pyplot as plt
-import pandas as pd
-fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-tmp = my_history.history
-pd.DataFrame({'validation':tmp['val_loss'],
-              'training':tmp['loss']}
-            ).plot(ax=ax1, ylabel='loss', style='o-')
-pd.DataFrame({'valitation':tmp['val_accuracy'],
-              'training':tmp['accuracy']}
-            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False, style='o-')
+plt.plot(my_train.y, label='train')
+plt.plot(my_test.y,  label='test')
+plt.legend()
 
-my_prob = my_model.predict(x_test1d)
-my_pred = np.argmax(my_prob, axis=-1)
+# 訓練
+from sklearn.linear_model import LinearRegression
+my_lm_model = LinearRegression()
+my_lm_model.fit(my_train[['x']], my_train[['y']])
 
-from sklearn.metrics import confusion_matrix
-confusion_matrix(y_test, my_pred)
-#> array([[ 961,    0,    1,    3,    0,    3,    9,    1,    1,    1],
-#>        [   0, 1115,    3,    1,    1,    2,    5,    0,    8,    0],
-#>        [  11,    2,  952,   17,    5,    3,    9,    9,   22,    2],
-#>        [   2,    0,    6,  943,    1,   27,    1,    6,   16,    8],
-#>        [   2,    1,    4,    1,  918,    0,   14,    1,    3,   38],
-#>        [   5,    2,    0,   15,    2,  843,   11,    1,    7,    6],
-#>        [  11,    3,    2,    1,    7,   13,  920,    0,    1,    0],
-#>        [   2,   11,   19,   11,    1,    3,    0,  955,    2,   24],
-#>        [   9,    2,    5,   22,    6,   18,   11,    7,  886,    8],
-#>        [   9,    7,    3,   11,   19,    7,    1,    7,    7,  938]])
+# テスト
+from sklearn.metrics import mean_squared_error, r2_score
+X = my_test[['x']]
+y_ = my_lm_model.predict(X)
 
-(y_test == my_pred).mean()
-#> 0.9431
+[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
+ r2_score(y_true=y, y_pred=y_),  # 決定係数B（テストその1）
+ my_lm_model.score(X, y)]        # 決定係数B（テストその2）
+#> [70.63707081783771, 0.18448078010854552, 0.18448078010854552]
 
-my_model.evaluate(x=x_test1d, y=y_test)
-#> [0.19800357520580292,
-#>  0.9430999755859375]
+import pmdarima as pm
+my_arima_model = pm.auto_arima(my_train.y, m=12, trace=True)
+#> （省略）
+#> Best model:  ARIMA(1,1,0)(0,1,0)[12]          
+#> Total fit time: 0.838 seconds
+
+y_, my_ci = my_arima_model.predict(len(my_test),
+                                   return_conf_int=True) # 信頼区間を求める．
+my_df = pd.DataFrame({'y': y_,
+                      'Lo': my_ci[:, 0],
+                      'Hi': my_ci[:, 1]},
+                     index=my_test.index)
+my_df.head()
+#>                      y          Lo          Hi
+#> 1958-01-01  345.964471  327.088699  364.840243
+#> 1958-02-01  331.731920  308.036230  355.427610
+#> 1958-03-01  386.787992  358.515741  415.060244
+#> 1958-04-01  378.774472  346.695454  410.853490
+#> 1958-05-01  385.777732  350.270765  421.284700
+
+from sklearn.metrics import mean_squared_error, r2_score
+[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
+ r2_score(y_true=y, y_pred=y_)]  # 決定係数B（テスト）
+#> [22.132236727738697, 0.9199392874179217]
+
+import matplotlib.pyplot as plt
+plt.plot(my_train[['y']], label='train')
+plt.plot(my_test[['y']],  label='test')
+plt.plot(tmp.y, label='model')
+plt.fill_between(tmp.index,
+                 tmp.Lo,
+                 tmp.Hi,
+                 alpha=0.25)
+plt.legend(loc='upper left')
+
+from fbprophet import Prophet
+my_prophet_model = Prophet(seasonality_mode='multiplicative')
+my_prophet_model.fit(my_train)
+
+my_prophet_result = my_prophet_model.predict(my_test)
+my_prophet_result[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
+#>           ds        yhat  yhat_lower  yhat_upper
+#> 0 1958-01-01  359.239305  350.910898  368.464588
+#> 1 1958-02-01  350.690546  341.748862  359.964881
+#> 2 1958-03-01  407.188556  398.483316  415.463759
+#> 3 1958-04-01  398.481739  389.244105  406.742333
+#> 4 1958-05-01  402.595604  393.721421  411.331761
+
+from sklearn.metrics import mean_squared_error, r2_score
+[mean_squared_error(y, y_)**0.5, # RMSE（テスト）
+ r2_score(y_true=y, y_pred=y_)]  # 決定係数（テスト）
+#> [33.795549086036466, 0.8133242729288646]
+
+# my_prophet_model.plot(my_prophet_result) # 予測結果のみでよい場合
+
+fig = my_prophet_model.plot(my_prophet_result)
+fig.axes[0].plot(my_train.ds, my_train.y)
+fig.axes[0].plot(my_test.ds, my_test.y, color = 'red')
 

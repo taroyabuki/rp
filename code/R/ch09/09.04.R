@@ -1,47 +1,48 @@
-## 9.4 訓練データの再現
+### 9.4.1 ランダムフォレスト
 
-# 正解
-y <- c("serosa", "setosa")
-
-# 予測
-y_A <- c("serosa", "versicolor")
-
-# 比較
-y_A == y
-#> [1]  TRUE FALSE
-
-# 正解率
-mean(y_A == y)
-#> [1] 0.5
-
-### 9.4.1 Rの場合
-
-library(tidyverse)
 library(caret)
+library(tidyverse)
 my_data <- iris
-my_model <- train(form = Species ~ ., data = my_data, method = "knn")
 
-y_ <- my_model %>% predict(my_data) # 訓練データの再現
-table(y_, my_data$Species)           # 混同行列の作成
-#> y_           setosa versicolor virginica
-#>   setosa         50          0         0
-#>   versicolor      0         48         1
-#>   virginica       0          2        49
+my_model <- train(form = Species ~ ., data = my_data, method = "rf",
+                  tuneGrid = data.frame(mtry = 2:4), # 省略可
+                  trControl = trainControl(method = "LOOCV"))
+my_model$results
+#>   mtry Accuracy Kappa
+#> 1    2     0.96  0.94
+#> 2    3     0.96  0.94
+#> 3    4     0.96  0.94
 
-mean(y_ == my_data$Species)
-#> [1] 0.98
+### 9.4.2 ブースティング
 
-y_ %>% confusionMatrix(my_data$Species)
-#> Confusion Matrix and Statistics
-#> 
-#>             Reference
-#> Prediction   setosa versicolor virginica
-#>   setosa         50          0         0
-#>   versicolor      0         48         1
-#>   virginica       0          2        49
-#> 
-#> Overall Statistics
-#>                                           
-#>                Accuracy : 0.98 
-# 以下は割愛
+library(doParallel)
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+
+my_model <- train(form = Species ~ ., data = my_data, method = "xgbTree",
+                  tuneGrid = expand.grid(                     # ここから
+                    nrounds = c(50, 100, 150),
+                    max_depth = c(1, 2, 3),
+                    eta = c(0.3, 0.4),
+                    gamma = 0,
+                    colsample_bytree = c(0.6, 0.8),
+                    min_child_weight = 1,
+                    subsample = c(0.5, 0.75, 1)),
+                  trControl = trainControl(method = "LOOCV")) # ここまで省略可
+my_model$results %>% filter(Accuracy == max(Accuracy)) %>% t
+#>                        [,1]       [,2]
+#> nrounds          50.0000000 50.0000000
+#> max_depth         1.0000000  2.0000000
+#> eta               0.3000000  0.4000000
+#> gamma             0.0000000  0.0000000
+#> colsample_bytree  0.8000000  0.8000000
+#> min_child_weight  1.0000000  1.0000000
+#> subsample         0.5000000  0.7500000
+#> Accuracy          0.9533333  0.9533333
+#> Kappa             0.9300000  0.9300000
+
+### 9.4.3 変数の重要度
+
+my_model <- train(form = Species ~ ., data = my_data, method = "rf")
+ggplot(varImp(my_model))
 

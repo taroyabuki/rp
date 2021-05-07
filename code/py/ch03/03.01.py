@@ -67,6 +67,9 @@ True or False # 論理和（または）
 not True # 否定（でない）
 #> False
 
+0 if 3 < 5 else 10
+#> 0
+
 %pwd
 # あるいは
 import os

@@ -21,7 +21,7 @@ my_sfs = SequentialFeatureSelector(
 
 my_pipeline = Pipeline([       # 変数選択の後で再訓練を行うようにする．
   ('sfs', my_sfs),             # 変数選択
-  ('lm', LinearRegression())]) # 回帰分析
+  ('lr', LinearRegression())]) # 回帰分析
 
 my_params = {'sfs__n_features_to_select':range(1, 6)} # 選択する変数の上限
 my_search = GridSearchCV(estimator=my_pipeline,

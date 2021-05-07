@@ -1,201 +1,193 @@
-y = [2, 1, 0, 1] # 正解
-
+import matplotlib.pyplot as plt
 import numpy as np
-
-# 予測例A
-p_A = np.array([[0.1, 0.1, 0.8],
-                [0.1, 0.7, 0.2],
-                [0.3, 0.4, 0.3],
-                [0.1, 0.8, 0.1]])
-
-# 予測例B
-p_B = np.array([[0.1, 0.2, 0.7],
-                [0.2, 0.6, 0.2],
-                [0.2, 0.5, 0.3],
-                [0.2, 0.7, 0.1]])
-
-# 予測カテゴリA
-y_A = np.argmax(p_A, axis=1)
-y_A
-#> array([2, 1, 1, 1])
-
-# 予測カテゴリB
-y_B = np.argmax(p_B, axis=1)
-y_B
-#> array([2, 1, 1, 1])
-
-(y_A == y).mean() # 正解率A
-#> 0.75
-
-(y_B == y).mean() # 正解率B
-#> 0.75
-
 import pandas as pd
-p = pd.get_dummies(y)
-p
-#>    0  1  2
-#> 0  0  0  1
-#> 1  0  1  0
-#> 2  1  0  0
-#> 3  0  1  0
+from random import sample
+from keras import callbacks, datasets, layers, models
+from sklearn.metrics import confusion_matrix
 
-p_A * p
-#>      0    1    2
-#> 0  0.0  0.0  0.8
-#> 1  0.0  0.7  0.0
-#> 2  0.3  0.0  0.0
-#> 3  0.0  0.8  0.0
+(x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
 
-# 予測例Aの交差エントロピー
--np.mean(np.log(
-    (p_A * p).apply(np.sum, axis=1)))
-#> 0.5017337127232719
+x_train.shape
+#> (60000, 28, 28)
 
-# 予測例Bの交差エントロピー
--np.mean(np.log(
-    (p_B * p).apply(np.sum, axis=1)))
-#> 0.708403356019389
-
-from sklearn.datasets import load_iris
-X, y = load_iris(return_X_y=True)
-
-from sklearn.utils import shuffle
-X, y = shuffle(X, y) # シャッフル
-
-from sklearn.preprocessing import StandardScaler
-my_scaler = StandardScaler()
-X = my_scaler.fit_transform(X) # 標準化
-# yはそのまま使う．
-
-from keras.models import Sequential
-from keras.layers import Dense
-
-my_model = Sequential()
-my_model.add(Dense(units=3, activation='relu', input_dim=4))
-my_model.add(Dense(units=3, activation='softmax'))
-
-my_model.compile(loss = 'sparse_categorical_crossentropy',
-                 optimizer = 'rmsprop',
-                 metrics = ['accuracy']) # 正解率を記録する．
-
-from keras.callbacks import EarlyStopping
-my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
-                       restore_best_weights = True)] # 最善を保持
-
-my_history = my_model.fit(
-    x=X,                   # 入力変数
-    y=y,                   # 出力変数
-    validation_split=0.25, # 検証データの割合
-    batch_size=20,         # バッチサイズ
-    epochs=500,            # エポック数の上限
-    callbacks=my_cb)       # エポックごとに行う処理
+np.set_printoptions(linewidth=170)
+x_train[4, :, :]
 
 import matplotlib.pyplot as plt
-import pandas as pd
-fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-tmp = my_history.history
-pd.DataFrame({'validation':tmp['val_loss'],
-              'training':tmp['loss']}
-            ).plot(ax=ax1, ylabel='loss')
-pd.DataFrame({'valitation':tmp['val_accuracy'],
-              'training':tmp['accuracy']}
-            ).plot(ax=ax2, xlabel='epoch', ylabel='accuracy', legend=False)
+plt.matshow(x_train[4, :, :])
 
-{k: v[-1] for k, v in my_history.history.items()}
-#> {'loss': 0.06126071885228157,
-#>  'accuracy': 0.9910714030265808,
-#>  'val_loss': 0.09569854289293289,
-#>  'val_accuracy': 0.9210526347160339}
+y_train
+#> array([5, 0, 4, ..., 5, 6, 8],
+#>       dtype=uint8)
 
-my_model.evaluate(x=X, y=y)
-#> [0.0721130445599556,
-#>  0.9733333587646484]
+[x_train.min(), x_train.max()]
+#> [0, 255]
 
-p_A = my_model.predict(X)
-p_A[0:5]
-#> array([[5.9782765e-12, 8.6652004e-04, 9.9913353e-01],
-#>        [1.2191916e-02, 9.6308953e-01, 2.4718598e-02],
-#>        [1.0000000e+00, 7.4585138e-10, 9.9767018e-12],
-#>        [6.3189853e-10, 6.3192551e-03, 9.9368072e-01],
-#>        [9.9999988e-01, 1.7056873e-07, 2.6229992e-09]], dtype=float32)
+x_train = x_train / 255
+x_test  = x_test  / 255
 
-import numpy as np
-# 予測カテゴリ
-y_A = np.argmax(p_A, axis=1)
+my_index = sample(range(60000), 6000)
+x_train = x_train[my_index, :, :]
+y_train = y_train[my_index]
 
-# 正解率（訓練）
-(y_A == y).mean()
-#> 0.9733333587646484
+my_model = models.Sequential()
+my_model.add(layers.Flatten(input_shape=[28, 28]))
+my_model.add(layers.Dense(units=256, activation="relu"))
+my_model.add(layers.Dense(units=10, activation="softmax"))
 
-import pandas as pd
-p = pd.get_dummies(y)
+my_model.compile(loss='sparse_categorical_crossentropy',
+                 optimizer='rmsprop',
+                 metrics=['accuracy'])
 
-# 交差エントロピー（訓練）
--np.mean(np.log(
-    (p_A * p).apply(np.sum, axis=1)))
-#> 0.0721130445599556
+my_cb = callbacks.EarlyStopping(patience=5,
+                                restore_best_weights = True)
 
-from sklearn.datasets import load_iris
-X, y = load_iris(return_X_y=True)
-from sklearn.utils import shuffle
-X, y = shuffle(X, y)
+my_history = my_model.fit(
+    x=x_train,
+    y=y_train,
+    validation_split=0.2,
+    batch_size=128,
+    epochs=20,
+    callbacks=[my_cb],
+    verbose=0)
 
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-my_scaler = StandardScaler()
-X = my_scaler.fit_transform(X) # 標準化
-p = pd.get_dummies(y)          # ワンホットエンコーディング
-p.head()
-#>    0  1  2
-#> 0  0  1  0
-#> 1  1  0  0
-#> 2  0  1  0
-#> 3  1  0  0
-#> 4  1  0  0
+tmp = pd.DataFrame(my_history.history)
+tmp.plot(xlabel='epoch', style='o-')
 
-from keras.models import Sequential
-from keras.layers import Dense
+y_ = my_model.predict_classes(x_test)
+confusion_matrix(y_true=y_test, y_pred=y_)
 
-my_model = Sequential()
-my_model.add(Dense(units=3, activation='relu', input_dim=4))
-my_model.add(Dense(units=3, activation='softmax'))
+#> [[ 962    0    2    1    1    2    7    1    2    2]
+#>  [   0 1123    4    0    0    1    3    0    4    0]
+#>  [  11    4  954   11    6    2    7    9   26    2]
+#>  [   3    0   20  930    2   12    2   11   21    9]
+#>  [   1    1    7    0  927    1   11    1    5   28]
+#>  [  10    1    3   16    4  812   11    7   24    4]
+#>  [   9    3    4    0    9   10  919    0    4    0]
+#>  [   3    6   17    4   11    0    0  965    2   20]
+#>  [   8    4    6   12    6    9    9    7  901   12]
+#>  [   9    8    0    8   31    4    1   14    7  927]]
 
-my_model.compile(loss = 'categorical_crossentropy', # 変更箇所
+(y_test == y_).mean()
+#> 0.942
+
+my_model.evaluate(x=x_test, y=y_test)
+#> [0.20125965774059296, 
+#>  0.9419999718666077]
+
+x_train2d = x_train.reshape(-1, 28, 28, 1)
+x_test2d = x_test.reshape(-1, 28, 28, 1)
+
+my_model = models.Sequential()
+my_model.add(layers.Conv2D(filters=32, kernel_size=3, # 畳み込み層
+                    activation='relu',
+                    input_shape=[28, 28, 1]))
+my_model.add(layers.MaxPooling2D(pool_size=2))        # プーリング層
+my_model.add(layers.Flatten())
+my_model.add(layers.Dense(128, activation='relu'))
+my_model.add(layers.Dense(10, activation='softmax'))
+
+my_model.summary()
+#> Model: "sequential"
+#> _________________________________________________________________
+#> Layer (type)                 Output Shape              Param #   
+#> =================================================================
+#> conv2d (Conv2D)              (None, 26, 26, 32)        320       
+#> _________________________________________________________________
+#> max_pooling2d (MaxPooling2D) (None, 13, 13, 32)        0         
+#> _________________________________________________________________
+#> flatten (Flatten)            (None, 5408)              0         
+#> _________________________________________________________________
+#> dense (Dense)                (None, 128)               692352    
+#> _________________________________________________________________
+#> dense_1 (Dense)              (None, 10)                1290      
+#> =================================================================
+#> Total params: 693,962
+#> Trainable params: 693,962
+#> Non-trainable params: 0
+#> _________________________________________________________________
+
+my_model.compile(loss = 'sparse_categorical_crossentropy',
                  optimizer = 'rmsprop',
                  metrics = ['accuracy'])
 
 from keras.callbacks import EarlyStopping
-my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
-                       restore_best_weights = True)] # 最善を保持
+my_cb = EarlyStopping(patience=5,
+                      restore_best_weights = True)
 
 my_history = my_model.fit(
-    x=X,                   # 入力変数
-    y=p,                   # 出力変数
-    validation_split=0.25, # 検証データの割合
-    batch_size=20,         # バッチサイズ
-    epochs=500,            # エポック数の上限
-    callbacks=my_cb)       # エポックごとに行う処理
+    x=x_train2d,
+    y=y_train,
+    validation_split=0.2,
+    batch_size=128,
+    epochs=20,
+    callbacks=my_cb,
+    verbose=0)
 
-my_model.evaluate(x=X, y=p)
-#> [0.10981836915016174,
-#>  0.9599999785423279]
+tmp = pd.DataFrame(my_history.history)
+tmp.plot(xlabel='epoch', style='o-')
 
-# 正解カテゴリ
-import numpy as np
-y = np.argmax(np.array(p), axis=1)
+my_model.evaluate(x=x_test2d, y=y_test)
+#> [0.1359061449766159,
+#>  0.9581000208854675]
 
-# 予測確率
-p_A = my_model.predict(X)
+my_model = models.Sequential()
+my_model.add(layers.Conv2D(filters=20, kernel_size=5, activation='relu',
+                           input_shape=(28, 28, 1)))
+my_model.add(layers.MaxPooling2D(pool_size=2, strides=2))
+my_model.add(layers.Conv2D(filters=20, kernel_size=5, activation='relu'))
+my_model.add(layers.MaxPooling2D(pool_size=2, strides=2))
+my_model.add(layers.Dropout(rate=0.25))
+my_model.add(layers.Flatten())
+my_model.add(layers.Dense(500, activation='relu'))
+my_model.add(layers.Dropout(rate=0.5))
+my_model.add(layers.Dense(10, activation='softmax'))
 
-# 予測カテゴリ
-y_A = np.argmax(p_A, axis=1)
+my_model.compile(loss = 'sparse_categorical_crossentropy',
+                 optimizer = 'rmsprop',
+                 metrics = ['accuracy'])
 
-# 正解率（訓練）
-(y_A == y).mean()
-#> 0.96
+my_cb = callbacks.EarlyStopping(patience=5,
+                                restore_best_weights = True)
 
-# 交差エントロピー（訓練）
--np.mean(np.log(
-    (p_A * p).apply(np.sum, axis=1)))
-#> 0.10981837166945979
+my_history = my_model.fit(
+    x=x_train2d,
+    y=y_train,
+    validation_split=0.2,
+    batch_size=128,
+    epochs=20,
+    callbacks=my_cb,
+    verbose=0)
+
+tmp = pd.DataFrame(my_history.history)
+tmp.plot(xlabel='epoch', style='o-')
+
+my_model.evaluate(x=x_test2d, y=y_test)
+#> [0.07139696925878525,
+#>  0.9800000190734863]
+
+y_prob = my_model.predict(x_test2d)                    # カテゴリに属する確率
+
+tmp = pd.DataFrame({
+    'y_prob': np.max(y_prob, axis=1),                  # 確率の最大値
+    'y_': np.argmax(y_prob, axis=1),                   # 予測カテゴリ
+    'y': y_test,                                       # 正解
+    'id': range(len(y_test))})                         # 番号
+
+tmp = tmp[tmp.y_ != tmp.y]                             # 予測がはずれたものを残す
+my_result = tmp.sort_values('y_prob', ascending=False) # 確率の大きい順に並び替える
+my_result.head()
+#>         y_prob  y_  y    id
+#> 2654  0.999542   1  6  2654
+#> 9729  0.998849   6  5  9729
+#> 2597  0.998480   3  5  2597
+#> 1014  0.998244   5  6  1014
+#> 9664  0.996748   7  2  9664
+
+for i in range(5):
+    plt.subplot(1, 5, i + 1)
+    id = my_result['id'].iloc[i]
+    plt.title(id)
+    plt.imshow(x_test[id])
+    plt.axis('off')
 

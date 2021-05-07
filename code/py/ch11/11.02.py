@@ -1,63 +1,67 @@
+import numpy as np
 import pandas as pd
-my_url = 'https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/wine.csv'
-tmp = pd.read_csv(my_url)
-tmp.head()
-#>    LPRICE2  WRAIN  DEGREES  HRAIN  TIME_SV
-#> 0 -0.99868    600  17.1167    160       31
-#> 1 -0.45440    690  16.7333     80       30
-#> 2 -0.80796    502  17.1500    130       28
-#> 3 -1.50926    420  16.1333    110       26
-#> 4 -1.71655    582  16.4167    187       25
+import sklearn
+import statsmodels.api as sm
+from keras import callbacks, layers, losses, models
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 
-from sklearn.utils import shuffle
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-my_data = scaler.fit_transform(shuffle(tmp)) # シャッフルと標準化
-X = my_data[:, 1:5] # 入力変数
-y = my_data[:, 0]   # 出力変数
+tmp = sm.datasets.get_rdataset('iris', 'datasets').data
+my_data = sklearn.utils.shuffle(tmp)
 
-from sklearn.linear_model import LinearRegression
-my_model = LinearRegression() # 線形回帰分析
+my_scaler = StandardScaler()
+X = my_scaler.fit_transform(
+    my_data.drop(columns=['Species']))
+my_enc = LabelEncoder()
+y = my_enc.fit_transform(
+    my_data['Species'])
 
-# 5分割交差検証（10回）
-from sklearn.model_selection import *
-my_cv = RepeatedKFold(n_splits=5, n_repeats=10)
+my_model = models.Sequential()
+my_model.add(layers.Dense(units=3, activation='relu', input_shape=[4]))
+my_model.add(layers.Dense(units=3, activation='softmax'))
 
-# 交差検証の実行
-my_scores = cross_val_score(my_model, X, y, cv=my_cv,
-                            scoring='neg_mean_squared_error') # -MSEを使う．
--my_scores.mean() # MSE（検証）
-#> 0.2958079750627453
+my_model.compile(loss='sparse_categorical_crossentropy',
+                 optimizer='rmsprop',
+                 metrics=['accuracy'])
 
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.callbacks import EarlyStopping
-
-my_model = Sequential()               # 層状のネットワーク
-my_model.add(Dense(units=3,           # 隠れ層のニューロン数
-                   activation='relu', # 活性化関数
-                   input_dim=4))      # 入力層のニューロン数
-my_model.add(Dense(units=1))          # 出力層のニューロン数
-
-my_model.compile(loss='mean_squared_error',
-                 optimizer='rmsprop')
-
-my_cb = [EarlyStopping(patience=20,                  # 訓練停止条件
-                       restore_best_weights = True)] # 最善を保持
+my_cb = callbacks.EarlyStopping(
+    patience=20,
+    restore_best_weights = True)
 
 my_history = my_model.fit(
-    x=X,                   # 入力変数
-    y=y,                   # 出力変数
-    validation_split=0.25, # 検証データの割合
-    batch_size=10,         # バッチサイズ
-    epochs=500,            # エポック数の上限
-    callbacks=my_cb)       # エポックごとに行う処理
+    x=X,
+    y=y,
+    validation_split=0.25,
+    batch_size=10,
+    epochs=500,
+    callbacks=[my_cb],
+    verbose = 0)
 
-import pandas as pd
-tmp = my_history.history
-pd.DataFrame({'validation':tmp['val_loss'],
-              'training':tmp['loss']}).plot(ylabel='loss')
+tmp = pd.DataFrame(my_history.history)
+tmp.plot(xlabel='epoch')
 
-{k: v[-1] for k, v in my_history.history.items()}
-#> {'loss': 0.1775408387184143, 'val_loss': 0.134183868765831}
+tmp.iloc[-1, ]
+#> loss            0.057278
+#> accuracy        0.991071
+#> val_loss        0.100445
+#> val_accuracy    0.947368
+
+-np.log([0.8, 0.7, 0.3, 0.8]).mean()
+#> 0.5017337127232719
+
+-np.log([0.7, 0.6, 0.2, 0.7]).mean()
+#> 0.708403356019389
+
+y = [2, 1, 0, 1]
+y_1 = [[0.1, 0.1, 0.8],
+       [0.1, 0.7, 0.2],
+       [0.3, 0.4, 0.3],
+       [0.1, 0.8, 0.1]]
+y_2 = [[0.1, 0.2, 0.7],
+       [0.2, 0.6, 0.2],
+       [0.2, 0.5, 0.3],
+       [0.2, 0.7, 0.1]]
+
+[losses.sparse_categorical_crossentropy(y_true=y, y_pred=y_1).numpy().mean(),
+ losses.sparse_categorical_crossentropy(y_true=y, y_pred=y_2).numpy().mean()]
+#> [0.5017337, 0.70840335]
 

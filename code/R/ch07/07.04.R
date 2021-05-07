@@ -20,7 +20,6 @@ head(my_data)
 #> 6     9   10 17.812584 -7.812584
 
 my_data %>%
-  mutate(label="data") %>%
   ggplot(aes(x = speed, y = dist)) +
   geom_point() +
   geom_line(aes(x = speed, y = y_)) +

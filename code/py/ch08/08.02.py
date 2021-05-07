@@ -10,12 +10,16 @@ X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
 my_model = LinearRegression().fit(X, y)
 
-[my_model.intercept_, my_model.coef_]
-#> [-12.145333576510417,  # (Intercept)
-#>  array([ 0.00116678,   # WRAIN
-#>          0.61639244,   # DEGREES
-#>         -0.00386055,   # HRAIN
-#>          0.02384741])] # TIME_SV
+my_model.intercept_
+#> -12.145333576510417
+
+pd.Series(my_model.coef_,
+          index=X.columns)
+#> WRAIN      0.001167
+#> DEGREES    0.616392
+#> HRAIN     -0.003861
+#> TIME_SV    0.023847
+#> dtype: float64
 
 my_test = [[500, 17, 120, 2]]
 my_model.predict(my_test)

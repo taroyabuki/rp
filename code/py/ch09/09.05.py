@@ -1,38 +1,35 @@
-### 9.5.2 Pythonの場合
-
-from sklearn.neighbors import KNeighborsClassifier
-my_model = KNeighborsClassifier()
-
-# チューニングの設定（1以上21未満のKを調べる．）
-params = {'n_neighbors': list(range(1,21))}
-
+import numpy as np
 import statsmodels.api as sm
-iris = sm.datasets.get_rdataset('iris', 'datasets').data
-X, y = iris.iloc[:, 0:4], iris.Species
+import xgboost
+from sklearn import tree
+from sklearn.impute import SimpleImputer
+from sklearn.model_selection import cross_val_score, LeaveOneOut
+from sklearn.pipeline import Pipeline
 
-# 5分割交差検証（10回）
-from sklearn.model_selection import *
-my_cv = RepeatedKFold(n_splits=5, n_repeats=10)
+my_data = sm.datasets.get_rdataset('iris', 'datasets').data
 
-# パラメータチューニングの設定
-my_search = GridSearchCV(my_model,
-                         params,
-                         cv=my_cv,
-                         return_train_score=True) # 正解率（訓練）の保存
+n = len(my_data)
+my_data['Petal.Length'] = [np.nan if i % 10 == 0 else
+                           my_data['Petal.Length'][i] for i in range(n)]
+my_data['Petal.Width']  = [np.nan if i % 10 == 1 else
+                           my_data['Petal.Width'][i]  for i in range(n)]
 
-# 訓練（チューニング）
-my_search.fit(X, y)
+my_data.describe() # countの値が135の変数に，150-135=15個の欠損がある．
+#>        Sepal.Length  Sepal.Width  Petal.Length  Petal.Width
+#> count    150.000000   150.000000    135.000000   135.000000
+#> mean       5.843333     3.057333      3.751852     1.197037
+# 以下省略
 
-my_search.best_params_ # 最良パラメータ
-#> {'n_neighbors': 9}
+X, y = my_data.iloc[:, 0:4], my_data.Species
 
-my_search.best_score_ # 正解率（検証）
-#> 0.968
+my_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy='median')), # 欠損を中央値で埋める．
+    ('tree', tree.DecisionTreeClassifier())])      # パラメータはデフォルトのまま
+my_scores = cross_val_score(my_pipeline, X, y, cv=LeaveOneOut(), n_jobs=-1)
+my_scores.mean()
+#> 0.9333333333333333
 
-import pandas as pd
-my_result = my_search.cv_results_
-my_df = pd.DataFrame({'k':range(1,21),
-                      'train':my_result['mean_train_score'],
-                      'test':my_result['mean_test_score']})
-my_df.plot(x='k', ylabel='Accuracy', style='o-')
+my_scores = cross_val_score(xgboost.XGBClassifier(), X, y, cv=LeaveOneOut())
+my_scores.mean()
+#> 0.9533333333333334
 

@@ -1,25 +1,32 @@
-import pandas as pd
-my_data = pd.DataFrame({
-  'answer': [  0,   1,   1,   0,   1,   0,    1,   0,   0,   1],  # 正解
-  'prob':   [0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5]}) # 陽性確率
+import numpy as np
+from sklearn.metrics import roc_curve, RocCurveDisplay,\
+  precision_recall_curve, PrecisionRecallDisplay, auc
 
-my_pred = [1 if p >= 0.5 else 0 for p in my_data.prob]
-my_pred
-#> [1, 1, 0, 0, 1, 1, 1, 0, 0, 1]
+y       = np.array([  0,   1,   1,   0,   1,   0,    1,   0,   0,   1])
+y_score = np.array([0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5])
+y_      = np.array([1 if 0.5 <= p else 0 for p in y_score])
 
-from sklearn.metrics import confusion_matrix
-confusion_matrix(my_pred, my_data.answer) # Rの仕様に合わせる．
-#> array([[3, 1],
-#>        [2, 4]])
+[sum((y == 0) & (y_ == 1)) / sum(y == 0), # False Positive Rate
+ sum((y == 1) & (y_ == 1)) / sum(y == 1)] # True Positive Rate
+#> [0.4, 0.8]
 
-from sklearn.metrics import classification_report
-print(classification_report(my_data.answer, my_pred))
-#>               precision    recall  f1-score   support
-#> 
-#>            0       0.75      0.60      0.67         5
-#>            1       0.67      0.80      0.73         5
-#> 
-#>     accuracy                           0.70        10
-#>    macro avg       0.71      0.70      0.70        10
-#> weighted avg       0.71      0.70      0.70        10
+my_fpr, my_tpr, _ = roc_curve(y_true=y,
+                              y_score=y_score,
+                              pos_label=1)
+RocCurveDisplay(fpr=my_fpr, tpr=my_tpr).plot()
+
+auc(x=my_fpr, y=my_tpr)
+#> 0.8
+
+[sum((y == 1) & (y_ == 1)) / sum(y == 1),  # Recall = TPR
+ sum((y == 1) & (y_ == 1)) / sum(y_ == 1)] # Precision
+#> [0.8, 0.6666666666666666]
+
+my_precision, my_recall, _ = precision_recall_curve(y_true=y,
+                                                    probas_pred=y_score,
+                                                    pos_label=1)
+PrecisionRecallDisplay(precision=my_precision, recall=my_recall).plot()
+
+auc(x=my_recall, y=my_precision)
+#> 0.8463095238095237
 

@@ -89,3 +89,57 @@ my_model$results
 #> 1      TRUE 15.69731 0.6217139 12.05918 0.6213689
 # 左から，RMSE（検証），決定係数 6（検証），MAE（検証），決定係数 1（検証）
 
+### 7.6.6 補足：検証による手法の比較
+
+library(caret)
+library(tidyverse)
+my_data <- cars
+
+my_lm_model <- train(form = dist ~ speed, data = my_data, method = "lm",
+                     trControl = trainControl(method = "LOOCV"))
+
+my_knn_model <- train(form = dist ~ speed, data = my_data, method = "knn",
+                      tuneGrid = data.frame(k = 5),
+                      trControl = trainControl(method = "LOOCV"))
+
+my_lm_model$results$RMSE
+#> [1] 15.69731 # 線形回帰分析
+
+my_knn_model$results$RMSE
+#> [1] 15.79924 # K最近傍法
+
+y     <- my_data$dist
+y_lm  <- my_lm_model$pred$pred
+y_knn <- my_knn_model$pred$pred
+
+my_df <- data.frame(
+  lm  = (y - y_lm)^2,
+  knn = (y - y_knn)^2)
+
+head(my_df)
+#>           lm      knn
+#> 1  18.913720 108.1600
+#> 2 179.215044   0.6400
+#> 3  41.034336 175.5625
+#> 4 168.490212  49.0000
+#> 5   5.085308   9.0000
+#> 6  67.615888 112.8906
+
+boxplot(my_df, ylab = "r^2")
+
+t.test(x = my_df$lm, y = my_df$knn,
+       conf.level = 0.95,
+       paired = TRUE,
+       alternative = "two.sided")
+
+#> 	Paired t-test
+#> 
+#> data:  my_df$lm and my_df$knn
+#> t = -0.12838, df = 49, p-value = 0.8984
+#> alternative hypothesis: true difference in means is not equal to 0
+#> 95 percent confidence interval:
+#>  -53.46930  47.04792
+#> sample estimates:
+#> mean of the differences 
+#>               -3.210688 
+

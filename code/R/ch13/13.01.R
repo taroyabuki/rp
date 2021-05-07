@@ -1,28 +1,82 @@
-### 13.1.1 日時
+## 13.1 主成分分析
 
-as.POSIXct("2021-01-01")
-#> [1] "2021-01-01 JST"
+library(tidyverse)
 
-### 13.1.2 等間隔の日時
+my_data <- data.frame(
+  language  = c(  0,  20,  20,  25,  22,  17),
+  english   = c(  0,  20,  40,  20,  24,  18),
+  math      = c(100,  20,   5,  30,  17,  25),
+  science   = c(  0,  20,   5,  25,  16,  23),
+  society   = c(  0,  20,  30,   0,  21,  17),
+  row.names = c("A", "B", "C", "D", "E", "F"))
+my_result <- my_data %>% prcomp # 主成分分析の実行
 
-seq(from = 2021,
-    to   = 2023,
-    by   = 1)
-#> [1] 2021 2022 2023
+my_result$x # 主成分スコア
+#>          PC1        PC2 ...
+#> A -74.907282  -7.010808 ...
+#> B  13.818842   2.753459 ...
+#> C  33.714034 -18.417290 ...
+#> D   1.730630  17.876372 ...
+#> E  17.837474  -1.064998 ...
+#> F   7.806303   5.863266 ...
 
-seq(from = yearmonth("202101"),
-    to   = yearmonth("202103"),
-    by   = 2)
-#> <yearmonth[2]>
-#> [1] "2021 1" "2021 3"
+my_result %>%
+  ggbiplot::ggbiplot(
+      labels = row.names(my_data),
+      scale = 0)
 
-seq(from = as.POSIXct("2021-01-01"),
-    to   = as.POSIXct("2021-01-03"),
-    by   = "1 day")
-#> [1] "2021-01-01 JST" "2021-01-02 JST" "2021-01-03 JST"
+my_result$rotation
+#>                 PC1         PC2         PC3          PC4       PC5
+#> language  0.2074983  0.27946267 -0.30611747  0.764942594 0.4472136
+#> english   0.3043604 -0.32505207 -0.61579860 -0.471696908 0.4472136
+#> math     -0.8872612 -0.09764267 -0.05634538 -0.007654992 0.4472136
+#> science   0.1301984  0.70266673  0.33844622 -0.418045446 0.4472136
+#> society   0.2452041 -0.55943466  0.63981523  0.132454751 0.4472136
 
-seq(from = as.POSIXct("2021-01-01 00:00:00"),
-    to   = as.POSIXct("2021-01-01 03:00:00"),
-    by   = "2 hour")
-#> [1] "2021-01-01 00:00:00 JST" "2021-01-01 02:00:00 JST"
+summary(my_result)
+#> Importance of components:
+#>                            PC1      PC2     PC3     PC4       PC5
+#> Standard deviation     38.2644 12.25566 5.58845 1.52970 1.232e-15
+#> Proportion of Variance  0.8885  0.09115 0.01895 0.00142 0.000e+00
+#> Cumulative Proportion   0.8885  0.97963 0.99858 1.00000 1.000e+00
+
+### 13.1.1 標準化＋主成分分析
+
+my_result <- prcomp(
+  x = my_data,
+  scale = TRUE)       # 標準化
+# あるいは
+my_result <- prcomp(
+  x = scale(my_data)) # 標準化データ
+
+my_result$x # 主成分スコア
+#>          PC1        PC2 ...
+#> A -3.6737215 -0.5688501 ...
+#> B  0.6528793  0.2469258 ...
+#> C  1.5682936 -1.7425981 ...
+#> D  0.2505043  1.6400394 ...
+#> E  0.8861864 -0.1104931 ...
+#> F  0.3158579  0.5349762 ...
+
+### 13.1.2 補足：行列計算による再現
+
+Z  <- my_data %>% scale(scale = FALSE) %>% as.matrix # 標準化しない場合
+#Z <- my_data %>% scale(scale = TRUE)  %>% as.matrix # 標準化する場合
+
+S <- var(Z)                          # 分散共分散行列
+tmp <- eigen(S)                      # 固有値と固有ベクトル
+Z %*% tmp$vectors                    # 主成分スコア（結果は割愛）
+cumsum(tmp$values) / sum(tmp$values) # 累積寄与率
+#> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
+
+A <- svd(Z)                                # 特異値分解
+all.equal(Z, A$u %*% diag(A$d) %*% t(A$v), # 元に戻ることの確認
+          check.attributes = FALSE)
+#> [1] TRUE
+
+Z %*% A$v # 主成分スコア（結果は割愛）
+
+e <- A$d^2 / nrow(my_data) # 分散共分散行列の固有値
+cumsum(e) / sum(e)         # 累積寄与率
+#> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
 

@@ -1,8 +1,6 @@
-### 9.1.1 Rの場合
+### 9.1.1 データの準備
 
 ```{r}
-library(tidyverse)
-library(caret)
 my_data <- iris
 head(my_data)
 #>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -16,11 +14,11 @@ head(my_data)
 
 ```{r}
 psych::describe(my_data)
-#>              vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
-#> Sepal.Length    1 150 5.84 0.83   5.80    5.81 1.04 4.3 7.9   3.6  0.31    -0.61 0.07
-#> Sepal.Width     2 150 3.06 0.44   3.00    3.04 0.44 2.0 4.4   2.4  0.31     0.14 0.04
-#> Petal.Length    3 150 3.76 1.77   4.35    3.76 1.85 1.0 6.9   5.9 -0.27    -1.42 0.14
-#> Petal.Width     4 150 1.20 0.76   1.30    1.18 1.04 0.1 2.5   2.4 -0.10    -1.36 0.06
-#> Species*        5 150 2.00 0.82   2.00    2.00 1.48 1.0 3.0   2.0  0.00    -1.52 0.07
+#>              vars   n mean   sd median trimmed  mad min max range ...
+#> Sepal.Length    1 150 5.84 0.83   5.80    5.81 1.04 4.3 7.9   3.6 ...
+#> Sepal.Width     2 150 3.06 0.44   3.00    3.04 0.44 2.0 4.4   2.4 ...
+#> Petal.Length    3 150 3.76 1.77   4.35    3.76 1.85 1.0 6.9   5.9 ...
+#> Petal.Width     4 150 1.20 0.76   1.30    1.18 1.04 0.1 2.5   2.4 ...
+#> Species*        5 150 2.00 0.82   2.00    2.00 1.48 1.0 3.0   2.0 ...
 ```
 

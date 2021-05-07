@@ -1,24 +1,44 @@
-from statsmodels.stats.proportion import binom_test
-binom_test(count=2,   # 当たった回数
-           nobs=15,   # くじを引いた回数
-           prop=4/10) # 当たる確率（仮説）
+from statsmodels.stats.proportion import binom_test, proportion_confint
+
+binom_test(count=2,                 # 当たった回数
+           nobs=15,                 # くじを引いた回数
+           prop=4/10,               # 当たる確率（仮説）
+           alternative='two-sided') # 両側検定（デフォルト）
+                                    # 左片側検定なら'smaller'
+                                    # 右片側検定なら'larger'
 #> 0.03646166155263999
 
-### 4.4.2 推定
+t = 4 / 10                        # 当たる確率
+n = 15                            # くじを引いた回数
+x = np.array(range(0, 16))        # 当たった回数
+my_pr  = stats.binom.pmf(x, n, t) # x回当たる確率
+my_pr2 = stats.binom.pmf(2, n, t) # 2回当たる確率
 
-from statsmodels.stats.proportion import proportion_confint
+my_data = pd.DataFrame({'x':x, 'y1':my_pr, 'y2':my_pr})
+my_data.loc[my_pr >  my_pr2, 'y1'] = np.nan # 当たる確率が，2回当たる確率超過
+my_data.loc[my_pr <= my_pr2, 'y2'] = np.nan # 当たる確率が，2回当たる確率以下
+ax = my_data.plot(x='x', style='o', ylabel='probability', legend=False)
+ax.hlines(y=my_pr2, xmin=0, xmax=15)    # 水平線
+ax.vlines(x=x,      ymin=0, ymax=my_pr) # 垂直線
 
-proportion_confint(count=2,             # 当たった回数
-                   nobs=15,             # くじを引いた回数
-                   alpha=0.05,          # 有意水準（省略可）
-                   method='binom_test') # 手法（両側p値）
-#> (0.024225732468536626, 0.3967139842509865)
+a = 0.05
+proportion_confint(
+    count=2, # 当たった回数
+    nobs=15, # くじを引いた回数
+    alpha=a, # 有意水準（省略可）
+    method='binom_test')
+#> (0.024225732468536626,
+#>  0.3967139842509865)
 
-proportion_confint(count=2,             # 当たった回数
-                   nobs=15,             # くじを引いた回数
-                   alpha=0.05,          # 有意水準（省略可）
-                   method='beta')       # 手法（片側p値の2倍）
-#> (0.016575913440083623, 0.4046026966033721)
+a = 0.05 # 有意水準
+tmp = np.linspace(0, 1, 100)
+
+my_df = pd.DataFrame({
+    't': tmp,                                                  # 当たる確率
+    'q': a,                                                    # 水平線
+    'p': [binom_test(count=2, nobs=15, prop=t) for t in tmp]}) # p値
+
+my_df.plot(x = 't', legend=None, xlabel=r'$\theta$', ylabel=r'p-value')
 
 X = [32.1, 26.2, 27.5, 31.8, 32.1, 31.2, 30.1, 32.4, 32.3, 29.9, 29.6,
      26.6, 31.2, 30.9, 29.3]
@@ -38,7 +58,7 @@ d.ttest_mean(alternative=alt)[1] # p値
 d.tconfint_mean(alpha=a, alternative=alt) # 信頼区間
 #> (-3.9955246743198867, -1.3644753256801117)
 
-c = CompareMeans(DescrStatsW(X), DescrStatsW(Y)) #対標本でない場合
+c = CompareMeans(DescrStatsW(X), DescrStatsW(Y)) # 対標本でない場合
 
 ve = 'pooled' # 等分散を仮定する（デフォルト）．仮定しないなら'unequal'．
 c.ttest_ind(alternative=alt, usevar=ve)[1] # p値
@@ -114,7 +134,6 @@ plt.hist(result, bins='sturges')
 result = [np.random.choice(X, len(X), replace=True).mean() -
           np.random.choice(Y, len(Y), replace=True).mean()
           for _ in range(n)]
-
 np.quantile(result, [0.025, 0.975])
 #> array([-4.06, -1.3 ])
 

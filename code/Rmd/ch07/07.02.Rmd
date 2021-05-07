@@ -43,6 +43,8 @@ pastecs::stat.desc(my_data)
 ```
 
 ```{r}
-plot(my_data)
+my_data %>%
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point()
 ```
 

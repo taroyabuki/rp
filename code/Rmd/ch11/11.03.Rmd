@@ -1,235 +1,233 @@
-### 11.3.1 交差エントロピー
-
-```{r}
-y <- c(2, 1, 0, 1) # 正解
-
-# 予測例A
-p_A <- matrix(
-  c(0.1, 0.1, 0.8,
-    0.1, 0.7, 0.2,
-    0.3, 0.4, 0.3,
-    0.1, 0.8, 0.1),
-  nrow = 4, byrow = TRUE)
-
-# 予測例B
-p_B <- matrix(
-  c(0.1, 0.2, 0.7,
-    0.2, 0.6, 0.2,
-    0.2, 0.5, 0.3,
-    0.2, 0.7, 0.1),
-  nrow = 4, byrow = TRUE)
-```
-
-```{r}
-# 予測カテゴリA
-y_A <- apply(X = p_A,
-             MARGIN = 1,
-             FUN = which.max) - 1
-y_A
-#> [1] 2 1 1 1
-
-# 予測カテゴリB
-y_B <- apply(X = p_B,
-             MARGIN = 1,
-             FUN = which.max) - 1
-y_B
-#> [1] 2 1 1 1
-```
-
-```{r}
-mean(y_A == y) # 正解率A
-#> [1] 0.75
-
-mean(y_B == y) # 正解率B
-#> [1] 0.75
-```
-
-```{r}
-p <- to_categorical(y)
-p
-#>      [,1] [,2] [,3]
-#> [1,]    0    0    1
-#> [2,]    0    1    0
-#> [3,]    1    0    0
-#> [4,]    0    1    0
-```
-
-```{r}
-p_A * p
-#>      [,1] [,2] [,3]
-#> [1,]  0.0  0.0  0.8
-#> [2,]  0.0  0.7  0.0
-#> [3,]  0.3  0.0  0.0
-#> [4,]  0.0  0.8  0.0
-
-# 予測例Aの交差エントロピー
--mean(log(apply(X = p_A * p,
-                MARGIN = 1,
-                FUN = sum)))
-#> [1] 0.5017337
-
-# 予測例Bの交差エントロピー
--mean(log(apply(X = p_B * p,
-                MARGIN = 1,
-                FUN = sum)))
-#> [1] 0.7084034
-```
-
-#### 11.3.2.1 出力変数が0から始まる整数の場合（表\ref{ネットワーク構築の基本原則
+### 11.3.1 データの形式
 
 ```{r}
 library(keras)
-my_data <- iris[sample(nrow(iris)), ] # シャッフル
-X <- scale(my_data[, -5])             # 標準化
-y <- as.integer(my_data$Species) - 1  # 0から始まる整数
+library(tidyverse)
+c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
 ```
+
+```{r}
+dim(x_train)
+#> [1] 60000    28    28
+```
+
+```{r}
+x_train[5, , ]
+```
+
+```{r}
+plot(as.raster(x = x_train[5, , ],
+               max = max(x_train)))
+```
+
+```{r}
+head(y_train)
+#> [1] 5 0 4 1 9 2
+```
+
+```{r}
+c(min(x_train), max(x_train))
+#> [1]   0 255
+```
+
+```{r}
+x_train <- x_train / 255
+x_test  <- x_test  / 255
+```
+
+```{r}
+my_index <- sample(1:60000, 6000)
+x_train <- x_train[my_index, , ]
+y_train <- y_train[my_index]
+```
+
+### 11.3.2 多層パーセプトロン
 
 ```{r}
 my_model <- keras_model_sequential() %>%
-  layer_dense(units = 3, activation = "relu", input_shape = c(4)) %>%
-  layer_dense(units = 3, activation = "softmax")
-```
+  layer_flatten(input_shape = c(28, 28)) %>%
+  layer_dense(units = 256, activation = "relu") %>%
+  layer_dense(units = 10, activation = "softmax")
+summary(my_model)
+# Pythonの結果を参照
 
-```{r}
 my_model %>% compile(loss = "sparse_categorical_crossentropy",
                      optimizer = "rmsprop",
-                     metrics = c("accuracy")) # 正解率を記録する．
+                     metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(patience = 5,
+                                 restore_best_weights = TRUE)
 ```
 
 ```{r}
-my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
-                                 restore_best_weights = TRUE) # 最善を保持
-
 my_history <- my_model %>%
-  fit(x = X,                   # 入力変数
-      y = y,                   # 出力変数
-      validation_split = 0.25, # 検証データの割合
-      batch_size = 20,         # バッチサイズ
-      epochs = 500,            # エポック数の上限
-      callbacks = my_cb)       # エポックごとに行う処理
+  fit(x = x_train,
+      y = y_train,
+      validation_split = 0.2,
+      batch_size = 128,
+      epochs = 20,
+      callbacks = list(my_cb),
+      verbose = 0)
+
+plot(my_history)
 ```
 
 ```{r}
-tmp <- my_history
-tmp$params$epochs<-length(tmp$metrics$loss)
-plot(tmp)
+y_ <- my_model %>% predict_classes(x_test)
+table(y_, y_test)
 ```
 
 ```{r}
-my_history
-#>         loss: 0.06704
-#>     accuracy: 0.9732
-#>     val_loss: 0.144
-#> val_accuracy: 0.9474
+#>    y_test
+#> y_     0    1    2    3    4    5    6    7    8    9
+#>   0  962    0    8    2    0    6   11    0    8   11
+#>   1    0 1110    1    0    3    1    3    8    2    4
+#>   2    0    5  959   13    4    4    2   16    6    1
+#>   3    1    1   22  958    1   27    0    7   33   13
+#>   4    2    0    6    1  905    8    6    6    3   14
+#>   5    5    2    0   12    1  809    9    1   15    4
+#>   6    6    3    8    0    8   11  922    0    5    1
+#>   7    1    1    7    7    1    2    0  963    4    8
+#>   8    2   13   19   13    4   16    5    0  890    5
+#>   9    1    0    2    4   55    8    0   27    8  948
 ```
 
 ```{r}
-my_model %>% evaluate(x = X, y = y)
-#>       loss   accuracy
-#> 0.08633477 0.96666664
+mean(y_ == y_test)
+#> [1] 0.9426000
 ```
 
 ```{r}
-p_A <- my_model %>% predict(X)
-head(p_A)
-#>              [,1]         [,2]         [,3]
-#> [1,] 5.627665e-08 6.949594e-03 9.930503e-01
-#> [2,] 7.952168e-05 9.933645e-01 6.556002e-03
-#> [3,] 2.432919e-09 6.402077e-03 9.935979e-01
-#> [4,] 9.999996e-01 3.476715e-07 5.606830e-11
-#> [5,] 9.999999e-01 1.118252e-07 1.196033e-11
-#> [6,] 7.851200e-05 9.281746e-01 7.174686e-02
+my_model %>%
+  evaluate(x = x_test, y = y_test)
+#>      loss  accuracy
+#> 0.2071411 0.9426000
 ```
+
+### 11.3.3 畳み込みニューラルネットワーク（CNN）
 
 ```{r}
-# 予測カテゴリ
-y_A <- apply(X = p_A,
-             MARGIN = 1,
-             FUN = which.max) - 1
-
-# 正解率（訓練）
-mean(y_A == y)
-#> [1] 0.96666664
+x_train2d <- x_train %>% array_reshape(c(-1, 28, 28, 1))
+x_test2d  <- x_test  %>% array_reshape(c(-1, 28, 28, 1))
 ```
 
-```{r}
-p <- to_categorical(y)
-
-# 交差エントロピー（訓練）
--mean(log(apply(X = p_A * p,
-                MARGIN = 1,
-                FUN = sum)))
-#> [1] 0.08633477
-```
-
-#### 11.3.2.2 ワンホットエンコーディングの場合（表\ref{ネットワーク構築の基本原則
-
-```{r}
-library(keras)
-my_data <- iris[sample(nrow(iris)), ]      # シャッフル
-X <- scale(my_data[, -5])                  # 標準化
-p <- (as.integer(my_data$Species) - 1) %>% # 0から始まる整数
-  to_categorical                           # ワンホットエンコーディング
-head(p)
-#>      [,1] [,2] [,3]
-#> [1,]    0    1    0
-#> [2,]    0    1    0
-#> [3,]    1    0    0
-#> [4,]    0    1    0
-#> [5,]    0    1    0
-#> [6,]    0    0    1
-```
+#### 11.3.3.1 単純なCNN
 
 ```{r}
 my_model <- keras_model_sequential() %>%
-  layer_dense(units = 3, activation = "relu", input_shape = c(4)) %>%
-  layer_dense(units = 3, activation = "softmax")
+  layer_conv_2d(filters = 32, kernel_size = 3,  # 畳み込み層
+                activation = "relu",
+                input_shape = c(28, 28, 1)) %>% 
+  layer_max_pooling_2d(pool_size = 2) %>%       # プーリング層
+  layer_flatten() %>% 
+  layer_dense(units = 128, activation = "relu") %>% 
+  layer_dense(units = 10, activation = "softmax")
+
+summary(my_model)
+# 割愛（Python の結果を参照）
+
+my_model %>% compile(loss = "sparse_categorical_crossentropy",
+                     optimizer = "rmsprop",
+                     metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(patience = 5,
+                                 restore_best_weights = TRUE)
+```
+
+```{r}
+my_history <- my_model %>%
+  fit(x = x_train2d,
+      y = y_train,
+      validation_split = 0.2,
+      batch_size = 128,
+      epochs = 20,
+      callbacks = list(my_cb),
+      verbose = 0)
+
+plot(my_history)
+```
+
+```{r}
+my_model %>%
+  evaluate(x = x_test2d, y = y_test)
+#>      loss  accuracy
+#> 0.1392894 0.9607000
+```
+
+#### 11.3.3.2 LeNet
+
+```{r}
+my_model <- keras_model_sequential() %>%
+  layer_conv_2d(filters = 20, kernel_size = 5, activation = "relu",
+                input_shape = c(28, 28, 1)) %>% 
+  layer_max_pooling_2d(pool_size = 2, strides = 2) %>% 
+  layer_conv_2d(filters = 50, kernel_size = 5, activation = "relu") %>% 
+  layer_max_pooling_2d(pool_size = 2, strides = 2) %>% 
+  layer_dropout(rate = 0.25) %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 500, activation = "relu") %>% 
+  layer_dropout(rate = 0.5) %>% 
+  layer_dense(units = 10, activation = "softmax")
 
 my_model %>% compile(
-  loss = "categorical_crossentropy", # 変更箇所
+  loss = "sparse_categorical_crossentropy",
   optimizer = "rmsprop",
   metrics = c("accuracy"))
+
+my_cb <- callback_early_stopping(patience = 5,
+                                 restore_best_weights = TRUE)
 ```
 
 ```{r}
-my_cb <- callback_early_stopping(patience = 20,               # 訓練停止条件
-                                 restore_best_weights = TRUE) # 最善を保持
-
 my_history <- my_model %>%
-  fit(x = X,                   # 入力変数
-      y = p,                   # 出力変数
-      validation_split = 0.25, # 検証データの割合
-      batch_size = 20,         # バッチサイズ
-      epochs = 500,            # エポック数の上限
-      callbacks = my_cb)       # エポックごとに行う処理
+  fit(x = x_train2d,
+      y = y_train,
+      validation_split = 0.2,
+      batch_size = 128,
+      epochs = 20,
+      callbacks = list(my_cb),
+      verbose = 0)
+
+plot(my_history)
 ```
 
 ```{r}
-my_model %>% evaluate(x = X, y = p)
-#>       loss   accuracy 
-#> 0.07238474 0.96666664 
+my_model %>%
+  evaluate(x = x_test2d, y = y_test)
+#>      loss  accuracy
+#> 0.05227623 0.98390001
+```
+
+#### 11.3.3.3 補足：LeNetが自信満々で間違う例
+
+```{r}
+y_prob <- my_model %>% predict(x_test2d) # カテゴリに属する確率
+
+my_result <- data.frame(
+  y_prob = apply(y_prob, 1, max),           # 確率の最大値
+  y_     = apply(y_prob, 1, which.max) - 1, # 予測カテゴリ
+  y      = y_test,                          # 正解
+  id     = 1:length(y_test)) %>%            # 番号
+  filter(y_ != y) %>%                       # 予測がはずれたものを残す
+  arrange(desc(y_prob))                     # 確率の大きい順に並び替える
+head(my_result)
+#>      y_prob y_ y   id
+#> 1 0.9996961  3 5 2598
+#> 2 0.9995261  6 5 9730
+#> 3 0.9977269  1 6 2655
+#> 4 0.9960837  1 0 9635
+#> 5 0.9947274  7 2 9665
+#> 6 0.9931380  9 4 2131
 ```
 
 ```{r}
-# 正解カテゴリ
-y <- apply(X = p,
-           MARGIN = 1,
-           FUN = which.max) - 1
+tmp = my_result[1:5, ]$id
+my_ids = factor(tmp, levels = tmp)
+my_fig <- expand.grid(id = my_ids, y = 28:1, x = 1:28)
+my_fig$z <- as.vector(x_test[tmp, , ])
 
-# 予測確率
-p_A <- my_model %>% predict(X)
-
-# 予測カテゴリ
-y_A <- apply(X = p_A,
-             MARGIN = 1,
-             FUN = which.max) - 1
-
-# 正解率（訓練）
-mean(y_A == y)
-#> [1] 0.96666664
-
-# 交差エントロピー（訓練）
--mean(log(apply(p_A * p, 1, sum)))
-#> [1] 0.07238474
+my_fig %>% ggplot(aes(x = x, y = y, fill = z)) +
+  geom_raster() + coord_fixed() + theme_void() + theme(legend.position = "none") +
+  facet_grid(. ~ id)
 ```
 

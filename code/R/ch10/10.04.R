@@ -1,28 +1,29 @@
-## 10.4 タイタニック
+## 10.4 ロジスティック回帰
+
+curve(1 / (1 + exp(-x)), -6, 6)
+
+library(caret)
+library(PRROC)
+library(tidyverse)
 
 my_url <- str_c("https://raw.githubusercontent.com",
                 "/taroyabuki/fromzero/master/data/titanic.csv")
 my_data <- read_csv(my_url)
 
-head(my_data)
-#>   Class  Sex   Age Survived
-#> 1   1st Male Child      Yes
-#> 2   1st Male Child      Yes
-#> 3   1st Male Child      Yes
-#> 4   1st Male Child      Yes
-#> 5   1st Male Child      Yes
-#> 6   1st Male Adult       No
+my_model <- train(form = Survived ~ ., data = my_data, method = "glm",
+                  trControl = trainControl(method = "LOOCV"))
 
-#### 10.4.1.1 Rの場合
+coef(my_model$finalModel) %>%
+  as.data.frame
+#>                      .
+#> (Intercept)  2.0438374
+#> Class2nd    -1.0180950
+#> Class3rd    -1.7777622
+#> ClassCrew   -0.8576762
+#> SexMale     -2.4200603
+#> AgeChild     1.0615424
 
-library(caret)
-library(tidyverse)
-my_data <- epitools::expand.table(Titanic)
-
-my_model <- train(form = Survived ~ .,data = my_data,  method = "rpart")
-my_model$results %>% filter(Accuracy == max(Accuracy)) # 正解率（検証）の最大値
-#>           cp  Accuracy     Kappa AccuracySD    KappaSD
-#> 1 0.01125176 0.7810916 0.4196713 0.01187911 0.02960261
-
-rpart.plot::rpart.plot(my_model$finalModel, digit = 3, type = 5) # 可視化
+my_model$results
+#>   parameter  Accuracy     Kappa
+#> 1      none 0.7782826 0.4448974
 

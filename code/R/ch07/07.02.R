@@ -34,5 +34,7 @@ pastecs::stat.desc(my_data)
 #> std.dev        5.288   25.77
 #> coef.var       0.343    0.60
 
-plot(my_data)
+my_data %>%
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point()
 
