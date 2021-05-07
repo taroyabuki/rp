@@ -1,21 +1,18 @@
 pdf(file = "07-r-boxplot.pdf", width = 5.83, height = 4.13)
 
-set.seed(0)
-
-library(tidyverse)
 library(caret)
 my_data <- cars
 
-my_lm_model  <- train(form = dist ~ ., data = my_data, method = "lm")
-my_lm_model$results
+my_lm_model <- train(form = dist ~ speed, data = my_data, method = "lm",
+                     trControl = trainControl(method = "LOOCV"))
 
-my_knn_model <- train(form = dist ~ ., data = my_data, method = "knn")
-my_knn_model$results
+my_knn_model <- train(form = dist ~ speed, data = my_data, method = "knn",
+                      tuneGrid = data.frame(k = 5),
+                      trControl = trainControl(method = "LOOCV"))
+y <- my_data$dist
 
-my_df <- data.frame(lm = my_lm_model$resample$RMSE,
-                    knn = my_knn_model$resample$RMSE)
-head(my_df)
+my_df <- data.frame(
+  lm  = (y - my_lm_model$pred$pred)^2,
+  knn = (y - my_knn_model$pred$pred)^2)
 
-boxplot(my_df)
-
-wilcox.test(my_df$lm, my_df$knn)
+boxplot(my_df, ylab = "r^2")

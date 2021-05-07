@@ -1,16 +1,15 @@
-import numpy
-numpy.random.seed(0)
-
-import xgboost as xgb
-my_model = xgb.XGBClassifier()
-
-# データの読み込み
+import pandas as pd
 import statsmodels.api as sm
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, LeaveOneOut
+
 iris = sm.datasets.get_rdataset('iris', 'datasets').data
 X, y = iris.iloc[:, 0:4], iris.Species
 
-my_model.fit(X, y) # 訓練
+my_model = RandomForestClassifier().fit(X, y)
+tmp = pd.Series(my_model.feature_importances_, index=X.columns)
+tmp.sort_values().plot(kind='barh')
 
 import matplotlib.pyplot as plt
-xgb.plot_importance(my_model)
+plt.tight_layout()
 plt.savefig('09-p-varimp.pdf')
