@@ -74,7 +74,3 @@ section|Open in Colab
 --|--
 [13.01](ch13/13.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch13/13.01.ipynb)
 [13.02](ch13/13.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch13/13.02.ipynb)
-## Chapter 14
-section|Open in Colab
---|--
-[*](ch14/*.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch14/*.ipynb)
