@@ -15,8 +15,8 @@ RUN install2.r --error \
   MLmetrics \
   pastecs \
   prophet \
+  PRROC \
   psych \
-  ROCR \
   randomForest \
   rpart.plot \
   vcd \
@@ -31,8 +31,7 @@ USER rstudio
 
 RUN Rscript -e '\
   reticulate::install_miniconda();\
-  keras::install_keras();\
-  saveRDS(keras::dataset_mnist(), "/tmp/mnist.obj");'
+  keras::install_keras();'
 
 USER root
 
@@ -40,10 +39,13 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && apt-get update \
   && apt-get install -y \
     curl \
+    dnsutils \
+    iputils-ping \
     less \
     libglpk-dev \
     libnode64 \
     libtbb2 \
+    net-tools \
     vim-tiny \
   && apt-get --reinstall install -y man-db coreutils manpages \
   && apt-get clean \
@@ -53,11 +55,14 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
 WORKDIR /home/rstudio
 
 # 必要かも
+#  exactci \
+#  fable \
 #  feasts \
 #  glmnet \
 #  glmnetUtils \
 #  ggfortify \
 #  leaps \
 #  neuralnet \
+#  ploty \
 #  tsibble \
 #  zoo
