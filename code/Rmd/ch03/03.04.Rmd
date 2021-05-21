@@ -58,7 +58,7 @@ my_df2
 
 ```{r}
 colnames(my_df2)
-#> [1] "P" "Q"
+#> [1] "X" "Y"
 ```
 
 ```{r}
@@ -104,94 +104,112 @@ my_df3
 
 ```{r}
 tmp <- data.frame(
-  name = "E",
+  name    = "E",
   english = 80,
-  math = 80,
-  gender = "m")
-rbind(my_df, tmp)
+  math    = 80,
+  gender  = "m")
+my_df2 <- rbind(my_df, tmp)
 ```
 
 #### 3.4.2.2 列の追加
 
 ```{r}
-my_df %>% mutate(id = c(1, 2, 3, 4))
+my_df2 <- my_df %>%
+  mutate(id = c(1, 2, 3, 4))
 ```
 
 ```{r}
-my_df["id"] <- c(1, 2, 3, 4)
+my_df3 <- my_df              # コピー
+my_df3["id"] = c(1, 2, 3, 4) # 更新
+my_df3 # 結果の確認（割愛）
 ```
 
 #### 3.4.3.1 1列の取り出し（結果は1次元データ）
 
 ```{r}
-my_df[, 2]         # 参照
+x <- my_df[, 2]
 # あるいは
-my_df$english      # 参照
+x <- my_df$english
 # あるいは
-my_df$"english"    # 参照
+x <- my_df$"english"
 # あるいは
-my_df[["english"]] # 参照
+x <- my_df[["english"]]
 # あるいは
 tmp <- "english"
-my_df[[tmp]]       # 参照
+x <- my_df[[tmp]]
 
-#> [1] 60 90 70 90
+x # 結果の確認（割愛）
 ```
 
 #### 3.4.3.2 複数列の取り出し（結果はデータフレーム）
 
 ```{r}
-my_df %>% select(name, math)
+x <- my_df %>% select(name, math)
 ```
 
 ```{r}
-my_df[, c(1, 3)] # 参照
+x <- my_df[, c(1, 3)]
 ```
 
 ```{r}
-my_df %>% select(-c(english, gender))
+x <- my_df %>%
+  select(-c(english, gender))
 # あるいは
-my_df[, -c(2, 4)] # 参照
+x <- my_df[, -c(2, 4)]
 ```
 
 #### 3.4.3.3 複数行の取り出し（結果はデータフレーム）
 
 ```{r}
-my_df[c(1, 3), ] # 参照
+x <- my_df[c(1, 3), ]
 ```
 
 ```{r}
-my_df[-c(2, 4), ] # 参照
+x <- my_df[-c(2, 4), ]
 ```
 
 #### 3.4.3.4 検索
 
 ```{r}
-my_df[my_df$gender == "m", ] # 参照
+x <- my_df[my_df$gender == "m", ]
 # あるいは
-my_df %>% filter(gender == "m")
+x <- my_df %>% filter(gender == "m")
 ```
 
 ```{r}
-my_df[my_df$english > 80 & my_df$gender == "m", ] # 参照
+x <- my_df[my_df$english > 80 & my_df$gender == "m", ]
 # あるいは
-my_df %>% filter(english > 80 & gender == "m")
+x <- my_df %>% filter(english > 80 & gender == "m")
 ```
 
 ```{r}
-my_df[my_df$english == max(my_df$english), ] # 参照
+x <- my_df[my_df$english == max(my_df$english), ]
 # あるいは
-my_df %>% filter(english == max(my_df$english))
+x <- my_df %>% filter(english == max(my_df$english))
+```
+
+```{r}
+my_df2 <- my_df # コピー
+my_df2[my_df$gender == 'm', ]$gender <- 'M'
+```
+
+```{r}
+my_df2
+#>   name english math gender
+#> 1    A      60   70      f
+#> 2    B      90   80      M
+#> 3    C      70   90      M
+#> 4    D      90  100      f
 ```
 
 #### 3.4.3.5 並べ替え
 
 ```{r}
-my_df %>% arrange(english)
+x <- my_df %>% arrange(english)
 ```
 
 ```{r}
-my_df %>% arrange(-english)
+x <- my_df %>% arrange(-english)
 ```
 
 #### 3.4.4.1 行列の生成
@@ -213,7 +231,8 @@ A
 #### 3.4.4.2 データフレームと行列
 
 ```{r}
-my_df[, c(2, 3)] %>% as.matrix
+x <- my_df[, c(2, 3)] %>% as.matrix
+x
 #>      english math
 #> [1,]      60   70
 #> [2,]      90   80
@@ -222,7 +241,7 @@ my_df[, c(2, 3)] %>% as.matrix
 ```
 
 ```{r}
-as.data.frame(A)
+as.data.frame(x)
 #>   english math
 #> 1      60   70
 #> 2      90   80
@@ -255,8 +274,6 @@ t(A) %*% A
 ### 3.4.5 縦型と横型
 
 ```{r}
-library(tidyverse)
-
 my_wider <- data.frame(
   day = c(25, 26, 27),
   min = c(20, 21, 15),

@@ -52,7 +52,7 @@ my_model <- h2o.automl(
 
 ```{r}
 min(my_model@leaderboard$rmse)
-#> [1] 0.2941663
+#> [1] 0.2922861
 ```
 
 ```{r}

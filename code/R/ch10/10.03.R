@@ -1,4 +1,4 @@
-### 10.3.1 質的入力変数を含むデータでの学習
+## 10.3 タイタニック
 
 library(caret)
 library(PRROC)
@@ -19,17 +19,17 @@ head(my_data)
 #> 5 1st   Male  Child Yes     
 #> 6 1st   Male  Adult No
 
-### 10.3.2 分類木
+### 10.3.2 決定木の訓練
 
 my_model <- train(form = Survived ~ ., data = my_data, method = "rpart2",
                   tuneGrid = data.frame(maxdepth = 2),
                   trControl = trainControl(method = "LOOCV"))
 
-#### 10.3.2.1 分類木の描画
+### 10.3.3 決定木の描画
 
 rpart.plot::rpart.plot(my_model$finalModel, extra = 1)
 
-#### 10.3.2.2 分類木の評価
+### 10.3.4 決定木の評価
 
 my_model$results
 #>   maxdepth  Accuracy     Kappa
@@ -48,4 +48,39 @@ my_roc$auc
 my_roc %>% plot(xlab = "False Positive Rate",
                 ylab = "True Positive Rate",
                 legend = FALSE)
+
+### 10.3.5 補足：質的入力変数の扱い
+
+X <- my_data %>% select(Class) # 質的入力変数
+y <- my_data$Survived          # 出力変数
+
+my_model1 <- train(x = X, y = y, method = "rpart2",
+                   tuneGrid = data.frame(maxdepth = 2),
+                   trControl = trainControl(method = "LOOCV"))
+rpart.plot::rpart.plot(my_model1$finalModel, extra = 1)
+my_model1$results
+#>   maxdepth  Accuracy     Kappa
+#> 1        2 0.7137665 0.2373133
+
+my_data2 <- my_data %>%
+  dummyVars(formula = Survived ~ Class) %>%
+  predict(my_data) %>%
+  as.data.frame %>%
+  mutate(Survived = my_data$Survived)
+
+my_model2 <- train(form = Survived ~ ., data = my_data2, method = "rpart2",
+                   tuneGrid = data.frame(maxdepth = 2),
+                   trControl = trainControl(method = "LOOCV"))
+rpart.plot::rpart.plot(my_model2$finalModel, extra = 1)
+my_model2$results
+#>   maxdepth  Accuracy     Kappa
+#> 1        2 0.7137665 0.2373133
+
+my_model3 <- train(form = Survived ~ Class, data = my_data, method = "rpart2",
+                   tuneGrid = data.frame(maxdepth = 2),
+                   trControl = trainControl(method = "LOOCV"))
+rpart.plot::rpart.plot(my_model1$finalMode3, extra = 1)
+my_model3$results
+#>   maxdepth  Accuracy     Kappa
+#> 1        2 0.6915039 0.2674485
 

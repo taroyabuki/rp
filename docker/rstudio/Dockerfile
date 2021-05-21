@@ -61,8 +61,10 @@ WORKDIR /home/rstudio
 #  glmnet \
 #  glmnetUtils \
 #  ggfortify \
+#  gplots \
 #  leaps \
 #  neuralnet \
 #  ploty \
+#  pryr \
 #  tsibble \
 #  zoo

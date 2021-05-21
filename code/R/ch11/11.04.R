@@ -41,7 +41,7 @@ my_model <- h2o.automl(
     max_runtime_secs = 60)
 
 min(my_model@leaderboard$rmse)
-#> [1] 0.2941663
+#> [1] 0.2922861
 
 tmp <- my_model %>%
   predict(my_frame) %>%

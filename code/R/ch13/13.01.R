@@ -20,10 +20,9 @@ my_result$x # 主成分スコア
 #> E  17.837474  -1.064998 ...
 #> F   7.806303   5.863266 ...
 
-my_result %>%
-  ggbiplot::ggbiplot(
-      labels = row.names(my_data),
-      scale = 0)
+my_result %>% ggbiplot::ggbiplot(
+  labels = row.names(my_data),
+  scale = 0)
 
 my_result$rotation
 #>                 PC1         PC2         PC3          PC4       PC5

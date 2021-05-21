@@ -1,5 +1,7 @@
-x = [165, 170, 175, 180, 185]
 import numpy as np
+import pandas as pd
+
+x = [165, 170, 175, 180, 185]
 np.mean(x) # リストの場合
 #> 175.0
 
@@ -7,14 +9,13 @@ x = np.array([165, 170, 175, 180, 185])
 x.mean() # アレイの場合（np.mean(x)も可）
 #> 175.0
 
-import pandas as pd
 x = pd.Series([165, 170, 175, 180, 185])
 x.mean() # シリーズの場合（np.mean(x)も可）
 #> 175.0
 
 n = len(x) # 標本の大きさ
 sum(x) / n
-#> 
+#> 175.0
 
 y = [173, 174, 175, 176, 177]
 np.mean(y)
@@ -38,7 +39,6 @@ np.std(y) # yの標準偏差
 np.var(x)**0.5 # xの標準偏差
 #> 7.0710678118654755
 
-import pandas as pd
 s = pd.Series(x)
 s.describe()
 #> count      5.000000 （データ数）
@@ -63,7 +63,6 @@ my_df.describe()
 #> std       15.0   12.909944
 # 以下省略
 
-import numpy as np
 x = [165, 170, 175, 180, 185]
 n = len(x)
 
@@ -102,7 +101,6 @@ my_df = pd.DataFrame({
 
 my_df['english'].var()
 # あるいは
-import numpy as np
 np.var(my_df['english'], ddof=1)
 
 #> 225.0

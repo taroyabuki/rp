@@ -2,7 +2,6 @@ import pandas as pd
 pd.to_datetime('2020-01-01')
 #> Timestamp('2020-01-01 00:00:00')
 
-import pandas as pd
 pd.date_range(start='2021-01-01',
               end='2023-01-01',
               freq='1AS')

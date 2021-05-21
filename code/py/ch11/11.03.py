@@ -35,6 +35,22 @@ my_model.add(layers.Flatten(input_shape=[28, 28]))
 my_model.add(layers.Dense(units=256, activation="relu"))
 my_model.add(layers.Dense(units=10, activation="softmax"))
 
+my_model.summary()
+#> Model: "sequential"
+#> _________________________________________________________________
+#> Layer (type)                 Output Shape              Param #   
+#> =================================================================
+#> flatten (Flatten)            (None, 784)               0         
+#> _________________________________________________________________
+#> dense (Dense)                (None, 256)               200960    
+#> _________________________________________________________________
+#> dense_1 (Dense)              (None, 10)                2570      
+#> =================================================================
+#> Total params: 203,530
+#> Trainable params: 203,530
+#> Non-trainable params: 0
+#> _________________________________________________________________
+
 my_model.compile(loss='sparse_categorical_crossentropy',
                  optimizer='rmsprop',
                  metrics=['accuracy'])

@@ -4,8 +4,6 @@ my_data = airpassengers.load_airpassengers()
 n = len(my_data) # データ数（144）
 k = 108          # 訓練データ数
 
-import pandas as pd
-import pandas as pd
 my_ds = pd.date_range(
     start='1949/01/01',
     end='1960/12/01',

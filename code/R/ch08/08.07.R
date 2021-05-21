@@ -42,7 +42,6 @@ my_model <- train(
 
 y  <- my_data$LPRICE2
 y_ <- my_model %>% predict(my_data)
-
 RMSE(y_, y)          # RMSE（訓練）
 #> [1] 0.1336863
 

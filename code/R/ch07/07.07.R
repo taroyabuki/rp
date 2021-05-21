@@ -16,7 +16,7 @@ my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                   tuneGrid = my_params,
                   trControl = trainControl(method = "LOOCV"))
 
-#> head(my_model$results)
+head(my_model$results)
 #>   k     RMSE  Rsquared      MAE
 #> 1 1 17.22299 0.5777197 13.84900
 #> 2 2 16.81462 0.5936438 13.03469

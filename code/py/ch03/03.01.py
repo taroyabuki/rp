@@ -26,11 +26,6 @@ x, y = 20, 30 # まとめて名付け
 x * y
 #> 600
 
-my_x = 2
-my_y = 3
-my_x * my_y
-#> 6
-
 x = 1 + 1
 # この段階では結果は表示されない
 
@@ -64,7 +59,7 @@ True and False # 論理積（かつ）
 True or False # 論理和（または）
 #> True
 
-not True # 否定（でない）
+not True      # 否定（でない）
 #> False
 
 0 if 3 < 5 else 10

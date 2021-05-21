@@ -37,18 +37,19 @@ import pandas as pd
 my_url = 'https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv'
 my_tables = pd.read_html(my_url)
 
-#> [   Unnamed: 0 name  english  math gender
-#>  0         NaN    A       60    70      f
-#>  1         NaN    B       90    80      m
-#>  2         NaN    C       70    90      m
-#>  3         NaN    D       90   100      f]
+my_tables
+#> [   Unnamed: 0 name  english ...
+#>  0         NaN    A       60 ...
+#>  1         NaN    B       90 ...
+#>  2         NaN    C       70 ...
+#>  3         NaN    D       90 ...]
 
 my_tables[0]
-#>    Unnamed: 0 name  english  math gender
-#> 0         NaN    A       60    70      f
-#> 1         NaN    B       90    80      m
-#> 2         NaN    C       70    90      m
-#> 3         NaN    D       90   100      f
+#>    Unnamed: 0 name  english ...
+#> 0         NaN    A       60 ...
+#> 1         NaN    B       90 ...
+#> 2         NaN    C       70 ...
+#> 3         NaN    D       90 ...
 
 # 1列目以降を取り出す．
 my_data = my_tables[0].iloc[:, 1:]

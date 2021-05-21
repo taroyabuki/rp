@@ -24,17 +24,16 @@ z2 = (x2 - np.mean(x1)) / np.std(x1)
 #>  1.9999999999999998]
 
 import pandas as pd
+from sklearn.preprocessing \
+import OneHotEncoder
+
 my_df = pd.DataFrame({
     'id': [1, 2, 3],
     'class': ['A', 'B', 'C']})
 
-from sklearn.preprocessing \
-import OneHotEncoder
-
 my_enc = OneHotEncoder()
 tmp = my_enc.fit_transform(
     my_df[['class']]).toarray()
-
 my_names = my_enc.get_feature_names()
 pd.DataFrame(tmp, columns = my_names)
 #>    x0_A  x0_B  x0_C
@@ -52,4 +51,23 @@ pd.DataFrame(tmp, columns = my_names)
 #> 0   0.0   1.0   0.0
 #> 1   0.0   0.0   1.0
 #> 2   0.0   1.0   0.0
+
+my_enc = OneHotEncoder(drop='first')
+
+tmp = my_enc.fit_transform(
+    my_df[['class']]).toarray()
+my_names = my_enc.get_feature_names()
+pd.DataFrame(tmp, columns = my_names)
+#>    x0_B  x0_C
+#> 0   0.0   0.0
+#> 1   1.0   0.0
+#> 2   0.0   1.0
+
+tmp = my_enc.transform(
+    my_df2[['class']]).toarray()
+pd.DataFrame(tmp, columns = my_names)
+#>    x0_B  x0_C
+#> 0   1.0   0.0
+#> 1   0.0   1.0
+#> 2   1.0   0.0
 

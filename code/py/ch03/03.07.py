@@ -4,8 +4,8 @@ def my_f1(x):
     tmp = np.random.random(x)
     return np.mean(tmp)
 
-my_f1(10) # 動作確認
-#> 0.5427033207230424 （結果の例）
+my_f1(10)             # 動作確認
+#> 0.5427033207230424 # 結果の例
 
 [my_f1(10) for i in range(3)]
 #> [0.4864425069985622,

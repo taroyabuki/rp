@@ -128,7 +128,6 @@ result = [np.random.choice(Z, len(Z), replace=True).mean() for _ in range(n)]
 np.quantile(result, [0.025, 0.975])
 #> array([-3.88666667, -1.55333333])
 
-import matplotlib.pyplot as plt
 plt.hist(result, bins='sturges')
 
 result = [np.random.choice(X, len(X), replace=True).mean() -

@@ -1,25 +1,29 @@
-my_v = ['foo', 'bar', 'baz']
+x = ['foo', 'bar', 'baz']
 
-len(my_v)
+len(x)
 #> 3
 
-my_v[1]
+x[1]
 #> 'bar'
 
-my_v[-2]
+x[1] = 'BAR'
+x # 結果の確認
+#> ['foo', 'BAR', 'baz']
+
+x[1] = 'bar # 元に戻す．
+
+x[-2]
 #> 'bar'
 
-my_v + ['qux']
+x + ['qux']
 #> ['foo', 'bar', 'baz', 'qux']
 
-my_v.append('qux')
-# あるいは
-my_v = my_v + ['qux']
-my_v
+x = x + ['qux']
+x # 結果の確認
 #> ['foo', 'bar', 'baz', 'qux']
 
-my_v = list(range(5))
-# my_v = [0, 1, 2, 3, 4]と同等
+list(range(5))
+#> [0, 1, 2, 3, 4]
 
 list(range(0, 11, 2))
 #> [0, 2, 4, 6, 8, 10]
@@ -34,30 +38,29 @@ np.linspace(0, 1, 5)
 #> [10, 10, 10, 10, 10]
 
 import numpy as np
-my_v = np.array([2, 3, 5, 7])
+x = np.array([2, 3, 5, 7])
 
-my_v + 10 # 加算
+x + 10 # 加算
 #> array([12, 13, 15, 17])
 
-my_v * 10 # 乗算
+x * 10 # 乗算
 #> array([20, 30, 50, 70])
 
-my_u = [2, 3]
-import numpy as np
-np.sin(my_u)
+x = [2, 3]
+np.sin(x)
 #> array([0.90929743, 0.14112001])
 
-my_v = np.array([2,  3,   5,    7])
-my_w = np.array([1, 10, 100, 1000])
-my_v + my_w
+x = np.array([2,  3,   5,    7])
+y = np.array([1, 10, 100, 1000])
+x + y
 #> array([   3,   13,  105, 1007])
 
-my_v * my_w
+x * y
 #> array([   2,   30,  500, 7000])
 
-np.dot(my_v, my_w)
+np.dot(x, y)
 # あるいは
-my_v @ my_w
+x @ y
 
 #> 7532
 
@@ -66,25 +69,22 @@ u = np.array([1, 2, 3])
 v = np.array([1, 2, 3])
 w = np.array([1, 2, 4])
 
-# 全体の比較
-all(u == v)
+all(u == v) # 全体の比較
 #> True
 
-all(u == w)
+all(u == w) # 全体の比較
 #> False
 
-# 要素ごとの比較
-u == v
+u == v      # 要素ごとの比較
 #> array([ True,  True,  True])
-u == w
+
+u == w      # 要素ごとの比較
 #> array([ True,  True, False])
 
-# 同じ要素の数
-(u == w).sum()
+(u == w).sum()  # 同じ要素の数
 #> 2
 
-# 同じ要素の割合
-(u == w).mean()
+(u == w).mean() # 同じ要素の割合
 #> [1] 0.6666667
 
 my_list = [1, "two"]
@@ -102,4 +102,22 @@ my_map['apple']
 tmp = 'apple'
 my_map[tmp]
 #> 'りんご'
+
+x = ['foo', 'bar', 'baz']
+y = x
+y[1] = 'BAR'
+y
+#> ['foo', 'BAR', 'baz']
+
+x
+#> ['foo', 'BAR', 'baz']
+
+x = ['foo', 'bar', 'baz']
+y = x.copy()             # 「y = x」とせずに，コピーする．
+x == y, x is y
+#> (True, False)         # xとyは，等価（内容は同じ）だが同一ではない．
+
+y[1] = 'BAR'             # yを更新しても，
+x
+#> ['foo', 'bar', 'baz'] # xは変化しない．
 

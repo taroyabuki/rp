@@ -1,6 +1,6 @@
 import numpy as np
-from sklearn.metrics import roc_curve, RocCurveDisplay,\
-  precision_recall_curve, PrecisionRecallDisplay, auc
+from sklearn.metrics import (roc_curve, RocCurveDisplay,
+  precision_recall_curve, PrecisionRecallDisplay, auc)
 
 y       = np.array([  0,   1,   1,   0,   1,   0,    1,   0,   0,   1])
 y_score = np.array([0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5])

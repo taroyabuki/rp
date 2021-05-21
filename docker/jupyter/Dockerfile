@@ -32,13 +32,15 @@ RUN Rscript -e '\
     "gridExtra",\
     "ggfortify",\
     "glmnetUtils",\
+    "gplots",\
     "h2o",\
     "igraph",\
     "neuralnet",\
+    "PRROC",\
     "pastecs",\
     "prophet",\
-    "PRROC",\
     "psych",\
+    "pryr",\
     "rpart.plot",\
     "tsibble",\
     "vcd",\

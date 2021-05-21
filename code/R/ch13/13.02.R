@@ -39,7 +39,7 @@ my_data <- data.frame(
   row.names = c("A", "B", "C", "D", "E", "F"))
 
 my_data %>% scale %>% # 列ごとの標準化
-  gplots::heatmap.2()
+  gplots::heatmap.2(cexRow = 1, cexCol = 1) # ラベルのサイズを指定して描画する．
 
 ### 13.2.3 非階層的クラスタ分析
 

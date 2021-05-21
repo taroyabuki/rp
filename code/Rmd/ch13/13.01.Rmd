@@ -25,10 +25,9 @@ my_result$x # 主成分スコア
 ```
 
 ```{r}
-my_result %>%
-  ggbiplot::ggbiplot(
-      labels = row.names(my_data),
-      scale = 0)
+my_result %>% ggbiplot::ggbiplot(
+  labels = row.names(my_data),
+  scale = 0)
 ```
 
 ```{r}

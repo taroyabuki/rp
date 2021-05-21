@@ -1,7 +1,8 @@
-# データの準備
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
+
+# データの準備
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 X, y = my_data[['speed']], my_data['dist']
 

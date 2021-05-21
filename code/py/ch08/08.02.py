@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -33,7 +34,6 @@ mean_squared_error(y_, y)**0.5
 my_model.score(X, y)
 #> 0.8275277990052154 # 決定係数1
 
-import numpy as np
 np.corrcoef(y, y_)[0, 1]**2
 #> 0.8275277990052158 # 決定係数6
 

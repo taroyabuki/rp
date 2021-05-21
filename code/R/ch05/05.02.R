@@ -32,6 +32,7 @@ my_df <- data.frame(
 
 my_enc <- my_df %>%
   dummyVars(formula = ~ .)
+
 my_enc %>% predict(my_df)
 #>   id class.A class.B class.C
 #> 1  1       1       0       0
@@ -46,4 +47,21 @@ my_enc %>% predict(my_df2)
 #> 1  4       0       1       0
 #> 2  5       0       0       1
 #> 3  6       0       1       0
+
+#### 5.2.2.1 冗長性の排除
+
+my_enc <- my_df %>%
+  dummyVars(formula = ~ .,
+            fullRank = TRUE)
+my_enc %>% predict(my_df)
+#>   id class.B class.C
+#> 1  1       0       0
+#> 2  2       1       0
+#> 3  3       0       1
+
+my_enc %>% predict(my_df2)
+#>   id class.B class.C
+#> 1  4       1       0
+#> 2  5       0       1
+#> 3  6       1       0
 
