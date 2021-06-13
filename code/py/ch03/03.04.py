@@ -14,13 +14,14 @@ my_df = pd.DataFrame([
     columns=['name', 'english',
              'math', 'gender'])
 
-my_df.shape        # 行数と列数
+r, c = my_df.shape # 行数と列数
+r, c
 #> (4, 4)
 
-len(my_df)         # 行数
+r                  # 行数
 #> 4
 
-len(my_df.columns) # 列数
+c                  # 列数
 #> 4
 
 import itertools

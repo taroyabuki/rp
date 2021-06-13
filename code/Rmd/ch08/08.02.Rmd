@@ -62,7 +62,9 @@ my_model$results
 M <- my_data[, -1] %>%
   mutate(b0 = 1) %>%
   as.matrix
-solve(t(M) %*% M, t(M) %*% y)
+b <- MASS::ginv(M) %*% y
+matrix(b,
+       dimnames = list(colnames(M)))
 #>                  [,1]
 #> WRAIN     0.001166782
 #> DEGREES   0.616392441

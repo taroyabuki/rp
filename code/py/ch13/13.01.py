@@ -50,7 +50,7 @@ my_result['PC'] # 主成分スコア
 tmp = my_data - my_data.mean()
 Z  = np.matrix(tmp)                       # 標準化しない場合
 #Z = np.matrix(tmp / my_data.std(ddof=1)) # 不偏分散の平方根で標準化
-#Z = np.matrix(tmp / my_data.std(ddof=0)) # pca(normalize=True)と同じ
+#Z = np.matrix(tmp / my_data.std(ddof=0)) # pca(normalize=True)に合わせる場合
 
 S = np.cov(Z, rowvar=0) # 分散共分散行列
 w, v = np.linalg.eig(S) # 固有値と固有ベクトル

@@ -13,8 +13,8 @@
 0.1 + 0.1 + 0.1 == 0.3
 #> False
 
-import numpy as np
-np.isclose(0.1 + 0.1 + 0.1, 0.3)
+import math
+math.isclose(0.1 + 0.1 + 0.1, 0.3)
 #> True
 
 x = 2
@@ -65,16 +65,11 @@ not True      # 否定（でない）
 0 if 3 < 5 else 10
 #> 0
 
-%pwd
-# あるいは
 import os
 os.getcwd()
 #> '/home/jovyan/work'
 
-%cd fromzero
-# あるいは
 os.chdir('fromzero')
-
 os.getcwd()
 #> '/home/jovyan/work/fromzero'
 

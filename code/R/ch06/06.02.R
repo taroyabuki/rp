@@ -1,0 +1,7 @@
+#### 6.2.2.1 R
+
+iris
+#>     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+#> 1            5.1         3.5          1.4         0.2     setosa
+#> （以下省略）
+

@@ -84,7 +84,7 @@ my_model$results %>% # RMSE（検証）
 #>   alpha lambda      RMSE ...
 #> 1     0 0.0595 0.3117092 ...
 
-### 8.6.4 補足：RとPythonの結果をそろえる方法
+### 8.6.4 補足：RとPythonで結果を同じにする方法
 
 my_sd <- function(x) { # 標準偏差'を計算する関数
   n <- length(x)

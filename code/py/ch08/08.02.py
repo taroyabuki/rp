@@ -45,10 +45,13 @@ my_scores = cross_val_score(my_model, X, y,
 
 import numpy as np
 M = np.matrix(X.assign(b0=1))
-np.linalg.solve(M.T @ M, M.T @ y)
-#> array([ 1.16678230e-03,  # WRAIN
-#>         6.16392441e-01,  # DEGREES
-#>        -3.86055357e-03,  # HRAIN
-#>         2.38474129e-02,  # TIME_SV
-#>        -1.21453336e+01]) # b0
+b = np.linalg.pinv(M) @ y
+pd.Series(b,
+  index=list(X.columns) + ['b0'])
+#> WRAIN       0.001167
+#> DEGREES     0.616392
+#> HRAIN      -0.003861
+#> TIME_SV     0.023847
+#> b0        -12.145334
+#> dtype: float64
 

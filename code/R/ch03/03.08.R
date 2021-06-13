@@ -4,7 +4,7 @@ my_model <- train(form = dist ~ ., data = cars, method = "lm")
 #> Error in train(form = dist ~ speed, data = cars, method = "lm"):
 #> could not find function "train"
 # trainという関数が見つからないというエラーです．
-# trainを含んだパッケージcaretを読み込むことで対応します．
+# trainが属するパッケージcaretを読み込むことで対応します．
 
 library(caret)
 #> Error in library(caret): there is no package called ‘caret’

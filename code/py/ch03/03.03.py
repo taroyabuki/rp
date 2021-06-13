@@ -28,6 +28,7 @@ list(range(5))
 list(range(0, 11, 2))
 #> [0, 2, 4, 6, 8, 10]
 
+import numpy as np
 np.arange(0, 1.1, 0.5)
 #> array([0. , 0.5, 1. ])
 

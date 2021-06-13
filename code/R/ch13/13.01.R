@@ -68,14 +68,17 @@ Z %*% tmp$vectors                    # 主成分スコア（結果は割愛）
 cumsum(tmp$values) / sum(tmp$values) # 累積寄与率
 #> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
 
-A <- svd(Z)                                # 特異値分解
-all.equal(Z, A$u %*% diag(A$d) %*% t(A$v), # 元に戻ることの確認
+tmp <- svd(Z) # 特異値分解
+u <- tmp$u
+d <- tmp$d
+v <- tmp$v
+all.equal(Z, u %*% diag(d) %*% t(v), # 元に戻ることの確認
           check.attributes = FALSE)
 #> [1] TRUE
 
-Z %*% A$v # 主成分スコア（結果は割愛）
+Z %*% v # 主成分スコア（結果は割愛）
 
-e <- A$d^2 / nrow(my_data) # 分散共分散行列の固有値
-cumsum(e) / sum(e)         # 累積寄与率
+e <- d^2 / nrow(my_data) # 分散共分散行列の固有値
+cumsum(e) / sum(e)       # 累積寄与率
 #> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
 

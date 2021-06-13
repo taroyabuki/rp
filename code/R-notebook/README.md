@@ -22,6 +22,10 @@ section|Open in Colab
 --|--
 [05.01](ch05/05.01.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch05/05.01.ipynb)
 [05.02](ch05/05.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch05/05.02.ipynb)
+## Chapter 06
+section|Open in Colab
+--|--
+[06.02](ch06/06.02.ipynb)|[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/taroyabuki/fromzero/blob/master/code/R-notebook/ch06/06.02.ipynb)
 ## Chapter 07
 section|Open in Colab
 --|--

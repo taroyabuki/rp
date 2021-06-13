@@ -12,7 +12,7 @@ import xgboost
 # xgboostというモジュールが見つからないというエラーです．
 # xgboostをインストールすることで対応します．
 
-# Jupyter notebookなら次のとおりです．
+# Jupyter Notebookなら次のとおりです．
 !pip install xgboost
 
 x = 123
