@@ -32,7 +32,7 @@ my_model <- keras_model_sequential() %>%
   layer_dense(units = 256, activation = "relu") %>%
   layer_dense(units = 10, activation = "softmax")
 summary(my_model)
-# Pythonの結果を参照
+# 割愛（Pythonの結果を参照）
 
 my_model %>% compile(loss = "sparse_categorical_crossentropy",
                      optimizer = "rmsprop",
@@ -169,19 +169,20 @@ my_result <- data.frame(
   arrange(desc(y_prob))                     # 確率の大きい順に並び替える
 head(my_result)
 #>      y_prob y_ y   id
-#> 1 0.9996961  3 5 2598
-#> 2 0.9995261  6 5 9730
-#> 3 0.9977269  1 6 2655
-#> 4 0.9960837  1 0 9635
-#> 5 0.9947274  7 2 9665
-#> 6 0.9931380  9 4 2131
+#> 1 0.9998116  9 4 2131
+#> 2 0.9988768  6 5 9730
+#> 3 0.9986107  3 5 2598
+#> 4 0.9971705  3 5 2036
+#> 5 0.9888211  1 6 2655
+#> 6 0.9857675  0 6 2119
 
-tmp = my_result[1:5, ]$id
-my_ids = factor(tmp, levels = tmp)
-my_fig <- expand.grid(id = my_ids, y = 28:1, x = 1:28)
+tmp <- my_result[1:5, ]$id
+my_labels = sprintf("%s (%s)", my_result[1:5, ]$y, tmp)
+my_fig <- expand.grid(label = my_labels, y = 28:1, x = 1:28)
 my_fig$z <- as.vector(x_test[tmp, , ])
 
 my_fig %>% ggplot(aes(x = x, y = y, fill = z)) +
-  geom_raster() + coord_fixed() + theme_void() + theme(legend.position = "none") +
-  facet_grid(. ~ id)
+  geom_raster() + coord_fixed() + theme_void() +
+  theme(legend.position = "none") +
+  facet_grid(. ~ label)
 

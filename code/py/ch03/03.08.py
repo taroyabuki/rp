@@ -20,13 +20,12 @@ type(x)
 #> int
 
 %whos
-Variable   Type      Data/Info
-------------------------------
-math       module    <module 'math' from '/opt<...>-38-x86_64-linux-gnu.so'>
-x          int       123
+#> Variable   Type      Data/Info
+#> ------------------------------
+#> math       module    <module 'math' from '/opt<...>-38-x86_64-linux-gnu.so'>
+#> x          int       123
 
 import math
-
 ?math.log
 # あるいは
 help(math.log)

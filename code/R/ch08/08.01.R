@@ -1,6 +1,5 @@
 ## 8.1 ワインの生育条件と価格
 
-library(caret)
 library(tidyverse)
 my_url <- "http://www.liquidasset.com/winedata.html"
 tmp <- read.table(file = my_url,   # 読み込む対象
@@ -33,7 +32,6 @@ nrow(my_data)
 
 my_data %>% write_csv("wine.csv")
 
-library(tidyverse)
 #my_data <- read_csv("wine.csv") # 作ったファイルを使う場合
 my_url <- str_c("https://raw.githubusercontent.com",
                 "/taroyabuki/fromzero/master/data/wine.csv")

@@ -8,8 +8,8 @@ my_data = pd.DataFrame(
 
 my_result = hierarchy.linkage(
     my_data,
-    metric='euclidean', # 個体間距離
-    method='complete')  # クラスタ間距離
+    metric='euclidean',
+    method='complete')
 
 hierarchy.dendrogram(
     my_result,

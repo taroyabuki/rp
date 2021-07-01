@@ -68,13 +68,16 @@ Z %*% tmp$vectors                    # 主成分スコア（結果は割愛）
 cumsum(tmp$values) / sum(tmp$values) # 累積寄与率
 #> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
 
-tmp <- svd(Z) # 特異値分解
+tmp <- svd(Z)                                                     # 特異値分解
 u <- tmp$u
 d <- tmp$d
 v <- tmp$v
-all.equal(Z, u %*% diag(d) %*% t(v), # 元に戻ることの確認
-          check.attributes = FALSE)
-#> [1] TRUE
+w <- diag(d)
+
+c(all.equal(Z, u %*% diag(d) %*% t(v), check.attributes = FALSE), # 確認1
+  all.equal(t(u) %*% u, diag(dim(u)[2])),                         # 確認2
+  all.equal(t(v) %*% v, diag(dim(v)[2])))                         # 確認3
+#> [1] TRUE TRUE TRUE
 
 Z %*% v # 主成分スコア（結果は割愛）
 

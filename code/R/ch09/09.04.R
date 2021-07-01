@@ -15,7 +15,7 @@ my_model$results
 
 ### 9.4.2 ブースティング
 
-library(doParallel)
+library(doParallel) # 並列化の準備
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
 

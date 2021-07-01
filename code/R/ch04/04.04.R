@@ -9,7 +9,7 @@ binom.exact(x = 2,                     # 当たった回数
             p = 4/10,                  # 当たる確率（仮説）
             plot = TRUE,               # p値の描画（結果は割愛）
             conf.level = 1 - a,        # 信頼係数（デフォルト）
-            tsmethod = "minlike",      # 両側p値の使用
+            tsmethod = "minlike",      # p値の定義
             alternative = "two.sided") # 両側検定（デフォルト）
                                        # 左片側検定なら'less'
                                        # 右片側検定なら'greater'
@@ -46,10 +46,13 @@ my_data %>% ggplot(aes(x = x, y = probability, color = color)) +
 
 ### 4.4.2 推定
 
+# 前項の結果（再掲）
 #> 95 percent confidence interval:
 #>  0.0242 0.3967
 
-### 4.4.3 平均の差の検定と推定（t検定）
+# 前項冒頭のコード
+
+### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
 
 X <- c(32.1, 26.2, 27.5, 31.8, 32.1, 31.2, 30.1, 32.4, 32.3, 29.9, 29.6,
        26.6, 31.2, 30.9, 29.3)
@@ -91,7 +94,7 @@ t.test(x = X, y = Y,
 #> mean of x mean of y 
 #>  30.21333  32.89333 
 
-### 4.4.4 独立性の検定（カイ2乗検定）
+### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 my_url <- str_c("https://raw.githubusercontent.com/taroyabuki",
                 "/fromzero/master/data/smoker.csv")

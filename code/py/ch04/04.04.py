@@ -40,12 +40,13 @@ my_df = pd.DataFrame({
 
 my_df.plot(x = 't', legend=None, xlabel=r'$\theta$', ylabel=r'p-value')
 
+from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
+
 X = [32.1, 26.2, 27.5, 31.8, 32.1, 31.2, 30.1, 32.4, 32.3, 29.9, 29.6,
      26.6, 31.2, 30.9, 29.3]
 Y = [35.4, 34.6, 31.1, 32.4, 33.3, 34.7, 35.3, 34.3, 32.1, 28.3, 33.3,
      30.5, 32.6, 33.3, 32.2]
 
-from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
 a = 0.05          # 有意水準（デフォルト） = 1 - 信頼係数
 alt = 'two-sided' # 両側検定（デフォルト）
                   # 左片側検定なら'smaller'
@@ -68,7 +69,7 @@ c.tconfint_diff(alpha=a, alternative=alt, usevar=ve) # 信頼区間
 #> (-4.170905570517185, -1.1890944294828283)
 
 import pandas as pd
-my_url = ('https://raw.githubusercontent.com/taroyabuki/' +
+my_url = ('https://raw.githubusercontent.com/taroyabuki/'
           '/fromzero/master/data/smoker.csv')
 my_data = pd.read_csv(my_url)
 

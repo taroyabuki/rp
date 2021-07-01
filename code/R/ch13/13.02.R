@@ -8,8 +8,8 @@ my_data <- data.frame(
   row.names = c("A", "B", "C", "D"))
 
 my_result <- my_data %>%
-  dist("euclidian") %>% # 個体間距離
-  hclust("complete")    # クラスタ間距離
+  dist("euclidian") %>%
+  hclust("complete")
 
 factoextra::fviz_dend(
   my_result,
@@ -38,7 +38,7 @@ my_data <- data.frame(
   society   = c(  0,  20,  30,   0,  21,  17),
   row.names = c("A", "B", "C", "D", "E", "F"))
 
-my_data %>% scale %>% # 列ごとの標準化
+my_data %>% scale %>%                       # 列ごとの標準化
   gplots::heatmap.2(cexRow = 1, cexCol = 1) # ラベルのサイズを指定して描画する．
 
 ### 13.2.3 非階層的クラスタ分析

@@ -74,6 +74,11 @@ x * y
 sum(x * y)
 #> [1] 7532
 
+x <- c(TRUE, FALSE)
+y <- c(TRUE, TRUE)
+x & y
+#> [1]  TRUE FALSE
+
 #### 3.3.2.1 1次元データ同士の比較
 
 u = c(1, 2, 3)
@@ -100,36 +105,37 @@ mean(u == w) # 同じ要素の割合
 
 ### 3.3.3 複数種類のデータをひとまとめにする
 
-my_list <- list(1, "two")
+x <- list(1, "two")
 
-my_list[[2]]
+x[[2]]
 #> [1] "two"
 
-### 3.3.4 文字列とデータのペアのコレクション
+### 3.3.4 文字列と値のペアのコレクション
 
-my_map <- list("apple"  = "りんご",
-               "orange" = "みかん")
+x <- list("apple"  = "りんご",
+          "orange" = "みかん")
 
-my_map[["grape"]] <- "ぶどう"
+x[["grape"]] <- "ぶどう"
 
-my_map$apple
+x$apple
 # あるいは
-my_map$"apple"
+x$"apple"
 # あるいは
-my_map[["apple"]]
+x[["apple"]]
 # あるいは
 tmp <- "apple"
-my_map[[tmp]]
+x[[tmp]]
+
 #> [1] "りんご"
 
 ### 3.3.5 補足：コピーと参照
 
 x <- c("foo", "bar", "baz")
 y <- x
-y[2] <- "BAR"
+y[2] <- "BAR" # yを更新する．
 y
 #> [1] "foo" "BAR" "baz"
 
-x
+x            # xは変わらない．
 #> [1] "foo" "bar" "baz"
 

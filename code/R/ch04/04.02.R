@@ -15,7 +15,11 @@ hist(iris$Sepal.Length)
 
 x <- c(10, 20, 30)
 hist(x, breaks = 2) # 階級数は2
-#hist(x, breaks = 2, right = FALSE)
+
+x <- iris$Sepal.Length
+tmp <- seq(min(x), max(x),
+           length.out = 10)
+hist(x, breaks=tmp, right=FALSE)
 
 ### 4.2.2 散布図
 
@@ -68,8 +72,7 @@ head(my_df)
 my_df %>%
   ggplot(aes(x = Species, y = value, fill = name)) +
   geom_col(position = "dodge") +
-  geom_errorbar(aes(ymin = value - se, ymax = value + se), position = "dodge") +
-  ylab("mean \u00B1 se")
+  geom_errorbar(aes(ymin = value - se, ymax = value + se), position = "dodge")
 
 # 各変数の平均
 iris %>% pivot_longer(-Species) %>%
@@ -107,7 +110,7 @@ curve(x^3 - x, -2, 2)
 ### 4.2.7 ggplot2 (R)
 
 データフレーム %>%
-  ggplot(aes(x = 横軸に使うものの列名, y = 縦軸に使うものの列名, その他)) +
+  ggplot(aes(x = 横軸に使う列の名前, y = 縦軸に使う列の名前, その他)) +
   描画要素1(オプション) +
   描画要素2(オプション) + ...
 

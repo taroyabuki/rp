@@ -14,20 +14,23 @@ my_df = pd.DataFrame([
     columns=['name', 'english',
              'math', 'gender'])
 
+my_df.head()
+# 結果は割愛
+
 r, c = my_df.shape # 行数と列数
 r, c
 #> (4, 4)
 
-r                  # 行数
+r                  # 行数（len(my_df)も可）
 #> 4
 
 c                  # 列数
 #> 4
 
-import itertools
+from itertools import product
 my_df2 = pd.DataFrame(
-    itertools.product([1, 2, 3],
-                      [10, 100]),
+    product([1, 2, 3],
+            [10, 100]),
     columns=['X', 'Y'])
 my_df2
 #>    X    Y
@@ -83,6 +86,9 @@ my_df2 = my_df.assign(id=[1, 2, 3, 4])
 my_df3 = my_df.copy()       # コピー
 my_df3['id'] = [1, 2, 3, 4] # 更新
 my_df3 # 結果の確認（割愛）
+
+my_df.iloc[0, 1]
+#> 60
 
 x = my_df.iloc[:, 1]
 # あるいは
@@ -152,14 +158,14 @@ A
 #>        [11, 13, 17, 19],
 #>        [23, 29, 31, 37]])
 
-x = my_df.iloc[:, [1, 2]].values
-x
+A = my_df.iloc[:, [1, 2]].values
+A
 #> array([[ 60,  70],
 #>        [ 90,  80],
 #>        [ 70,  90],
 #>        [ 90, 100]])
 
-pd.DataFrame(x)
+pd.DataFrame(A)
 #>     0    1
 #> 0  60   70
 #> 1  90   80
@@ -167,16 +173,12 @@ pd.DataFrame(x)
 #> 3  90  100
 
 A.T
-#> array([[ 2, 11, 23],
-#>        [ 3, 13, 29],
-#>        [ 5, 17, 31],
-#>        [ 7, 19, 37]])
+#> array([[ 60,  90,  70,  90],
+#>        [ 70,  80,  90, 100]])
 
 A.T @ A
-#> array([[ 654,  816,  910, 1074],
-#>        [ 816, 1019, 1135, 1341],
-#>        [ 910, 1135, 1275, 1505],
-#>        [1074, 1341, 1505, 1779]])
+#> array([[24700, 26700],
+#>        [26700, 29400]])
 
 my_df = pd.DataFrame({
   'day':[25, 26, 27],

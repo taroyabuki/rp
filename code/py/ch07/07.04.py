@@ -12,8 +12,8 @@ my_model.fit(X, y)
 y_ = my_model.predict(X)
 my_data['y_'] = y_
 
-pd.options.display.float_format = \
-  '{:.2f}'.format
+pd.options.display.float_format = (
+  '{:.2f}'.format)
 my_data['residual'] = y - y_
 my_data.head()
 #>    speed  dist    y_  residual

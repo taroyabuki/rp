@@ -7,11 +7,10 @@ my_df
 #> 2    C       70    90      m
 #> 3    D       90   100      f
 
-my_url = ('https://raw.githubusercontent.com/taroyabuki/' +
+my_url = ('https://raw.githubusercontent.com/taroyabuki/'
           'fromzero/master/data/exam.csv')
 my_df = pd.read_csv(my_url)
 
-import pandas as pd
 my_df2 = pd.read_csv('exam.csv',
     index_col='name')
 my_df2
@@ -23,17 +22,15 @@ my_df2
 #> D          90   100      f
 
 my_df.to_csv('exam2.csv',
-    index=False) # 行名を出力しない．
+    index=False) # 行の名前を出力しない．
 
 my_df2.to_csv('exam3.csv')
 
-import pandas as pd
 my_df = pd.read_csv('exam.csv',
     encoding='UTF-8')
 
 my_df.to_csv('exam2.csv', index=False, encoding='UTF-8')
 
-import pandas as pd
 my_url = 'https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv'
 my_tables = pd.read_html(my_url)
 
@@ -60,7 +57,6 @@ my_data
 #> 2    C       70    90      m
 #> 3    D       90   100      f
 
-import pandas as pd
 my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/exam.json')
 my_data = pd.read_json(my_url)
@@ -72,7 +68,6 @@ my_data
 #> 2    C       70    90      m
 #> 3    D       90   100      f
 
-import pandas as pd
 import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 

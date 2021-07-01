@@ -13,7 +13,6 @@ x_train.shape
 np.set_printoptions(linewidth=170)
 x_train[4, :, :]
 
-import matplotlib.pyplot as plt
 plt.matshow(x_train[4, :, :])
 
 y_train
@@ -194,16 +193,17 @@ tmp = tmp[tmp.y_ != tmp.y]                             # 予測がはずれた�
 my_result = tmp.sort_values('y_prob', ascending=False) # 確率の大きい順に並び替える
 my_result.head()
 #>         y_prob  y_  y    id
-#> 2654  0.999542   1  6  2654
-#> 9729  0.998849   6  5  9729
-#> 2597  0.998480   3  5  2597
-#> 1014  0.998244   5  6  1014
-#> 9664  0.996748   7  2  9664
+#> 2654  0.999997   1  6  2654
+#> 1232  0.999988   4  9  1232
+#> 3520  0.999926   4  6  3520
+#> 9729  0.999881   6  5  9729
+#> 2896  0.999765   0  8  2896
 
 for i in range(5):
     plt.subplot(1, 5, i + 1)
+    ans = my_result['y'].iloc[i]
     id = my_result['id'].iloc[i]
-    plt.title(id)
+    plt.title(f'{ans} ({id})')
     plt.imshow(x_test[id])
     plt.axis('off')
 

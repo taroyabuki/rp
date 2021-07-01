@@ -1,9 +1,8 @@
-### 7.6.3 交差検証の実践
+### 7.6.3 検証の実践
 
 library(caret)
 library(tidyverse)
 my_data <- cars
-
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm")
 
 my_model$results
@@ -22,7 +21,7 @@ my_model$results
 #>   intercept     RMSE  Rsquared      MAE
 #> 1      TRUE 15.69731 0.6217139 12.05918
 
-### 7.6.4 交差検証の並列化
+### 7.6.4 検証の並列化
 
 library(doParallel)
 cl <- makeCluster(detectCores())
@@ -43,51 +42,42 @@ y_ <- my_model %>% predict(my_data)
 RMSE(y_, y)
 #> [1] 15.06886
 
-
-
 # 決定係数1（訓練）
 R2(pred = y_, obs = y,
    form = "traditional")
 #> [1] 0.6510794
-
 
 # 決定係数6（訓練）
 R2(pred = y_, obs = y,
    form = "corr")
 #> [1] 0.6510794
 
-#### 7.6.5.3 予測性能の指標
+#### 7.6.5.3 予測性能の指標（簡単に求められるもの）
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm")
 my_model$results
-#>   intercept     RMSE  Rsquared      MAE   RMSESD RsquaredSD   MAESD
-#> 1      TRUE 14.88504 0.6700353 11.59226 2.778445  0.1529552 2.05134
+#>   intercept     RMSE  Rsquared      MAE ...
+#> 1      TRUE 14.88504 0.6700353 11.59226 ...
+# 左から，RMSE（検証），決定係数6（検証），MAE（検証）
 
-#### 7.6.5.4 補足：予測性能の指標（工夫が必要なもの）
-
-# 決定係数1（検証）を求めるための準備
-my_r2_1 <- function(data, lev, model) {
-  c(defaultSummary(data),
-    "R2_1" = R2(pred = data$pred, obs = data$obs, form="traditional"))
-}
+#### 7.6.5.4 予測性能の指標（RとPythonで同じ結果を得る）
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm",
-                  trControl = trainControl(summaryFunction = my_r2_1))
-my_model$results
-#>   intercept    RMSE  Rsquared      MAE      R2_1 ...
-#> 1      TRUE 16.7833 0.6206035 12.93985 0.5718879 ...
-# 左から，RMSE（検証），決定係数6（検証），MAE（検証），決定係数1（検証）
+                  trControl = trainControl(method = "LOOCV"))
 
-#### 7.6.5.5 補足：予測性能の指標（RとPythonで同じ結果を得る）
-
-my_model <- train(form = dist ~ speed, data = my_data, method = "lm",
-                  trControl = trainControl(
-                    method = "LOOCV",
-                    summaryFunction = my_r2_1))
+# 方法1
 my_model$results
-#>   intercept     RMSE  Rsquared      MAE      R2_1
-#> 1      TRUE 15.69731 0.6217139 12.05918 0.6213689
-# 左から，RMSE（検証），決定係数 6（検証），MAE（検証），決定係数 1（検証）
+#>   intercept     RMSE  Rsquared      MAE
+#> 1      TRUE 15.69731 0.6217139 12.05918
+
+# 方法2
+y  <- my_model$pred$obs
+y_ <- my_model$pred$pred
+mean((y - y_)^2)**0.5
+#> [1] 15.69731
+
+mean(((y - y_)^2)**0.5)
+#> [1] 12.05918
 
 ### 7.6.6 補足：検証による手法の比較
 

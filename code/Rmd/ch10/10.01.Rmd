@@ -15,8 +15,8 @@ y_
 library(caret)
 confusionMatrix(data      = as.factor(y_), # 予測
                 reference = as.factor(y),  # 正解
-                positive = "1",            # 陽性
-                mode = "everything")       # すべての指標を求める．
+                positive = "1",            # 何を陽性とするか
+                mode = "everything")       # 全ての指標を求める．
 #> Confusion Matrix and Statistics
 #> 
 #>           Reference

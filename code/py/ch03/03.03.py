@@ -10,7 +10,7 @@ x[1] = 'BAR'
 x # 結果の確認
 #> ['foo', 'BAR', 'baz']
 
-x[1] = 'bar # 元に戻す．
+x[1] = 'bar' # 元に戻す．
 
 x[-2]
 #> 'bar'
@@ -19,6 +19,9 @@ x + ['qux']
 #> ['foo', 'bar', 'baz', 'qux']
 
 x = x + ['qux']
+# あるいは
+x.append('qux')
+
 x # 結果の確認
 #> ['foo', 'bar', 'baz', 'qux']
 
@@ -65,7 +68,11 @@ x @ y
 
 #> 7532
 
-import numpy as np
+x = np.array([True, False])
+y = np.array([True, True])
+x & y
+#> array([ True, False])
+
 u = np.array([1, 2, 3])
 v = np.array([1, 2, 3])
 w = np.array([1, 2, 4])
@@ -88,29 +95,30 @@ u == w      # 要素ごとの比較
 (u == w).mean() # 同じ要素の割合
 #> [1] 0.6666667
 
-my_list = [1, "two"]
+x = [1, "two"]
 
-my_list[1]
+x[1]
 #> 'two'
 
-my_map = {'apple' :'りんご',
-          'orange':'みかん'}
+x = {'apple' :'りんご',
+     'orange':'みかん'}
 
-my_map['grape'] = 'ぶどう'
+x['grape'] = 'ぶどう'
 
-my_map['apple']
+x['apple']
 # あるいは
 tmp = 'apple'
-my_map[tmp]
+x[tmp]
+
 #> 'りんご'
 
 x = ['foo', 'bar', 'baz']
 y = x
-y[1] = 'BAR'
+y[1] = 'BAR' # yを更新する．
 y
 #> ['foo', 'BAR', 'baz']
 
-x
+x            # xも変わる．
 #> ['foo', 'BAR', 'baz']
 
 x = ['foo', 'bar', 'baz']

@@ -7,7 +7,8 @@ my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
 # StandardScalerで標準化した結果をデータフレームに戻してから描画する．
-pd.DataFrame(StandardScaler().fit_transform(X), columns=X.columns).boxplot()
+pd.DataFrame(StandardScaler().fit_transform(X),
+             columns=X.columns).boxplot(showmeans=True)
 
 my_pipeline = Pipeline([
     ('sc', StandardScaler()),

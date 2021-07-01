@@ -1,36 +1,35 @@
 FROM rocker/tidyverse
 
-RUN install2.r --error \
-  caret \
-  doParallel \
-  e1071 \
-  epitools \
-  factoextra \
-  forecast \
-  furrr \
-  ggrepel \
-  gplots \
-  gridExtra \
-  igraph \
-  MLmetrics \
-  pastecs \
-  prophet \
-  PRROC \
-  psych \
-  randomForest \
-  rpart.plot \
-  vcd \
-  xgboost
-
-RUN installGithub.r \
-  haleyjeppson/ggmosaic \
-  rstudio/keras \
-  vqv/ggbiplot
-
 USER rstudio
 
-RUN Rscript -e '\
-  reticulate::install_miniconda();\
+RUN Rscript -e ' \
+  install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/"); \
+  pak::pkg_install(c( \
+    "caret", \
+    "doParallel", \
+    "e1071", \
+    "epitools", \
+    "factoextra", \
+    "forecast", \
+    "furrr", \
+    "ggrepel", \
+    "gplots", \
+    "gridExtra", \
+    "igraph", \
+    "MLmetrics", \
+    "pastecs", \
+    "prophet", \
+    "PRROC", \
+    "psych", \
+    "randomForest", \
+    "rpart.plot", \
+    "vcd", \
+    "xgboost", \
+    "haleyjeppson/ggmosaic", \
+    "rstudio/keras", \
+    "vqv/ggbiplot" \
+  )); \
+  reticulate::install_miniconda(); \
   keras::install_keras();'
 
 USER root
@@ -61,10 +60,7 @@ WORKDIR /home/rstudio
 #  glmnet \
 #  glmnetUtils \
 #  ggfortify \
-#  gplots \
-#  leaps \
 #  neuralnet \
 #  ploty \
 #  pryr \
 #  tsibble \
-#  zoo

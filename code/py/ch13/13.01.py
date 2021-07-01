@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-import scipy.stats as sp
 from pca import pca
+from scipy.stats import zscore
 
 my_data = pd.DataFrame(
     {'language': [  0,  20,  20,  25,  22,  17],
@@ -35,8 +35,7 @@ my_result['loadings']
 my_result['explained_var']
 #> array([0.88848331, 0.97962854, 0.99858005, 1.        , 1.        ])
 
-tmp = sp.stats.zscore(
-    my_data, ddof=1) # 標準化
+tmp = zscore(my_data, ddof=1) # 標準化
 my_result = my_model.fit_transform(tmp)
 my_result['PC'] # 主成分スコア
 #>           PC1       PC2 ...
@@ -49,7 +48,7 @@ my_result['PC'] # 主成分スコア
 
 tmp = my_data - my_data.mean()
 Z  = np.matrix(tmp)                       # 標準化しない場合
-#Z = np.matrix(tmp / my_data.std(ddof=1)) # 不偏分散の平方根で標準化
+#Z = np.matrix(tmp / my_data.std(ddof=1)) # √不偏分散で標準化する場合
 #Z = np.matrix(tmp / my_data.std(ddof=0)) # pca(normalize=True)に合わせる場合
 
 S = np.cov(Z, rowvar=0) # 分散共分散行列
@@ -58,9 +57,13 @@ Z @ v                   # 主成分スコア（結果は割愛）
 w.cumsum() / w.sum()    # 累積寄与率
 #> array([0.88848331, 0.97962854, 0.99858005, 1.        , 1.        ])
 
-u, d, v =  np.linalg.svd(Z, full_matrices=False) # 特異値分解
-np.isclose(Z, u @ np.diag(d) @ v).all()          # 元に戻ることの確認
-#> True
+u, d, v =  np.linalg.svd(Z, full_matrices=False)     # 特異値分解
+w = np.diag(d)
+
+[np.isclose(Z, u @ w @ v).all(),                     # 確認1
+ np.isclose(u.T @ u, np.identity(u.shape[1])).all(), # 確認2
+ np.isclose(v @ v.T, np.identity(v.shape[0])).all()] # 確認3
+#> [True, True, True]
 
 Z @ v.T # 主成分スコア（結果は割愛）
 

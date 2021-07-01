@@ -1,5 +1,11 @@
 ### 3.1.1 数値
 
+0x10
+#> [1] 16
+
+1.23e5
+#> [1] 123000
+
 2 * 3
 #> [1] 6
 
@@ -9,14 +15,8 @@
 10 %/% 3 # 商
 #> [1] 3
 
-10 %% 3 # 余り
+10 %% 3  # 余り
 #> [1] 1
-
-0.1 + 0.1 + 0.1 == 0.3
-#> [1] FALSE
-
-all.equal(0.1 + 0.1 + 0.1, 0.3)
-#> [1] TRUE
 
 ### 3.1.2 変数
 
@@ -33,7 +33,7 @@ x * y
 x <- 1 + 1
 # この段階では結果は表示されない
 
-x # 変数名
+x # 変数名を評価する．
 #> [1] 2
 
 ### 3.1.3 文字列
@@ -47,12 +47,11 @@ library(tidyverse)
 str_c("This is ", "a", " pen.")
 #> [1] "This is a pen."
 
-substr(x = my_s,
-       start = 2, stop = 4)
+substr(x = my_s, start = 2, stop = 4)
 #> [1] "bcd"
 
-my_t <- "%s is %s."
-sprintf(my_t, "This", "a pen")
+tmp <- "%s is %s."
+sprintf(tmp, "This", "a pen")
 #> [1] "This is a pen."
 
 ### 3.1.4 論理値
@@ -62,6 +61,12 @@ sprintf(my_t, "This", "a pen")
 
 1 < 0
 #> [1] FALSE
+
+0.1 + 0.1 + 0.1 == 0.3
+#> [1] FALSE
+
+all.equal(0.1 + 0.1 + 0.1, 0.3)
+#> [1] TRUE
 
 TRUE & FALSE # 論理積（かつ）
 #> [1] FALSE

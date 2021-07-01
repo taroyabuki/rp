@@ -10,6 +10,7 @@ my_data %>%
   pivot_longer(-LPRICE2) %>%
   ggplot(aes(x = name, y = value)) +
   geom_boxplot() +
+  stat_summary(fun = mean, geom = "point", size = 3) +
   xlab(NULL)
 
 my_model <- train(

@@ -17,38 +17,40 @@ RUN pip install \
 RUN pip install fbprophet
 
 #RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
-RUN Rscript -e '\
+RUN Rscript -e ' \
   Sys.setenv(DOWNLOAD_STATIC_LIBV8=1); \
   install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/"); \
-  pak::pkg_install(c(\
-    "doParallel",\
-    "e1071",\
-    "epitools",\
-    "exactci",\
-    "fable",\
-    "factoextra",\
-    "furrr",\
-    "ggrepel",\
-    "gridExtra",\
-    "ggfortify",\
-    "glmnetUtils",\
-    "gplots",\
-    "h2o",\
-    "igraph",\
-    "neuralnet",\
-    "PRROC",\
-    "pastecs",\
-    "prophet",\
-    "psych",\
-    "pryr",\
-    "rpart.plot",\
-    "tsibble",\
-    "vcd",\
-    "xgboost",\
-    "haleyjeppson/ggmosaic",\
-    "rstudio/keras",\
-    "vqv/ggbiplot"\
+  pak::pkg_install(c( \
+    "doParallel", \
+    "e1071", \
+    "epitools", \
+    "exactci", \
+    "fable", \
+    "factoextra", \
+    "furrr", \
+    "ggrepel", \
+    "gridExtra", \
+    "ggfortify", \
+    "glmnetUtils", \
+    "gplots", \
+    "h2o", \
+    "igraph", \
+    "neuralnet", \
+    "PRROC", \
+    "pastecs", \
+    "prophet", \
+    "psych", \
+    "pryr", \
+    "rpart.plot", \
+    "tsibble", \
+    "vcd", \
+    "xgboost", \
+    "haleyjeppson/ggmosaic", \
+    "rstudio/keras", \
+    "vqv/ggbiplot" \
   ));'
+
+RUN mkdir -p /home/jovyan/.ipython/profile_default && echo "c.InteractiveShell.ast_node_interactivity = 'all'" > /home/jovyan/.ipython/profile_default/ipython_config.py
 
 USER root
 

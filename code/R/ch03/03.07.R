@@ -1,39 +1,42 @@
+## 3.7 反復処理
+
+library(tidyverse)
+
 ### 3.7.1 指定した回数→1次元データ
 
-my_f1 <- function(x) {
+f1 <- function(x) {
   tmp <- runif(x)
   mean(tmp)
 }
 
-my_f1(10)        # 動作確認
+f1(10)           # 動作確認
 #> [1] 0.5776604 # 結果の例
 
-replicate(n = 3, expr = my_f1(10))
+replicate(n = 3, expr = f1(10))
 #> [1] 0.4672766 0.4712016 0.5579449
 
-rep(x = my_f1(10), times=3)
+rep(x = f1(10), times=3)
 #> [1] 0.481329 0.481329 0.481329
 
 ### 3.7.2 1次元データ→1次元データ
 
-my_v <- c(5, 10, 100)
-my_v %>% map_dbl(my_f1)
+v <- c(5, 10, 100)
+v %>% map_dbl(f1)
 #> [1] 0.4857329 0.5322183 0.5084124
 
-rep(x = 10, times = 3) %>%
-  map_dbl(my_f1)
+rep(x = 10, times = 3) %>% map_dbl(f1)
 # 結果は割愛
 
 ### 3.7.3 1次元データ→データフレーム
 
-my_f2 <- function(n) {
+f2 <- function(n) {
   tmp = runif(n)
   list(x = n,
        p = mean(tmp),
        q = sd(tmp))
 }
 
-my_f2(10) # 動作確認
+f2(10) # 動作確認
 #> $x
 #> [1] 10
 #> 
@@ -43,8 +46,8 @@ my_f2(10) # 動作確認
 #> $q
 #> [1] 0.3750788 （標準偏差の例）
 
-my_v <- c(5, 10, 100)
-my_v %>% map_dfr(my_f2)
+v <- c(5, 10, 100)
+v %>% map_dfr(f2)
 #>       x     p     q
 #>   <dbl> <dbl> <dbl>
 #> 1     5 0.560 0.320
@@ -53,7 +56,7 @@ my_v %>% map_dfr(my_f2)
 
 ### 3.7.4 データフレーム→データフレーム
 
-my_f3 = function(x, y) {
+f3 <- function(x, y) {
   tmp <- runif(x, min = 1,
                   max = y + 1) %>%
     as.integer
@@ -63,7 +66,7 @@ my_f3 = function(x, y) {
        q = sd(tmp))
 }
 
-my_f3(x = 10, y = 6) # 動作確認
+f3(x = 10, y = 6) # 動作確認
 #> $x
 #> [1] 10
 #> 
@@ -76,11 +79,11 @@ my_f3(x = 10, y = 6) # 動作確認
 #> $q
 #> [1] 1.316561 （標準偏差の例）
 
-my_df = data.frame(
+my_df <- data.frame(
   x = c(5, 10, 100, 5, 10, 100),
   y = c(6, 6, 6, 12, 12, 12))
 
-my_df %>% pmap_dfr(my_f3)
+my_df %>% pmap_dfr(f3)
 #>       x     y     p     q
 #>   <dbl> <dbl> <dbl> <dbl>
 #> 1     5     6  3     1.41
@@ -95,7 +98,7 @@ my_df %>% pmap_dfr(my_f3)
 library(furrr)
 plan(multisession) # 準備
 
-my_v <- c(5, 10, 100)
-my_v %>% future_map_dbl(my_f1)
+v <- c(5, 10, 100)
+v %>% future_map_dbl(f1)
 # 結果は割愛
 

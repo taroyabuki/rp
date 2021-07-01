@@ -41,9 +41,16 @@ X = my_test[['x']]
 y_ = my_lm_model.predict(X)
 
 [mean_squared_error(y, y_)**0.5, # RMSE（テスト）
- r2_score(y_true=y, y_pred=y_),  # 決定係数B（テストその1）
- my_lm_model.score(X, y)]        # 決定係数B（テストその2）
+ r2_score(y_true=y, y_pred=y_),  # 決定係数1（方法1）
+ my_lm_model.score(X, y)]        # 決定係数1（方法2）
 #> [70.63707081783771, 0.18448078010854552, 0.18448078010854552]
+
+y_ = my_lm_model.predict(my_df[['x']])
+tmp = pd.DataFrame(y_, index=my_df.index)
+plt.plot(my_train[['y']], label='train')
+plt.plot(my_test[['y']],  label='test')
+plt.plot(tmp, label='model')
+plt.legend()
 
 import pmdarima as pm
 my_arima_model = pm.auto_arima(my_train.y, m=12, trace=True)

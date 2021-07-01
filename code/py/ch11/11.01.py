@@ -56,10 +56,10 @@ my_history = my_model.fit(
     verbose=0)
 
 tmp = pd.DataFrame(my_history.history)
-tmp.plot(xlabel='epoch', ylabel='MSE')
+tmp.plot(xlabel='epoch')
 
 tmp.iloc[-1, ]
-#> loss        0.054385
-#> val_loss    0.100958
+#> loss        0.058252
+#> val_loss    0.085878
 #> Name: 499, dtype: float64
 

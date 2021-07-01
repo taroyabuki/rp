@@ -48,7 +48,7 @@ my_enc %>% predict(my_df2)
 #> 2  5       0       0       1
 #> 3  6       0       1       0
 
-#### 5.2.2.1 冗長性の排除
+#### 5.2.2.1 補足：冗長性の排除
 
 my_enc <- my_df %>%
   dummyVars(formula = ~ .,

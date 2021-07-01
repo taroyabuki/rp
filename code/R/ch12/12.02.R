@@ -33,8 +33,8 @@ head(my_df)
 #> 5 1949 5     4   121 train
 #> 6 1949 6     5   135 train
 
-my_train <- my_df[  1:k,]
-my_test  <- my_df[-(1:k),]
+my_train <- my_df[  1:k , ]
+my_test  <- my_df[-(1:k), ]
 y <- my_test$y
 
 my_plot <- my_df %>%
@@ -53,7 +53,7 @@ my_lm_model <- train(form = y ~ x, data = my_train, method = "lm")
 # テスト
 y_ <- my_lm_model %>% predict(my_test)
 y_ %>% postResample(y)
-#>       RMSE   Rsquared        MAE 
+#>       RMSE   Rsquared        MAE # Rsquaredは決定係数6
 #> 70.6370708  0.2758569 53.3019355
 
 y_ <- my_lm_model %>%
@@ -62,15 +62,7 @@ tmp <- my_df %>%
   mutate(y = y_, label = "model")
 my_plot + geom_line(data = tmp)
 
-import matplotlib.pyplot as plt
-y_ = my_lm_model.predict(my_df[['x']])
-tmp = pd.DataFrame(y_, index=my_df.index)
-plt.plot(my_train[['y']], label='train')
-plt.plot(my_test[['y']],  label='test')
-plt.plot(tmp, label='model')
-plt.legend()
-
-#### 12.2.3.2 モデルの構築
+#### 12.2.3.1 モデルの構築
 
 library(fable)
 my_arima_model <- my_train %>% model(ARIMA(y))
@@ -80,7 +72,7 @@ my_arima_model
 #>                     <model>
 #> 1 <ARIMA(1,1,0)(0,1,0)[12]>
 
-#### 12.2.3.3 予測
+#### 12.2.3.2 予測
 
 my_arima_result <- my_arima_model %>% forecast(h = "3 years")
 head(my_arima_result)

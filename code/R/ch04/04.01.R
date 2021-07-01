@@ -4,7 +4,7 @@ x <- c(165, 170, 175, 180, 185)
 mean(x) # 平均
 #> [1] 175
 
-n <- length(x) # 標本の大きさ
+n <- length(x) # サンプルサイズ
 sum(x) / n
 #> [1] 175
 
@@ -30,30 +30,21 @@ sd(y) # yの標準偏差
 var(x)**0.5 # xの標準偏差
 #> [1] 7.905694
 
-# 結果はデータフレーム
 psych::describe(x)
 #>    vars n mean   sd ...
 #> X1    1 5  175 7.91 ...
 
-# 結果は1次元データ
+# あるいは
+
 pastecs::stat.desc(x)
 #>      nbr.val ...   std.dev ...
 #>    5.0000000 ... 7.9056942 ...
 
-x <- 1:9
 quantile(x)
 #>   0%  25%  50%  75% 100% 
-#>    1    3    5    7    9 
+#>  165  170  175  180  185 
 
-my_df <- data.frame(
-  english = c( 60,  90,  70,  90),
-  math    = c( 70,  80,  90, 100))
-psych::describe(my_df)
-#>         vars n mean    sd ...
-#> english    1 4 77.5 15.00 ...
-#> math       2 4 85.0 12.91 ...
-
-#### 4.1.1.1 補足：不偏分散とその平方根
+#### 4.1.1.1 不偏分散とその非負の平方根
 
 x <- c(165, 170, 175, 180, 185)
 n <- length(x)
@@ -62,14 +53,18 @@ var(x)
 #> [1] 62.5
 
 var(x) * (n - 1) / n
+# あるいは
+mean((x - mean(x))^2)
 #> [1] 50
 
-# 不偏分散の平方根
+# √不偏分散
 sd(x)
 #> [1] 7.905694
 
-# 標準偏差'
-sqrt((n - 1) / n) * sd(x)
+# √標本分散
+sd(x) * sqrt((n - 1) / n)
+# あるいは
+mean((x - mean(x))^2)^0.5
 #> [1] 7.071068
 
 sd(x) / length(x)**0.5
@@ -90,21 +85,37 @@ my_df <- data.frame(
 var(my_df$english)
 #> [1] 225
 
-my_df[, c(2, 3)] %>%
-  summarize_each(var)
+# 結果はベクタ
+my_df[, c(2, 3)] %>% sapply(var)
+#> english     math 
+#> 225.0000 166.6667
+
+# 結果はリスト
+my_df[, c(2, 3)] %>% lapply(var)
+#> $english
+#> [1] 225
+#> 
+#> $math
+#> [1] 166.6667
+
+# 結果はデータフレーム
+my_df[, c(2, 3)] %>% # 2, 3列目
+  summarize(across(  # の
+    everything(),    # 全ての
+    var))            # 不偏分散
+# あるいは
+my_df %>%              # データフレーム
+  summarize(across(    # の
+    where(is.numeric), # 数値の列の
+    var))              # 不偏分散
+# あるいは
+my_df %>%              # データフレーム
+  summarize(across(    # の
+    where(is.numeric), # 数値の列の
+    function(x) { var(x) })) # 不偏分散
+
 #>   english     math
 #> 1     225 166.6667
-
-my_df[, c(2, 3)] %>%
-  summarize_each(function(x) {
-    sd(x) / length(x)**0.5 })
-# あるいは
-my_df[, c(2, 3)] %>%
-  summarize_each(
-    ~ sd(.) / length(.)**0.5)
-
-#>   english     math
-#> 1     7.5 6.454972
 
 psych::describe(my_df)
 #>         vars n mean    sd ...
@@ -122,7 +133,7 @@ pastecs::stat.desc(my_df)
 #> nbr.na      0.0000000   0.0000000
 #> （以下略）
 
-#### 4.1.2.2 分割表
+#### 4.1.2.2 分割表とグループごとの集計
 
 table(my_df$gender)
 
@@ -139,34 +150,14 @@ table(my_df2)
 #>      f     1    1
 #>      m     0    2
 
-#### 4.1.2.3 グループごとの集計
-
-my_df %>%
-  group_by(gender) %>%
-  summarize(n = n())
-#> # A tibble: 2 x 2
-#>   gender `n()`
-#>   <chr>  <int>
-#> 1 f          2
-#> 2 m          2
-
-my_df[, -1] %>%
-  group_by(gender) %>%
-  summarize_each(mean)
+my_df %>% group_by(gender) %>%
+  summarize(across(
+    where(is.numeric), mean),
+    .groups = "drop") # グループ化解除
 
 #> # A tibble: 2 x 3
 #>   gender english  math
 #>   <chr>    <dbl> <dbl>
 #> 1 f           75    85
 #> 2 m           80    85
-
-my_df[, -1] %>%
-  group_by(gender) %>%
-  summarize_each(
-    ~ sd(.) /length(.)**0.5)
-#> # A tibble: 2 x 3
-#>   gender english  math
-#>   <chr>    <dbl> <dbl>
-#> 1 f           15    15
-#> 2 m           10     5
 

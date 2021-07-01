@@ -24,8 +24,8 @@ z2 = (x2 - np.mean(x1)) / np.std(x1)
 #>  1.9999999999999998]
 
 import pandas as pd
-from sklearn.preprocessing \
-import OneHotEncoder
+from sklearn.preprocessing import (
+    OneHotEncoder)
 
 my_df = pd.DataFrame({
     'id': [1, 2, 3],

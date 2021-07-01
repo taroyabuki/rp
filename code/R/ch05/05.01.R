@@ -35,13 +35,12 @@ my_df2
 my_df %>% write_csv("exam2.csv")
 # あるいは
 my_df %>% write.csv(file = "exam2.csv",
-  row.names = FALSE) # 行名を出力しない．
+  row.names = FALSE) # 行の名前を出力しない．
 
 my_df2 %>% write.csv("exam3.csv")
 
 ### 5.1.2 文字コード
 
-library(tidyverse)
 my_df <- read_csv(file = "exam.csv",
   locale = locale(encoding = "UTF-8"))
 # あるいは
@@ -55,7 +54,6 @@ my_df %>% write.csv(file = "exam2.csv", row.names = FALSE, fileEncoding = "UTF-8
 
 ### 5.1.3 ウェブ上の表
 
-library(tidyverse)
 my_url <- "https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv"
 my_tables <- xml2::read_html(my_url) %>% rvest::html_table()
 
@@ -91,7 +89,6 @@ my_data
 
 #### 5.1.4.1 JSONデータの読み込み
 
-library(tidyverse)
 library(jsonlite)
 
 my_url <- str_c("https://raw.githubusercontent.com",
@@ -107,7 +104,6 @@ my_data
 
 #### 5.1.4.2 XMLデータの読み込み
 
-library(tidyverse)
 library(xml2)
 
 my_url <- str_c("https://raw.githubusercontent.com",
@@ -120,7 +116,7 @@ xml_ns(my_xml)                  # 名前空間の確認（d1）
 my_records <- xml_find_all(my_xml, ".//d1:record")
 
 f <- function(record) {
-  tmp <- xml_attrs(record)                    # 属性をすべて取り出し，
+  tmp <- xml_attrs(record)                    # 属性を全て取り出し，
   xml_children(record) %>% walk(function(e) {
     tmp[xml_name(e)] <<- xml_text(e)          # 子要素の名前と内容を追加する．
   })

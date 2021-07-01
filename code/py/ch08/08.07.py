@@ -17,19 +17,18 @@ my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
 my_pipeline = Pipeline([('sc', StandardScaler()),        # 標準化
-                     ('mlp', MLPRegressor())])        # ニューラルネットワーク
+                        ('mlp', MLPRegressor())])        # ニューラルネットワーク
 my_pipeline.fit(X, y)                                    # 訓練
 
 my_scores = cross_val_score(my_pipeline, X, y,
-                            cv=LeaveOneOut(),
-                            scoring='neg_mean_squared_error')
+                            scoring='neg_root_mean_squared_error')
 
 y_ = my_pipeline.predict(X)
 mean_squared_error(y_, y)**0.5
-#> 0.1759231326772027  # RMSE（訓練）
+#> 0.23277167397113335 # RMSE（訓練）
 
-(-my_scores.mean())**0.5
-#> 0.44711009804693636 # RMSE（検証）
+-my_scores.mean()
+#> 0.46383292352312744 # RMSE（検証）
 
 my_pipeline = Pipeline([
     ('sc', StandardScaler()),
@@ -42,17 +41,17 @@ my_params = {'mlp__activation': ('logistic', 'tanh', 'relu'), # 活性化関数
 my_search = GridSearchCV(estimator=my_pipeline,
                          param_grid=my_params,
                          cv=LeaveOneOut(),
-                         scoring='neg_root_mean_squared_error',
+                         scoring='neg_mean_squared_error',
                          n_jobs=-1).fit(X, y)
-my_search.best_params_               # チューニング結果
-#> {'mlp__activation': 'logistic', 'mlp__hidden_layer_sizes': 5}
-
 my_model = my_search.best_estimator_ # 最良モデル
+
+my_search.best_params_               # チューニング結果
+#> {'mlp__activation': 'tanh', 'mlp__hidden_layer_sizes': 3}
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5
-#> 0.2676901172357906  # RMSE（訓練）
+#> 0.21660824459726416 # RMSE（訓練）
 
 (-my_search.best_score_)**0.5
-#> 0.29492939980184524 # RMSE（検証）
+#> 0.2832501479521093  # RMSE（検証）
 

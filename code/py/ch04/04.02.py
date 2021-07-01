@@ -14,6 +14,11 @@ import pandas as pd
 my_df = pd.DataFrame({'x':[10, 20, 30]})
 my_df.hist('x', bins=2) # 階級数は2
 
+x = iris['Sepal.Length']
+tmp = np.linspace(min(x), max(x), 10)
+iris.hist('Sepal.Length',
+          bins=tmp.round(2))
+
 iris.plot('Sepal.Length',
           'Sepal.Width',
           kind='scatter')
@@ -21,10 +26,10 @@ iris.plot('Sepal.Length',
 iris.boxplot()
 
 import pandas as pd
-pd.options.display.float_format = \
-'{:.2f}'.format
-my_df = iris.describe().transpose()\
-[['mean','std']]
+pd.options.display.float_format = (
+'{:.2f}'.format)
+my_df = (iris.describe().transpose()
+[['mean','std']])
 my_df['se'] = (my_df['std'] /
                len(iris)**0.5)
 my_df
@@ -50,6 +55,8 @@ my_se
 my_group.agg('mean').plot(kind='bar', yerr=my_se, capsize=5)
 
 import pandas as pd
+from statsmodels import graphics
+
 my_df = pd.DataFrame({
     'Species':iris.Species,
     'w_Sepal':iris['Sepal.Width'] > 3})
@@ -64,15 +71,13 @@ my_table
 #> versicolor     42      8
 #> virginica      33     17
 
-from statsmodels.graphics.mosaicplot \
-import mosaic
+graphics.mosaicplot.mosaic(
+  my_df, index=['Species', 'w_Sepal'])
 
-mosaic(my_df,
-       index=['Species', 'w_Sepal'])
-
+import matplotlib.pyplot as plt
 import numpy as np
+
 x = np.linspace(-2, 2, 100)
 y = x**3 - x
-import matplotlib.pyplot as plt
 plt.plot(x, y)
 

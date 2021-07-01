@@ -22,7 +22,9 @@ my_model <- train(
   tuneGrid = data.frame(
     lambda = A,
     alpha = B))
+```
 
+```{r}
 coef(my_model$finalModel, A)
 #>                         1
 #> (Intercept) -2.8015519302
@@ -96,74 +98,5 @@ my_model$results %>% # RMSE（検証）
   filter(RMSE == min(RMSE))
 #>   alpha lambda      RMSE ...
 #> 1     0 0.0595 0.3117092 ...
-```
-
-### 8.6.4 補足：RとPythonで結果を同じにする方法
-
-```{r}
-my_sd <- function(x) { # 標準偏差'を計算する関数
-  n <- length(x)
-  sd(x) * sqrt((n - 1) / n)
-}
-
-y = my_data$LPRICE2
-u = mean(y)
-s = my_sd(y)
-my_data2 <- my_data %>% mutate(LPRICE2 = (y - u) / s) # 対策1
-```
-
-```{r}
-A <- 2
-B <- 0.1
-
-library(glmnetUtils)
-my_model <-
-  glmnetUtils::glmnet( # 対策2
-    form = LPRICE2 ~ .,
-    data = my_data2,
-    lambda = A,
-    alpha = B,
-    standardize = TRUE)
-```
-
-```{r}
-my_test <- data.frame(
-  WRAIN = 500, DEGREES = 17,
-  HRAIN = 120, TIME_SV = 2)
-my_model %>%
-  predict(newdata = my_test,
-          exact = T) * s + u # 対策3
-#>             s0
-#> [1,] -1.434772
-```
-
-```{r}
-coef(my_model)
-#>                       s0
-#> (Intercept) -3.950668388
-#> WRAIN        .          
-#> DEGREES      0.243666704
-#> HRAIN       -0.001531916
-#> TIME_SV      0.009726541
-```
-
-```{r}
-tmp <- coef(my_model)
-my_intercept <- tmp[1]
-my_coef <- tmp[-1]
-
-X = my_data[, -1]
-X_mean <- apply(X, 2, mean)
-X_sd <- apply(X, 2, my_sd)
-
-my_intercept + sum(my_coef * X_mean)
-#> [1] 8.881784e-16
-
-my_coef * X_sd %>% as.data.frame
-#>                   .
-#> WRAIN    0.00000000
-#> DEGREES  0.15761997
-#> HRAIN   -0.10983842
-#> TIME_SV  0.07870943
 ```
 
