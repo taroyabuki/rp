@@ -1,22 +1,3 @@
-### 3.8.1 よく遭遇するエラーとその対処方法
-
-my_model = xgboost.XGBClassifier()
-#> Traceback (most recent call last):
-#>   File "<stdin>", line 1, in <module>
-#> NameError: name 'xgboost' is not defined
-# xgboostが定義されていないというエラーです．
-# モジュールxgboostを読み込むことで対応します．
-
-import xgboost
-#> Traceback (most recent call last):
-#>   File "<stdin>", line 1, in <module>
-#> ModuleNotFoundError: No module named 'xgboost'
-# xgboostというモジュールが見つからないというエラーです．
-# xgboostをインストールすることで対応します．
-
-# Jupyter Notebookなら次のとおりです．
-!pip install xgboost
-
 ### 3.8.2 変数や関数についての調査
 
 x = 123

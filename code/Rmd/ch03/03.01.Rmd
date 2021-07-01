@@ -122,8 +122,8 @@ getwd()
 ```
 
 ```{r}
-setwd("fromzero")
+setwd("..")
 getwd()
-#> '/home/jovyan/work/fromzero'
+#> '/home/jovyan/work'
 ```
 

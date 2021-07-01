@@ -1,18 +1,3 @@
-### 3.8.1 よく遭遇するエラーとその対処方法
-
-my_model <- train(form = dist ~ ., data = cars, method = "lm")
-#> Error in train(form = dist ~ speed, data = cars, method = "lm"):
-#> could not find function "train"
-# trainという関数が見つからないというエラーです．
-# trainが属するパッケージcaretを読み込むことで対応します．
-
-library(caret)
-#> Error in library(caret): there is no package called ‘caret’
-# caretというパッケージが見つからないというエラーです．
-# caretをインストールすることで対応します．
-
-install.packages("caret")
-
 ### 3.8.2 変数や関数についての調査
 
 x <- 123

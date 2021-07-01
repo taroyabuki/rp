@@ -89,7 +89,7 @@ import os
 os.getcwd()
 #> '/home/jovyan/work'
 
-os.chdir('fromzero')
+os.chdir('..')
 os.getcwd()
-#> '/home/jovyan/work/fromzero'
+#> '/home/jovyan/work'
 

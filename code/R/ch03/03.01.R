@@ -87,7 +87,7 @@ ifelse(3 < 5, 0, 10)
 getwd()
 #> '/home/jovyan/work'
 
-setwd("fromzero")
+setwd("..")
 getwd()
-#> '/home/jovyan/work/fromzero'
+#> '/home/jovyan/work'
 
