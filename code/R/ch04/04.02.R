@@ -103,6 +103,9 @@ mosaicplot(
   formula = ~ Species + w_Sepal,
   data = my_df)
 
+library(vcd)
+mosaic(formula = ~w_Sepal + Species, data = my_df, labeling = labeling_values)
+
 ### 4.2.6 関数のグラフ
 
 curve(x^3 - x, -2, 2)
@@ -114,9 +117,13 @@ curve(x^3 - x, -2, 2)
   描画要素1(オプション) +
   描画要素2(オプション) + ...
 
+x <- iris$Sepal.Length
+tmp <- seq(min(x), max(x),
+           length.out = 10)
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
-  geom_histogram(bins = 8)
+  geom_histogram(breaks = tmp,
+                 closed = "left")
 
 iris %>%
   ggplot(aes(x = Sepal.Length,

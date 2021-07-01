@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-### 4.3.1 \myindexj{いちようらんすうせいすう
+### 4.3.1 一様乱数（離散）
 
 x = np.random.randint(
       low=1,      # 最小
@@ -17,7 +17,7 @@ x = np.random.choice(
 
 plt.hist(x, bins=6) # ヒストグラム
 
-### 4.3.2 \myindexj{いちようらんすうれんぞく
+### 4.3.2 一様乱数（連続）
 
 x = np.random.uniform(
     low=0,     # 最小
@@ -34,7 +34,7 @@ tmp = np.random.uniform(
 x = [int(k) for k in tmp]
 plt.hist(x, bins=6) # 結果は割愛
 
-### 4.3.3 \myindexj{にこうらんすう
+### 4.3.3 二項乱数
 
 n = 100
 p = 0.5
@@ -45,7 +45,7 @@ x = np.random.binomial(
     size=r) # 乱数の数
 plt.hist(x, bins=max(x)-min(x))
 
-### 4.3.4 \myindexj{せいきらんすう
+### 4.3.4 
 
 r = 10000
 x = np.random.normal(

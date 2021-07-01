@@ -1,11 +1,11 @@
-### 4.3.1 \myindexj{いちようらんすうせいすう
+### 4.3.1 一様乱数（離散）
 
 x <- sample(x = 1:6,        # 範囲
             size = 10000,   # 乱数の数
             replace = TRUE) # 重複あり
 hist(x, breaks = 0:6) # ヒストグラム
 
-### 4.3.2 \myindexj{いちようらんすうれんぞく
+### 4.3.2 一様乱数（連続）
 
 x <- runif(min = 0,  # 最小
            max = 1,  # 最大
@@ -18,7 +18,7 @@ x <- runif(min = 1,      # 最小
   as.integer             # 整数に変換
 hist(x, breaks = 0:6)    # 結果は割愛
 
-### 4.3.3 \myindexj{にこうらんすう
+### 4.3.3 二項乱数
 
 n <- 100
 p <- 0.5
@@ -26,9 +26,9 @@ r <- 10000
 x <- rbinom(size = n, # 試行回数
             prob = p, # 確率
             n = r)    # 乱数の数
-hist(x, breaks=max(x)-min(x))
+hist(x, breaks = max(x) - min(x))
 
-### 4.3.4 \myindexj{せいきらんすう
+### 4.3.4 
 
 r <- 10000
 x <- rnorm(mean = 50, # 平均

@@ -4,7 +4,7 @@ from statsmodels.stats.proportion import binom_test, proportion_confint
 
 binom_test(count=2,                 # 当たった回数
            nobs=15,                 # くじを引いた回数
-           prop=4/10,               # 当たる確率（仮説）
+           prop=4 / 10,             # 当たる確率（仮説）
            alternative='two-sided') # 両側検定（デフォルト）
                                     # 左片側検定なら'smaller'
                                     # 右片側検定なら'larger'
@@ -14,7 +14,7 @@ binom_test(count=2,                 # 当たった回数
 
 t = 4 / 10                        # 当たる確率
 n = 15                            # くじを引いた回数
-x = np.array(range(0, 16))        # 当たった回数
+x = np.array(range(0, n + 1))     # 当たった回数
 my_pr  = stats.binom.pmf(x, n, t) # x回当たる確率
 my_pr2 = stats.binom.pmf(2, n, t) # 2回当たる確率
 
@@ -46,7 +46,7 @@ my_df = pd.DataFrame({
 
 my_df.plot(x = 't', legend=None, xlabel=r'$\theta$', ylabel=r'p-value')
 
-### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
+### 4.4.3 平均の差の検定と推定（t検定）
 
 from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
 
@@ -122,8 +122,7 @@ result = [sum(np.random.choice(X, len(X), replace=True)) # 手順4
             for _ in range(n)]
 
 import matplotlib.pyplot as plt
-plt.hist(result,
-         bins=range(0, 16))
+plt.hist(result, bins=range(0, 16))
 
 np.quantile(result, [0.025, 0.975])
 #> array([0., 5.])

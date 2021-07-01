@@ -35,7 +35,6 @@ iris.boxplot()
 
 ### 4.2.4 棒グラフとエラーバー
 
-import pandas as pd
 pd.options.display.float_format = (
 '{:.2f}'.format)
 my_df = (iris.describe().transpose()
@@ -66,7 +65,6 @@ my_group.agg('mean').plot(kind='bar', yerr=my_se, capsize=5)
 
 ### 4.2.5 モザイクプロット
 
-import pandas as pd
 from statsmodels import graphics
 
 my_df = pd.DataFrame({
@@ -85,6 +83,10 @@ my_table
 
 graphics.mosaicplot.mosaic(
   my_df, index=['Species', 'w_Sepal'])
+
+my_table.columns = [str(x) for x in my_table.columns]
+my_table.index   = [str(x) for x in my_table.index]
+mosaic(my_df, index=['Species', 'w_Sepal'], labelizer=lambda k: my_table.loc[k])
 
 ### 4.2.6 関数のグラフ
 

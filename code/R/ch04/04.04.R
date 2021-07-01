@@ -6,7 +6,7 @@ library(tidyverse)
 a = 0.05                               # 有意水準
 binom.exact(x = 2,                     # 当たった回数
             n = 15,                    # くじを引いた回数
-            p = 4/10,                  # 当たる確率（仮説）
+            p = 4 / 10,                # 当たる確率（仮説）
             plot = TRUE,               # p値の描画（結果は割愛）
             conf.level = 1 - a,        # 信頼係数（デフォルト）
             tsmethod = "minlike",      # p値の定義
@@ -40,8 +40,8 @@ my_data <- data.frame(x = x) %>%
 
 my_data %>% ggplot(aes(x = x, y = probability, color = color)) +
   geom_point(size = 3) +
-  geom_linerange(aes(ymin = 0, ymax = probability), ) + # 水平線
-  geom_hline(yintercept = my_pr2) +                     # 垂直線
+  geom_linerange(aes(ymin = 0, ymax = probability), ) + # 垂直線
+  geom_hline(yintercept = my_pr2) +                     # 水平線
   theme(legend.position = "none")
 
 ### 4.4.2 推定
@@ -52,7 +52,7 @@ my_data %>% ggplot(aes(x = x, y = probability, color = color)) +
 
 # 前項冒頭のコード
 
-### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
+### 4.4.3 平均の差の検定と推定（t検定）
 
 X <- c(32.1, 26.2, 27.5, 31.8, 32.1, 31.2, 30.1, 32.4, 32.3, 29.9, 29.6,
        26.6, 31.2, 30.9, 29.3)
@@ -79,7 +79,7 @@ t.test(x = X, y = Y,
 
 t.test(x = X, y = Y,
        paired = FALSE,   # 対標本ではない（デフォルト）．
-       var.equal = TRUE, # 等分散を仮定する．仮定しないならFALSE．
+       var.equal = TRUE, # 等分散を仮定する．仮定しないならFALSE（デフォルト）．
        alternative = "two.sided",
        conf.level = 0.95)
 
@@ -139,8 +139,7 @@ sum(tmp) # 手順3
 n <- 10^5
 result <- replicate(n, sum(sample(X, size = length(X), replace = TRUE))) # 手順4
 
-hist(x = result,
-     breaks = 0:15,
+hist(x = result, breaks = 0:15,
      right = FALSE)
 
 quantile(result, c(0.025, 0.975))
