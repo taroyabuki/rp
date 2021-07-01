@@ -1,12 +1,18 @@
+### 10.1.1 陽性と陰性
+
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
 
 y       = np.array([  0,   1,   1,   0,   1,   0,    1,   0,   0,   1])
 y_score = np.array([0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5])
 
+### 10.1.1 陽性と陰性
+
 y_ = np.array([1 if 0.5 <= p else 0 for p in y_score])
 y_
 #> array([1, 1, 0, 0, 1, 1, 1, 0, 0, 1])
+
+### 10.1.1 陽性と陰性
 
 confusion_matrix(y_true=y, y_pred=y_)
 #> array([[3, 2],

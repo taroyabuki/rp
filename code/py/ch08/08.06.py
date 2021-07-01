@@ -1,3 +1,5 @@
+## 8.6 補足：正則化
+
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import ElasticNet, enet_path
@@ -16,6 +18,8 @@ my_url = ('https://raw.githubusercontent.com'
 my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
+### 8.6.1 正則化の実践
+
 A = 2
 B = 0.1
 
@@ -25,6 +29,8 @@ my_pipeline = Pipeline([
         alpha=A,
         l1_ratio=B))])
 my_pipeline.fit(X, y)
+
+### 8.6.1 正則化の実践
 
 my_enet = my_pipeline.named_steps.enet
 my_enet.intercept_
@@ -38,10 +44,14 @@ pd.Series(my_enet.coef_,
 #> TIME_SV    0.024027
 #> dtype: float64
 
+### 8.6.1 正則化の実践
+
 my_test = pd.DataFrame(
     [[500, 17, 120, 2]])
 my_pipeline.predict(my_test)
 #> array([-1.41981616])
+
+### 8.6.2 ペナルティの強さと係数の関係
 
 As = np.e**np.arange(
     2, -5.5, -0.1)
@@ -60,6 +70,8 @@ pd.DataFrame(
     xlabel='log A ( = log alpha)',
     ylabel='Coefficients')
 
+### 8.6.3 パラメータ$A,\,B$の決定
+
 As = np.linspace(0, 0.1, 21)
 Bs = np.linspace(0, 0.1,  6)
 
@@ -76,6 +88,8 @@ my_search.best_params_
 
 my_model = my_search.best_estimator_ # 最良モデル
 
+### 8.6.3 パラメータ$A,\,B$の決定
+
 tmp = my_search.cv_results_                # チューニングの詳細
 my_scores = (-tmp['mean_test_score'])**0.5 # RMSE
 
@@ -86,6 +100,8 @@ my_results = pd.DataFrame(tmp['params']).assign(RMSE=my_scores).pivot(
 
 my_results.plot(style='o-', xlabel='A ( = alpha)', ylabel='RMSE').legend(
     title='B ( = l1_ratio)')
+
+### 8.6.3 パラメータ$A,\,B$の決定
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5

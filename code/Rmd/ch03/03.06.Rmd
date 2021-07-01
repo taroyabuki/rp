@@ -4,6 +4,8 @@
 library(tidyverse)
 ```
 
+### 3.6.1 Rのパッケージ
+
 ```{r}
 update.packages(ask = FALSE)
 ```

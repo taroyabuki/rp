@@ -1,3 +1,5 @@
+### 7.5.2 K最近傍法の実践
+
 # 準備
 import numpy as np
 import pandas as pd
@@ -17,8 +19,12 @@ tmp = pd.DataFrame({'speed':np.linspace(min(my_data.speed),
                                         100)})
 tmp['model'] = my_model.predict(tmp)
 
+### 7.5.2 K最近傍法の実践
+
 pd.concat([my_data, tmp]).plot(
   x='speed', style=['o', '-'])
+
+### 7.5.2 K最近傍法の実践
 
 y_ = my_model.predict(X)
 

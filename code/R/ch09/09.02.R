@@ -4,7 +4,11 @@ library(caret)
 my_data <- iris
 my_model <- train(form = Species ~ ., data = my_data, method = "rpart")
 
+### 9.2.1 分類木の作成と利用
+
 rpart.plot::rpart.plot(my_model$finalModel, extra = 1)
+
+### 9.2.1 分類木の作成と利用
 
 my_test <- tribble(
 ~Sepal.Length, ~Sepal.Width, ~Petal.Length, ~Petal.Width,
@@ -14,6 +18,8 @@ my_test <- tribble(
 my_model %>% predict(my_test)
 #> [1] setosa    virginica
 #> Levels: setosa versicolor virginica
+
+### 9.2.1 分類木の作成と利用
 
 my_model %>% predict(my_test,
                      type = "prob")

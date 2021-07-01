@@ -29,6 +29,8 @@ my_model <- train(form = dist ~ speed, # モデル式（出力変数と入力変
                   method = "lm")       # 手法
 ```
 
+#### 7.3.3.2 訓練
+
 ```{r}
 coef(my_model$finalModel)
 #> (Intercept)       speed 
@@ -49,6 +51,8 @@ my_model %>% predict(tmp)
 ```{r}
 f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
 ```
+
+#### 7.3.3.4 モデルの可視化
 
 ```{r}
 my_data %>%

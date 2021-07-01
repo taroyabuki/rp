@@ -19,6 +19,8 @@ my_df <- tribble(
   "C",         70,    90,     "m",
   "D",         90,   100,     "f")
 
+#### 3.4.1.2 データを見た目のとおりに記述する方法
+
 head(my_df)
 # 結果は割愛
 
@@ -52,6 +54,8 @@ my_df2
 colnames(my_df2)
 #> [1] "X" "Y"
 
+#### 3.4.1.5 列と行の名前
+
 colnames(my_df2) <- c("P", "Q")
 my_df2
 #>   P   Q
@@ -59,8 +63,12 @@ my_df2
 #> 2 2  10
 # 以下略
 
+#### 3.4.1.5 列と行の名前
+
 row.names(my_df)
 #> [1] "1" "2" "3" "4"
+
+#### 3.4.1.5 列と行の名前
 
 row.names(my_df2) <-
   c("a", "b", "c", "d", "e", "f")
@@ -70,6 +78,8 @@ my_df2
 #> b 2  10
 #> c 3  10
 # 以下略
+
+#### 3.4.1.5 列と行の名前
 
 my_df3 <- data.frame(
   english =   c( 60,  90,  70,  90),
@@ -96,6 +106,8 @@ my_df2 <- rbind(my_df, tmp)
 
 my_df2 <- my_df %>%
   mutate(id = c(1, 2, 3, 4))
+
+#### 3.4.2.2 列の追加
 
 my_df3 <- my_df               # コピー
 my_df3["id"] <- c(1, 2, 3, 4) # 更新
@@ -125,7 +137,11 @@ x # 結果の確認（割愛）
 
 x <- my_df %>% select(name, math)
 
+#### 3.4.3.3 複数列の取り出し（結果はデータフレーム）
+
 x <- my_df[, c(1, 3)]
+
+#### 3.4.3.3 複数列の取り出し（結果はデータフレーム）
 
 x <- my_df %>%
   select(-c(english, gender))
@@ -136,6 +152,8 @@ x <- my_df[, -c(2, 4)]
 
 x <- my_df[c(1, 3), ]
 
+#### 3.4.3.4 複数行の取り出し（結果はデータフレーム）
+
 x <- my_df[-c(2, 4), ]
 
 #### 3.4.3.5 検索
@@ -144,16 +162,24 @@ x <- my_df[my_df$gender == "m", ]
 # あるいは
 x <- my_df %>% filter(gender == "m")
 
+#### 3.4.3.5 検索
+
 x <- my_df[my_df$english > 80 & my_df$gender == "m", ]
 # あるいは
 x <- my_df %>% filter(english > 80 & gender == "m")
+
+#### 3.4.3.5 検索
 
 x <- my_df[my_df$english == max(my_df$english), ]
 # あるいは
 x <- my_df %>% filter(english == max(my_df$english))
 
+#### 3.4.3.5 検索
+
 my_df2 <- my_df # コピー
 my_df2[my_df$gender == 'm', ]$gender <- 'M'
+
+#### 3.4.3.5 検索
 
 my_df2
 #>   name english math gender
@@ -165,6 +191,8 @@ my_df2
 #### 3.4.3.6 並べ替え
 
 x <- my_df %>% arrange(english)
+
+#### 3.4.3.6 並べ替え
 
 x <- my_df %>% arrange(-english)
 
@@ -191,6 +219,8 @@ A
 #> [2,]      90   80
 #> [3,]      70   90
 #> [4,]      90  100
+
+#### 3.4.4.2 データフレームと行列
 
 as.data.frame(A)
 #>   english math
@@ -220,6 +250,8 @@ my_wider <- data.frame(
   min = c(20, 21, 15),
   max = c(24, 27, 21))
 
+### 3.4.5 縦型と横型
+
 my_longer <- my_wider %>%
   pivot_longer(-day)
 my_longer
@@ -233,6 +265,8 @@ my_longer
 #> 5    27 min      15
 #> 6    27 max      21
 
+### 3.4.5 縦型と横型
+
 my_longer %>% pivot_wider()
 #> # A tibble: 3 x 3
 #>     day   min   max
@@ -240,6 +274,8 @@ my_longer %>% pivot_wider()
 #> 1    25    20    24
 #> 2    26    21    27
 #> 3    27    15    21
+
+### 3.4.5 縦型と横型
 
 my_longer %>%
   ggplot(aes(x = day, y = value,

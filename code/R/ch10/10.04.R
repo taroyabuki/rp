@@ -2,6 +2,8 @@
 
 curve(1 / (1 + exp(-x)), -6, 6)
 
+## 10.4 ロジスティック回帰
+
 library(caret)
 library(PRROC)
 library(tidyverse)
@@ -13,6 +15,8 @@ my_data <- read_csv(my_url)
 my_model <- train(form = Survived ~ ., data = my_data, method = "glm",
                   trControl = trainControl(method = "LOOCV"))
 
+## 10.4 ロジスティック回帰
+
 coef(my_model$finalModel) %>%
   as.data.frame
 #>                      .
@@ -22,6 +26,8 @@ coef(my_model$finalModel) %>%
 #> ClassCrew   -0.8576762
 #> SexMale     -2.4200603
 #> AgeChild     1.0615424
+
+## 10.4 ロジスティック回帰
 
 my_model$results
 #>   parameter  Accuracy     Kappa

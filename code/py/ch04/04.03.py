@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+### 4.3.1 \myindexj{いちようらんすうせいすう
+
 x = np.random.randint(
       low=1,      # 最小
       high=7,     # 最大+1
@@ -15,6 +17,8 @@ x = np.random.choice(
 
 plt.hist(x, bins=6) # ヒストグラム
 
+### 4.3.2 \myindexj{いちようらんすうれんぞく
+
 x = np.random.uniform(
     low=0,     # 最小
     high=1,    # 最大
@@ -23,12 +27,16 @@ x = np.random.uniform(
 x = np.random.random(size=1000)
 plt.hist(x)
 
+### 4.3.2 \myindexj{いちようらんすうれんぞく
+
 tmp = np.random.uniform(
     low=1,     # 最小
     high=7,    # 最大+1
     size=1000) # 乱数の数
 x = [int(k) for k in tmp]
 plt.hist(x, bins=6) # 結果は割愛
+
+### 4.3.3 \myindexj{にこうらんすう
 
 n = 100
 p = 0.5
@@ -39,12 +47,16 @@ x = np.random.binomial(
     size=r) # 乱数の数
 plt.hist(x, bins=max(x)-min(x))
 
+### 4.3.4 \myindexj{せいきらんすう
+
 r = 10000
 x = np.random.normal(
     loc=50,  # 平均
     scale=5, # 標準偏差
     size=r)  # 乱数の数
 plt.hist(x, bins=40)
+
+#### 4.3.4.1 補足：不偏性の具体例
 
 import numpy as np
 import pandas as pd
@@ -57,6 +69,8 @@ def f(k):
                       np.std(tmp) / n**0.5], # 標準誤差
                      index=['k', 'mean', 'se'])
 
+#### 4.3.4.1 補足：不偏性の具体例
+
 def g(x):
     return x.var(ddof=1)
 pd.Series([10, 20, 30]).apply(f)
@@ -65,6 +79,8 @@ pd.Series([10, 20, 30]).apply(f)
 #> 1  20.0  9.022280  0.029525
 #> 2  30.0  8.983166  0.023584
 
+#### 4.3.4.1 補足：不偏性の具体例
+
 def g(x):
     return x.std(ddof=1)
 pd.Series([10, 20, 30]).apply(f)
@@ -72,6 +88,8 @@ pd.Series([10, 20, 30]).apply(f)
 #> 0  10.0  2.923114  0.006983
 #> 1  20.0  2.961450  0.004811
 #> 2  30.0  2.968328  0.003977
+
+#### 4.3.4.1 補足：不偏性の具体例
 
 from math import gamma
 

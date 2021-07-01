@@ -1,3 +1,5 @@
+## 11.1 Kerasによる回帰
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -9,17 +11,25 @@ my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/wine.csv')
 tmp = pd.read_csv(my_url)
 
+## 11.1 Kerasによる回帰
+
 my_data = sklearn.utils.shuffle(tmp)
+
+## 11.1 Kerasによる回帰
 
 my_scaler = StandardScaler()
 X = my_scaler.fit_transform(
     my_data.drop(columns=['LPRICE2']))
 y = my_data['LPRICE2']
 
+## 11.1 Kerasによる回帰
+
 x = np.linspace(-3, 3, 100)
 plt.plot(x, activations.relu(x))
 plt.xlabel('x')
 plt.ylabel('ReLU(x)')
+
+## 11.1 Kerasによる回帰
 
 my_model = models.Sequential()
 my_model.add(layers.Dense(units=3, activation='relu', input_shape=[4]))
@@ -38,13 +48,19 @@ my_model.summary() # ネットワークの概要
 #> Trainable params: 19
 #> Non-trainable params: 0
 
+## 11.1 Kerasによる回帰
+
 my_model.compile(
     loss='mse',
     optimizer='rmsprop')
 
+## 11.1 Kerasによる回帰
+
 my_cb = callbacks.EarlyStopping(
     patience=20,
     restore_best_weights = True)
+
+## 11.1 Kerasによる回帰
 
 my_history = my_model.fit(
     x=X,
@@ -55,8 +71,12 @@ my_history = my_model.fit(
     callbacks=[my_cb],
     verbose=0)
 
+## 11.1 Kerasによる回帰
+
 tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch')
+
+## 11.1 Kerasによる回帰
 
 tmp.iloc[-1, ]
 #> loss        0.058252

@@ -1,3 +1,5 @@
+### 9.1.1 データの準備
+
 import statsmodels.api as sm
 my_data = sm.datasets.get_rdataset('iris', 'datasets').data
 my_data.head()
@@ -7,6 +9,8 @@ my_data.head()
 #> 2           4.7          3.2           1.3          0.2  setosa
 #> 3           4.6          3.1           1.5          0.2  setosa
 #> 4           5.0          3.6           1.4          0.2  setosa
+
+### 9.1.1 データの準備
 
 my_data.describe()
 #>        Sepal.Length  Sepal.Width  Petal.Length  Petal.Width

@@ -1,8 +1,12 @@
+### 8.7.1 ニューラルネットワークとは何か
+
 import numpy as np
 import matplotlib.pyplot as plt
 x = np.linspace(-6, 6, 100)
 y = 1 / (1 + np.exp(-x))
 plt.plot(x, y)
+
+### 8.7.2 ニューラルネットワークの訓練
 
 import pandas as pd
 from sklearn.neural_network import MLPRegressor
@@ -16,6 +20,8 @@ my_url = ('https://raw.githubusercontent.com'
 my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
+### 8.7.2 ニューラルネットワークの訓練
+
 my_pipeline = Pipeline([('sc', StandardScaler()),        # 標準化
                         ('mlp', MLPRegressor())])        # ニューラルネットワーク
 my_pipeline.fit(X, y)                                    # 訓練
@@ -23,12 +29,16 @@ my_pipeline.fit(X, y)                                    # 訓練
 my_scores = cross_val_score(my_pipeline, X, y,
                             scoring='neg_root_mean_squared_error')
 
+### 8.7.2 ニューラルネットワークの訓練
+
 y_ = my_pipeline.predict(X)
 mean_squared_error(y_, y)**0.5
 #> 0.23277167397113335 # RMSE（訓練）
 
 -my_scores.mean()
 #> 0.46383292352312744 # RMSE（検証）
+
+### 8.7.3 ニューラルネットワークのチューニング
 
 my_pipeline = Pipeline([
     ('sc', StandardScaler()),
@@ -47,6 +57,8 @@ my_model = my_search.best_estimator_ # 最良モデル
 
 my_search.best_params_               # チューニング結果
 #> {'mlp__activation': 'tanh', 'mlp__hidden_layer_sizes': 3}
+
+### 8.7.3 ニューラルネットワークのチューニング
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5

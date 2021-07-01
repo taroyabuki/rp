@@ -4,22 +4,36 @@ library(keras)
 library(tidyverse)
 c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
 
+### 11.3.1 データの形式
+
 dim(x_train)
 #> [1] 60000    28    28
 
+### 11.3.1 データの形式
+
 x_train[5, , ]
+
+### 11.3.1 データの形式
 
 plot(as.raster(x = x_train[5, , ],
                max = max(x_train)))
 
+### 11.3.1 データの形式
+
 head(y_train)
 #> [1] 5 0 4 1 9 2
+
+### 11.3.1 データの形式
 
 c(min(x_train), max(x_train))
 #> [1]   0 255
 
+### 11.3.1 データの形式
+
 x_train <- x_train / 255
 x_test  <- x_test  / 255
+
+### 11.3.1 データの形式
 
 my_index <- sample(1:60000, 6000)
 x_train <- x_train[my_index, , ]
@@ -41,6 +55,8 @@ my_model %>% compile(loss = "sparse_categorical_crossentropy",
 my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 
+### 11.3.2 多層パーセプトロン
+
 my_history <- my_model %>%
   fit(x = x_train,
       y = y_train,
@@ -52,8 +68,12 @@ my_history <- my_model %>%
 
 plot(my_history)
 
+### 11.3.2 多層パーセプトロン
+
 y_ <- my_model %>% predict_classes(x_test)
 table(y_, y_test)
+
+### 11.3.2 多層パーセプトロン
 
 #>    y_test
 #> y_     0    1    2    3    4    5    6    7    8    9
@@ -68,8 +88,12 @@ table(y_, y_test)
 #>   8    2   13   19   13    4   16    5    0  890    5
 #>   9    1    0    2    4   55    8    0   27    8  948
 
+### 11.3.2 多層パーセプトロン
+
 mean(y_ == y_test)
 #> [1] 0.9426000
+
+### 11.3.2 多層パーセプトロン
 
 my_model %>%
   evaluate(x = x_test, y = y_test)
@@ -102,6 +126,8 @@ my_model %>% compile(loss = "sparse_categorical_crossentropy",
 my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 
+#### 11.3.3.1 単純なCNN
+
 my_history <- my_model %>%
   fit(x = x_train2d,
       y = y_train,
@@ -112,6 +138,8 @@ my_history <- my_model %>%
       verbose = 0)
 
 plot(my_history)
+
+#### 11.3.3.1 単純なCNN
 
 my_model %>%
   evaluate(x = x_test2d, y = y_test)
@@ -140,6 +168,8 @@ my_model %>% compile(
 my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 
+#### 11.3.3.2 LeNet
+
 my_history <- my_model %>%
   fit(x = x_train2d,
       y = y_train,
@@ -150,6 +180,8 @@ my_history <- my_model %>%
       verbose = 0)
 
 plot(my_history)
+
+#### 11.3.3.2 LeNet
 
 my_model %>%
   evaluate(x = x_test2d, y = y_test)
@@ -175,6 +207,8 @@ head(my_result)
 #> 4 0.9971705  3 5 2036
 #> 5 0.9888211  1 6 2655
 #> 6 0.9857675  0 6 2119
+
+#### 11.3.3.3 補足：LeNetが自信満々で間違う例
 
 tmp <- my_result[1:5, ]$id
 my_labels = sprintf("%s (%s)", my_result[1:5, ]$y, tmp)

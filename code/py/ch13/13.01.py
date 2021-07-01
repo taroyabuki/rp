@@ -1,3 +1,5 @@
+## 13.1 主成分分析
+
 import numpy as np
 import pandas as pd
 from pca import pca
@@ -13,6 +15,8 @@ my_data = pd.DataFrame(
 my_model = pca(n_components=5)
 my_result = my_model.fit_transform(my_data) # 主成分分析の実行
 
+## 13.1 主成分分析
+
 my_result['PC'] # 主成分スコア
 #>          PC1        PC2 ...
 #> A  74.907282   7.010808 ...
@@ -22,7 +26,11 @@ my_result['PC'] # 主成分スコア
 #> E -17.837474   1.064998 ...
 #> F  -7.806303  -5.863266 ...
 
+## 13.1 主成分分析
+
 my_model.biplot(legend=False)
+
+## 13.1 主成分分析
 
 my_result['loadings']
 #>      language   english      math   science   society
@@ -32,8 +40,12 @@ my_result['loadings']
 #> PC4  0.764943 -0.471697 -0.007655 -0.418045  0.132455
 #> PC5 -0.447214 -0.447214 -0.447214 -0.447214 -0.447214
 
+## 13.1 主成分分析
+
 my_result['explained_var']
 #> array([0.88848331, 0.97962854, 0.99858005, 1.        , 1.        ])
+
+### 13.1.1 標準化＋主成分分析
 
 tmp = zscore(my_data, ddof=1) # 標準化
 my_result = my_model.fit_transform(tmp)
@@ -46,6 +58,8 @@ my_result['PC'] # 主成分スコア
 #> 1.0 -0.886186  0.110493 ...
 #> 1.0 -0.315858 -0.534976 ...
 
+### 13.1.2 補足：行列計算による再現
+
 tmp = my_data - my_data.mean()
 Z  = np.matrix(tmp)                       # 標準化しない場合
 #Z = np.matrix(tmp / my_data.std(ddof=1)) # √不偏分散で標準化する場合
@@ -56,6 +70,8 @@ w, v = np.linalg.eig(S) # 固有値と固有ベクトル
 Z @ v                   # 主成分スコア（結果は割愛）
 w.cumsum() / w.sum()    # 累積寄与率
 #> array([0.88848331, 0.97962854, 0.99858005, 1.        , 1.        ])
+
+### 13.1.2 補足：行列計算による再現
 
 u, d, v =  np.linalg.svd(Z, full_matrices=False)     # 特異値分解
 w = np.diag(d)

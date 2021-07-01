@@ -1,6 +1,10 @@
+### 12.1.1 日時
+
 import pandas as pd
 pd.to_datetime('2020-01-01')
 #> Timestamp('2020-01-01 00:00:00')
+
+### 12.1.2 等間隔の日時
 
 pd.date_range(start='2021-01-01', end='2023-01-01', freq='1A')
 #> DatetimeIndex(['2021-12-31', '2022-12-31'],

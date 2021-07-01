@@ -1,3 +1,5 @@
+### 13.2.1 階層的クラスタ分析
+
 import pandas as pd
 from scipy.cluster import hierarchy
 
@@ -11,12 +13,18 @@ my_result = hierarchy.linkage(
     metric='euclidean',
     method='complete')
 
+### 13.2.1 階層的クラスタ分析
+
 hierarchy.dendrogram(
     my_result,
     labels=my_data.index)
 
+### 13.2.1 階層的クラスタ分析
+
 hierarchy.cut_tree(my_result, 3)
 #> array([[0], [1], [0], [2]])
+
+### 13.2.2 階層的クラスタ分析とヒートマップ
 
 import pandas as pd
 import seaborn as sns
@@ -32,6 +40,8 @@ my_data = pd.DataFrame(
 sns.clustermap(my_data,
                z_score=1) # 列ごとの標準化
 
+### 13.2.3 非階層的クラスタ分析
+
 import pandas as pd
 from sklearn.cluster import KMeans
 
@@ -43,8 +53,12 @@ my_data = pd.DataFrame(
 my_result = KMeans(
     n_clusters=3).fit(my_data)
 
+### 13.2.3 非階層的クラスタ分析
+
 my_result.labels_
 #> array([1, 0, 1, 2], dtype=int32)
+
+### 13.2.4 クラスタ数の決定
 
 import pandas as pd
 import statsmodels.api as sm
@@ -58,6 +72,8 @@ my_df = pd.DataFrame({
     'k': k,
     'inertia': [KMeans(k).fit(my_data).inertia_ for k in range(1, 11)]})
 my_df.plot(x='k', style='o-', legend=False)
+
+### 13.2.5 主成分分析とクラスタ分析
 
 import seaborn as sns
 import statsmodels.api as sm

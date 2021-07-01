@@ -1,3 +1,5 @@
+### 3.5.1 ユークリッド距離
+
 import numpy as np
 from scipy.spatial import distance
 
@@ -11,11 +13,15 @@ distance.euclidean(A, B)
 distance.euclidean(A, C)
 #> 23.0
 
+### 3.5.2 マンハッタン距離
+
 distance.cityblock(A, B)
 #> 24
 
 distance.cityblock(A, C)
 #> 31
+
+### 3.5.3 コサイン類似度
 
 1 - distance.cosine(A, B)
 #> 0.8169678632647616
@@ -23,11 +29,15 @@ distance.cityblock(A, C)
 1 - distance.cosine(A, C)
 #> -0.032651157422416865
 
+### 3.5.4 相関係数
+
 1 - distance.correlation(A, B)
 #> 0.8824975032927698
 
 1 - distance.correlation(A, C)
 #> -0.032651157422416865
+
+#### 3.5.4.1 データフレームを使う方法
 
 # 小数点以下は3桁表示
 np.set_printoptions(precision=3)

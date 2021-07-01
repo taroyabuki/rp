@@ -1,3 +1,5 @@
+### 9.5.1 欠損のあるデータの準備
+
 import numpy as np
 import statsmodels.api as sm
 import xgboost
@@ -22,12 +24,16 @@ my_data.describe() # countの値が135の変数に，150-135=15個の欠損が�
 
 X, y = my_data.iloc[:, 0:4], my_data.Species
 
+### 9.5.2 方針1：欠損を埋めて学習する．
+
 my_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='median')), # 欠損を中央値で埋める．
     ('tree', tree.DecisionTreeClassifier())])      # パラメータはデフォルトのまま
 my_scores = cross_val_score(my_pipeline, X, y, cv=LeaveOneOut(), n_jobs=-1)
 my_scores.mean()
 #> 0.9333333333333333
+
+### 9.5.3 方針2：欠損があっても使える手法で学習する．
 
 my_scores = cross_val_score(xgboost.XGBClassifier(), X, y, cv=LeaveOneOut())
 my_scores.mean()

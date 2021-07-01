@@ -10,11 +10,15 @@ my_model$results
 #> 2 7 16.19047 0.6601173 12.68464 3.165330 0.09990158 2.329326
 #> 3 9 16.30276 0.6556700 12.84811 3.367423 0.09645747 2.471620
 
+## 7.7 パラメータチューニング
+
 my_params <- expand.grid(k = 1:15) # data.frame(k = 1:15)も可
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                   tuneGrid = my_params,
                   trControl = trainControl(method = "LOOCV"))
+
+## 7.7 パラメータチューニング
 
 head(my_model$results)
 #>   k     RMSE  Rsquared      MAE
@@ -25,16 +29,24 @@ head(my_model$results)
 #> 5 5 15.79924 0.6169267 11.96067
 #> 6 6 15.98720 0.6079396 12.26667
 
+## 7.7 パラメータチューニング
+
 ggplot(my_model)
+
+## 7.7 パラメータチューニング
 
 my_model$bestTune
 #>   k
 #> 5 5
 
+## 7.7 パラメータチューニング
+
 my_model$results %>%
   filter(RMSE == min(RMSE))
 #>   k     RMSE  Rsquared      MAE
 #> 1 5 15.79924 0.6169267 11.96067
+
+## 7.7 パラメータチューニング
 
 y  <- my_data$dist
 y_ <- my_model %>% predict(my_data)
@@ -59,6 +71,8 @@ my_loocv <- function(k) {
 }
 
 my_results <- 1:15 %>% map_dfr(my_loocv)
+
+### 7.7.1 補足：ハイパーパラメータとRMSE（訓練）
 
 my_results %>%
   pivot_longer(-k) %>%

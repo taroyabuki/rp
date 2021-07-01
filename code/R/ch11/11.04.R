@@ -7,6 +7,8 @@ library(tidyverse)
 h2o.init()
 h2o.no_progress()
 
+### 11.4.1 H2Oの起動と停止
+
 h2o.shutdown(prompt = FALSE)
 
 ### 11.4.2 H2Oのデータフレーム
@@ -17,6 +19,8 @@ my_data <- read_csv(my_url)
 my_frame <- as.h2o(my_data) # 通常のデータフレームをH2OFrameに変換する．
 # あるいは
 my_frame <- h2o.importFile(my_url, header=TRUE) # データを読み込む（1行目はラベル）．
+
+### 11.4.2 H2Oのデータフレーム
 
 my_frame
 #>    LPRICE2 WRAIN DEGREES HRAIN ...
@@ -40,8 +44,12 @@ my_model <- h2o.automl(
     training_frame = my_frame,
     max_runtime_secs = 60)
 
+### 11.4.3 AutoMLによる回帰
+
 min(my_model@leaderboard$rmse)
 #> [1] 0.2922861
+
+### 11.4.3 AutoMLによる回帰
 
 tmp <- my_model %>%
   predict(my_frame) %>%
@@ -58,6 +66,8 @@ my_index <- sample(1:60000, 6000)
 x_train <- x_train[my_index, , ]
 y_train <- y_train[my_index]
 
+### 11.4.4 AutoMLによる分類
+
 tmp <- x_train %>%
   array_reshape(c(-1, 28 * 28)) %>%
   as.data.frame
@@ -69,14 +79,20 @@ tmp <- x_test %>%
   as.data.frame
 my_test <- as.h2o(tmp)
 
+### 11.4.4 AutoMLによる分類
+
 my_model <- h2o.automl(
     y = "y",
     training_frame = my_train,
     max_runtime_secs = 120)
 
+### 11.4.4 AutoMLによる分類
+
 min(my_model@leaderboard$
     mean_per_class_error)
 #> [1] 0.0806190885648608
+
+### 11.4.4 AutoMLによる分類
 
 tmp <- my_model %>%
   predict(my_test) %>%

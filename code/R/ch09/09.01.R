@@ -10,6 +10,8 @@ head(my_data)
 #> 5          5.0         3.6          1.4         0.2  setosa
 #> 6          5.4         3.9          1.7         0.4  setosa
 
+### 9.1.1 データの準備
+
 psych::describe(my_data)
 #>              vars   n mean   sd median trimmed  mad min max range ...
 #> Sepal.Length    1 150 5.84 0.83   5.80    5.81 1.04 4.3 7.9   3.6 ...

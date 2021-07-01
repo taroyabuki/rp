@@ -17,10 +17,14 @@ head(iris)
 hist(iris$Sepal.Length)
 ```
 
+### 4.2.1 ヒストグラム
+
 ```{r}
 x <- c(10, 20, 30)
 hist(x, breaks = 2) # 階級数は2
 ```
+
+### 4.2.1 ヒストグラム
 
 ```{r}
 x <- iris$Sepal.Length
@@ -55,6 +59,8 @@ my_df %>% select(mean, sd, se)
 #> Petal.Width  1.20 0.76 0.06
 ```
 
+### 4.2.4 棒グラフとエラーバー
+
 ```{r}
 tmp = rownames(my_df)
 my_df %>% ggplot(aes(x = factor(tmp, levels = tmp), y = mean)) +
@@ -62,6 +68,8 @@ my_df %>% ggplot(aes(x = factor(tmp, levels = tmp), y = mean)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se)) +
   xlab(NULL)
 ```
+
+### 4.2.4 棒グラフとエラーバー
 
 ```{r}
 my_group <- iris %>% group_by(Species)       # 品種ごとに，
@@ -87,12 +95,16 @@ head(my_df)
 #> 6 versicolor Sepal.Width  2.77  0.0444
 ```
 
+### 4.2.4 棒グラフとエラーバー
+
 ```{r}
 my_df %>%
   ggplot(aes(x = Species, y = value, fill = name)) +
   geom_col(position = "dodge") +
   geom_errorbar(aes(ymin = value - se, ymax = value + se), position = "dodge")
 ```
+
+### 4.2.4 棒グラフとエラーバー
 
 ```{r}
 # 各変数の平均
@@ -142,11 +154,15 @@ curve(x^3 - x, -2, 2)
   描画要素2(オプション) + ...
 ```
 
+### 4.2.7 ggplot2 (R)
+
 ```{r}
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_histogram(bins = 8)
 ```
+
+### 4.2.7 ggplot2 (R)
 
 ```{r}
 iris %>%
@@ -154,6 +170,8 @@ iris %>%
              y = Sepal.Width)) +
   geom_point()
 ```
+
+### 4.2.7 ggplot2 (R)
 
 ```{r}
 iris %>%
@@ -166,6 +184,8 @@ iris %>%
   xlab(NULL)
 ```
 
+### 4.2.7 ggplot2 (R)
+
 ```{r}
 library(ggmosaic)
 my_df <- data.frame(
@@ -177,6 +197,8 @@ my_df %>%
     aes(x = product(w_Sepal,
                     Species)))
 ```
+
+### 4.2.7 ggplot2 (R)
 
 ```{r}
 f <- function(x) { x^3 - x }

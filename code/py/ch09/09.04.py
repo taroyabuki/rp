@@ -1,3 +1,5 @@
+### 9.4.1 ランダムフォレスト
+
 import pandas as pd
 import statsmodels.api as sm
 import xgboost
@@ -16,6 +18,8 @@ my_search.best_params_
 
 my_search.cv_results_['mean_test_score']
 #> array([0.96      , 0.96      , 0.95333333])
+
+### 9.4.2 ブースティング
 
 my_search = GridSearchCV(
     xgboost.XGBClassifier(),
@@ -37,6 +41,8 @@ my_search.best_params_
 
 my_search.best_score_
 #> 0.9533333333333334
+
+### 9.4.3 変数の重要度
 
 my_model = RandomForestClassifier().fit(X, y)
 tmp = pd.Series(my_model.feature_importances_, index=X.columns)

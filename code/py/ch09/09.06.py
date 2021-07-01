@@ -1,3 +1,5 @@
+### 9.6.1 K最近傍法
+
 import statsmodels.api as sm
 from sklearn.model_selection import cross_val_score, LeaveOneOut
 from sklearn.neighbors import KNeighborsClassifier
@@ -9,6 +11,8 @@ X, y = my_data.iloc[:, 0:4], my_data.Species
 my_scores = cross_val_score(KNeighborsClassifier(), X, y, cv=LeaveOneOut())
 my_scores.mean()
 #> 0.9666666666666667
+
+### 9.6.2 ニューラルネットワーク
 
 import statsmodels.api as sm
 from sklearn.model_selection import cross_val_score, LeaveOneOut

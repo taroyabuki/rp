@@ -11,6 +11,8 @@ my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
 # 可視化の準備
 f <- function(x) { my_model %>% predict(data.frame(speed = x))}
 
+### 7.5.2 K最近傍法の実践
+
 my_data %>%
   ggplot(aes(x = speed,
              y = dist,
@@ -19,6 +21,8 @@ my_data %>%
   stat_function(
     fun = f,
     mapping = aes(color = "model"))
+
+### 7.5.2 K最近傍法の実践
 
 y  <- my_data$dist
 y_ <- my_model %>% predict(my_data)

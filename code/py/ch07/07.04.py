@@ -1,3 +1,5 @@
+### 7.4.1 RMSE
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
@@ -12,6 +14,8 @@ my_model.fit(X, y)
 y_ = my_model.predict(X)
 my_data['y_'] = y_
 
+### 7.4.1 RMSE
+
 pd.options.display.float_format = (
   '{:.2f}'.format)
 my_data['residual'] = y - y_
@@ -23,9 +27,13 @@ my_data.head()
 #> 3      7    22  9.95     12.05
 #> 4      8    16 13.88      2.12
 
+### 7.4.1 RMSE
+
 ax = my_data.plot(x='speed', y='dist', style='o', legend=False)
 my_data.plot(x='speed', y='y_', style='-', legend=False, ax=ax)
 ax.vlines(x=X, ymin=y, ymax=y_, linestyles='dotted')
+
+### 7.4.1 RMSE
 
 mean_squared_error(y, y_)**0.5
 # あるいは
@@ -33,13 +41,19 @@ mean_squared_error(y, y_)**0.5
 
 #> 15.068855995791381
 
+### 7.4.2 決定係数
+
 my_model.score(X, y)
 # あるいは
 r2_score(y_true=y, y_pred=y_)
 #> 0.6510793807582509
 
+### 7.4.2 決定係数
+
 np.corrcoef(y, y_)[0, 1]**2
 #> 0.6510793807582511
+
+### 7.4.2 決定係数
 
 my_test = my_data[:3]
 X = my_test[['speed']]
@@ -54,6 +68,8 @@ r2_score(y_true=y, y_pred=y_)
 np.corrcoef(y, y_)[0, 1]**2
 #> 0.0769230769230769 # 決定係数6
 
+### 7.4.3 当てはまりの良さの指標の問題点
+
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
@@ -66,12 +82,16 @@ my_idx = [1, 10, 26, 33, 38, 43]
 my_sample = my_data.iloc[my_idx, ]
 X, y = my_sample[['speed']], my_sample['dist']
 
+### 7.4.3 当てはまりの良さの指標の問題点
+
 d = 5
 X5 = PolynomialFeatures(d).fit_transform(X) # Xの1乗から5乗の変数
 
 my_model = LinearRegression()
 my_model.fit(X5, y)
 y_ = my_model.predict(X5)
+
+### 7.4.3 当てはまりの良さの指標の問題点
 
 ((y - y_)**2).mean()**0.5
 #> 7.725744805546204e-07 # RMSE
@@ -81,6 +101,8 @@ my_model.score(X5, y)
 
 np.corrcoef(y, y_)[0, 1]**2
 #> 0.9999999999999991 # 決定係数6
+
+### 7.4.3 当てはまりの良さの指標の問題点
 
 tmp = pd.DataFrame({'speed':np.linspace(min(my_data.speed),
                                         max(my_data.speed),

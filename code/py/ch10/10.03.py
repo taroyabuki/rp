@@ -1,3 +1,5 @@
+## 10.3 タイタニック
+
 import graphviz
 import pandas as pd
 from sklearn import tree
@@ -10,6 +12,8 @@ my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/titanic.csv')
 my_data = pd.read_csv(my_url)
 
+## 10.3 タイタニック
+
 my_data.head()
 #>   Class   Sex    Age Survived
 #> 0   1st  Male  Child      Yes
@@ -18,6 +22,8 @@ my_data.head()
 #> 3   1st  Male  Child      Yes
 #> 4   1st  Male  Child      Yes
 
+### 10.3.2 決定木の訓練
+
 X, y = my_data.iloc[:, 0:3], my_data.Survived
 
 my_pipeline = Pipeline([
@@ -25,6 +31,8 @@ my_pipeline = Pipeline([
     ('tree', tree.DecisionTreeClassifier(max_depth=2,
                                          min_impurity_decrease=0.01))])
 my_pipeline.fit(X, y)
+
+### 10.3.3 決定木の描画
 
 my_enc  = my_pipeline.named_steps['ohe']  # パイプラインからエンコーダを取り出す．
 my_tree = my_pipeline.named_steps['tree'] # パイプラインから木を取り出す．
@@ -37,12 +45,16 @@ my_dot = tree.export_graphviz(
     filled=True)
 graphviz.Source(my_dot)
 
+### 10.3.4 決定木の評価
+
 my_scores = cross_val_score(
     my_pipeline, X, y,
     cv=LeaveOneOut(),
     n_jobs=-1)
 my_scores.mean()
 #> 0.7832803271240345
+
+### 10.3.4 決定木の評価
 
 tmp = pd.DataFrame(
     my_pipeline.predict_proba(X),

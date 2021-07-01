@@ -1,3 +1,5 @@
+## 7.7 パラメータチューニング
+
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
@@ -16,9 +18,13 @@ my_search = GridSearchCV(estimator=KNeighborsRegressor(),
                          scoring='neg_mean_squared_error')
 my_search.fit(X, y)
 
+## 7.7 パラメータチューニング
+
 tmp = my_search.cv_results_                # チューニングの詳細
 my_scores = (-tmp['mean_test_score'])**0.5 # RMSE
 my_results = pd.DataFrame(tmp['params']).assign(validation = my_scores)
+
+## 7.7 パラメータチューニング
 
 my_results.head()
 #>    n_neighbors  validation
@@ -28,20 +34,30 @@ my_results.head()
 #> 3            4   16.198804
 #> 4            5   16.073083
 
+## 7.7 パラメータチューニング
+
 my_results.plot(x='n_neighbors',
                 style='o-',
                 ylabel='RMSE')
 
+## 7.7 パラメータチューニング
+
 my_search.best_params_
 #> {'n_neighbors': 5}
 
+## 7.7 パラメータチューニング
+
 (-my_search.best_score_)**0.5
 #> 16.07308308943869
+
+## 7.7 パラメータチューニング
 
 my_model = my_search.best_estimator_
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5
 #> 13.087184571174962
+
+### 7.7.1 補足：ハイパーパラメータとRMSE（訓練）
 
 import pandas as pd
 import statsmodels.api as sm
@@ -64,6 +80,8 @@ def my_loocv(k):
                      index=['n_neighbors', 'validation', 'training'])
 
 my_results = pd.Series(range(1, 16)).apply(my_loocv)
+
+### 7.7.1 補足：ハイパーパラメータとRMSE（訓練）
 
 my_results.plot(x='n_neighbors',
                 style='o-',

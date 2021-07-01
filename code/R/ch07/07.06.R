@@ -9,11 +9,15 @@ my_model$results
 #>   intercept    RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
 #> 1      TRUE 16.0206 0.6662176 12.14701 2.518604 0.09249158 1.920564
 
+### 7.6.3 検証の実践
+
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm",
                   trControl = trainControl(method = "cv", number = 5))
 my_model$results                 
 #>   intercept     RMSE  Rsquared      MAE  RMSESD RsquaredSD    MAESD
 #> 1      TRUE 15.06708 0.6724501 12.12448 4.75811  0.1848932 3.052435
+
+### 7.6.3 検証の実践
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm",
                   trControl = trainControl(method="LOOCV"))
@@ -76,6 +80,8 @@ y_ <- my_model$pred$pred
 mean((y - y_)^2)**0.5
 #> [1] 15.69731
 
+#### 7.6.5.4 予測性能の指標（RとPythonで同じ結果を得る）
+
 mean(((y - y_)^2)**0.5)
 #> [1] 12.05918
 
@@ -92,11 +98,15 @@ my_knn_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                       tuneGrid = data.frame(k = 5),
                       trControl = trainControl(method = "LOOCV"))
 
+### 7.6.6 補足：検証による手法の比較
+
 my_lm_model$results$RMSE
 #> [1] 15.69731 # 線形回帰分析
 
 my_knn_model$results$RMSE
 #> [1] 15.79924 # K最近傍法
+
+### 7.6.6 補足：検証による手法の比較
 
 y     <- my_data$dist
 y_lm  <- my_lm_model$pred$pred
@@ -115,7 +125,11 @@ head(my_df)
 #> 5   5.085308   9.0000
 #> 6  67.615888 112.8906
 
+### 7.6.6 補足：検証による手法の比較
+
 boxplot(my_df, ylab = "r^2")
+
+### 7.6.6 補足：検証による手法の比較
 
 t.test(x = my_df$lm, y = my_df$knn,
        conf.level = 0.95,

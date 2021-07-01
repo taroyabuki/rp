@@ -6,34 +6,48 @@ library(tidyverse)
 c(c(x_train, y_train), c(x_test, y_test)) %<-% dataset_mnist()
 ```
 
+### 11.3.1 データの形式
+
 ```{r}
 dim(x_train)
 #> [1] 60000    28    28
 ```
 
+### 11.3.1 データの形式
+
 ```{r}
 x_train[5, , ]
 ```
+
+### 11.3.1 データの形式
 
 ```{r}
 plot(as.raster(x = x_train[5, , ],
                max = max(x_train)))
 ```
 
+### 11.3.1 データの形式
+
 ```{r}
 head(y_train)
 #> [1] 5 0 4 1 9 2
 ```
+
+### 11.3.1 データの形式
 
 ```{r}
 c(min(x_train), max(x_train))
 #> [1]   0 255
 ```
 
+### 11.3.1 データの形式
+
 ```{r}
 x_train <- x_train / 255
 x_test  <- x_test  / 255
 ```
+
+### 11.3.1 データの形式
 
 ```{r}
 my_index <- sample(1:60000, 6000)
@@ -59,6 +73,8 @@ my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 ```
 
+### 11.3.2 多層パーセプトロン
+
 ```{r}
 my_history <- my_model %>%
   fit(x = x_train,
@@ -72,10 +88,14 @@ my_history <- my_model %>%
 plot(my_history)
 ```
 
+### 11.3.2 多層パーセプトロン
+
 ```{r}
 y_ <- my_model %>% predict_classes(x_test)
 table(y_, y_test)
 ```
+
+### 11.3.2 多層パーセプトロン
 
 ```{r}
 #>    y_test
@@ -92,10 +112,14 @@ table(y_, y_test)
 #>   9    1    0    2    4   55    8    0   27    8  948
 ```
 
+### 11.3.2 多層パーセプトロン
+
 ```{r}
 mean(y_ == y_test)
 #> [1] 0.9426000
 ```
+
+### 11.3.2 多層パーセプトロン
 
 ```{r}
 my_model %>%
@@ -134,6 +158,8 @@ my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 ```
 
+#### 11.3.3.1 単純なCNN
+
 ```{r}
 my_history <- my_model %>%
   fit(x = x_train2d,
@@ -146,6 +172,8 @@ my_history <- my_model %>%
 
 plot(my_history)
 ```
+
+#### 11.3.3.1 単純なCNN
 
 ```{r}
 my_model %>%
@@ -178,6 +206,8 @@ my_cb <- callback_early_stopping(patience = 5,
                                  restore_best_weights = TRUE)
 ```
 
+#### 11.3.3.2 LeNet
+
 ```{r}
 my_history <- my_model %>%
   fit(x = x_train2d,
@@ -190,6 +220,8 @@ my_history <- my_model %>%
 
 plot(my_history)
 ```
+
+#### 11.3.3.2 LeNet
 
 ```{r}
 my_model %>%
@@ -219,6 +251,8 @@ head(my_result)
 #> 5 0.9888211  1 6 2655
 #> 6 0.9857675  0 6 2119
 ```
+
+#### 11.3.3.3 補足：LeNetが自信満々で間違う例
 
 ```{r}
 tmp <- my_result[1:5, ]$id

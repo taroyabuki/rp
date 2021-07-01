@@ -1,3 +1,5 @@
+### 4.4.1 検定
+
 from statsmodels.stats.proportion import binom_test, proportion_confint
 
 binom_test(count=2,                 # 当たった回数
@@ -7,6 +9,8 @@ binom_test(count=2,                 # 当たった回数
                                     # 左片側検定なら'smaller'
                                     # 右片側検定なら'larger'
 #> 0.03646166155263999
+
+#### 4.4.1.1 補足：p値とは何か
 
 t = 4 / 10                        # 当たる確率
 n = 15                            # くじを引いた回数
@@ -21,6 +25,8 @@ ax = my_data.plot(x='x', style='o', ylabel='probability', legend=False)
 ax.hlines(y=my_pr2, xmin=0, xmax=15)    # 水平線
 ax.vlines(x=x,      ymin=0, ymax=my_pr) # 垂直線
 
+### 4.4.2 推定
+
 a = 0.05
 proportion_confint(
     count=2, # 当たった回数
@@ -29,6 +35,8 @@ proportion_confint(
     method='binom_test')
 #> (0.024225732468536626,
 #>  0.3967139842509865)
+
+### 4.4.2 推定
 
 a = 0.05 # 有意水準
 tmp = np.linspace(0, 1, 100)
@@ -39,6 +47,8 @@ my_df = pd.DataFrame({
     'p': [binom_test(count=2, nobs=15, prop=t) for t in tmp]}) # p値
 
 my_df.plot(x = 't', legend=None, xlabel=r'$\theta$', ylabel=r'p-value')
+
+### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
 
 from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
 
@@ -59,6 +69,8 @@ d.ttest_mean(alternative=alt)[1] # p値
 d.tconfint_mean(alpha=a, alternative=alt) # 信頼区間
 #> (-3.9955246743198867, -1.3644753256801117)
 
+### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
+
 c = CompareMeans(DescrStatsW(X), DescrStatsW(Y)) # 対標本でない場合
 
 ve = 'pooled' # 等分散を仮定する（デフォルト）．仮定しないなら'unequal'．
@@ -68,10 +80,14 @@ c.ttest_ind(alternative=alt, usevar=ve)[1] # p値
 c.tconfint_diff(alpha=a, alternative=alt, usevar=ve) # 信頼区間
 #> (-4.170905570517185, -1.1890944294828283)
 
+### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
+
 import pandas as pd
 my_url = ('https://raw.githubusercontent.com/taroyabuki/'
           '/fromzero/master/data/smoker.csv')
 my_data = pd.read_csv(my_url)
+
+### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 my_data.head()
 #>   alive smoker
@@ -80,6 +96,8 @@ my_data.head()
 #> 2   Yes     No
 #> 3   Yes     No
 #> 4   Yes     No
+
+### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 my_table = pd.crosstab(
     my_data['alive'],
@@ -90,9 +108,13 @@ my_table
 #> No      117   54
 #> Yes     950  348
 
+### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
+
 from scipy.stats import chi2_contingency
 chi2_contingency(my_table, correction = False)[1]
 #> 0.18860725715300422
+
+#### 4.4.5.1 15回引いて2回当たったくじ
 
 X = [0] * 13 + [1] * 2 # 手順1
 X
@@ -109,12 +131,18 @@ n = 10**5
 result = [sum(np.random.choice(X, len(X), replace=True)) # 手順4
             for _ in range(n)]
 
+#### 4.4.5.1 15回引いて2回当たったくじ
+
 import matplotlib.pyplot as plt
 plt.hist(result,
          bins=range(0, 16))
 
+#### 4.4.5.1 15回引いて2回当たったくじ
+
 np.quantile(result, [0.025, 0.975])
 #> array([0., 5.])
+
+#### 4.4.5.2 平均の差の信頼区間
 
 import numpy as np
 X = [32.1, 26.2, 27.5, 31.8, 32.1, 31.2, 30.1, 32.4, 32.3, 29.9, 29.6,
@@ -129,7 +157,11 @@ result = [np.random.choice(Z, len(Z), replace=True).mean() for _ in range(n)]
 np.quantile(result, [0.025, 0.975])
 #> array([-3.88666667, -1.55333333])
 
+#### 4.4.5.2 平均の差の信頼区間
+
 plt.hist(result, bins='sturges')
+
+#### 4.4.5.2 平均の差の信頼区間
 
 result = [np.random.choice(X, len(X), replace=True).mean() -
           np.random.choice(Y, len(Y), replace=True).mean()

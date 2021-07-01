@@ -1,3 +1,5 @@
+### 9.3.1 混同行列
+
 import pandas as pd
 import statsmodels.api as sm
 from sklearn import tree
@@ -14,6 +16,8 @@ confusion_matrix(y_true=y, y_pred=y_)
 #>        [ 0, 49,  1],
 #>        [ 0,  5, 45]])
 
+### 9.3.2 正解率（訓練）
+
 my_model.score(X, y)
 # あるいは
 y_ = my_model.predict(X)
@@ -21,8 +25,12 @@ y_ = my_model.predict(X)
 
 #> 0.96
 
+### 9.3.3 正解率（検証）
+
 cross_val_score(my_model, X, y, cv=LeaveOneOut()).mean()
 #> 0.9533333333333334
+
+### 9.3.4 パラメータチューニング
 
 my_search = GridSearchCV(estimator=tree.DecisionTreeClassifier(),
                          param_grid={'max_depth':range(1, 11)},
@@ -30,6 +38,8 @@ my_search = GridSearchCV(estimator=tree.DecisionTreeClassifier(),
                          n_jobs=-1).fit(X, y)
 [my_search.best_params_, my_search.best_score_]
 #> [{'max_depth': 2}, 0.9533333333333334]
+
+### 9.3.5 補足：木の複雑さの制限
 
 my_params = {
     'max_depth':range(2, 6),
@@ -56,6 +66,8 @@ my_results[my_results.Accuracy == my_results.Accuracy.max()] # 正解率（検�
 #> 37          4                 5                 20  0.973333
 #> 50          5                 5                  2  0.973333
 #> 51          5                 5                 20  0.973333
+
+### 9.3.5 補足：木の複雑さの制限
 
 my_model = my_search.best_estimator_
 my_dot = tree.export_graphviz(

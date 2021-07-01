@@ -17,6 +17,8 @@ psych::describe(tmp)
 #> HRAIN      6 38  137.00  66.74  120.50  132.19  59.30   38.00  292.00 ...
 #> TIME_SV    7 38   12.50  11.11   12.50   12.50  14.08   -6.00   31.00 ...
 
+## 8.1 ワインの生育条件と価格
+
 my_data <- na.omit(tmp[, -c(1, 2)])
 head(my_data)
 #>    LPRICE2 WRAIN DEGREES ...
@@ -27,10 +29,16 @@ head(my_data)
 #> 7 -1.71655   582 16.4167 ...
 #> 8 -0.41800   485 17.4833 ...
 
+## 8.1 ワインの生育条件と価格
+
 nrow(my_data)
 #> [1] 27
 
+## 8.1 ワインの生育条件と価格
+
 my_data %>% write_csv("wine.csv")
+
+## 8.1 ワインの生育条件と価格
 
 #my_data <- read_csv("wine.csv") # 作ったファイルを使う場合
 my_url <- str_c("https://raw.githubusercontent.com",

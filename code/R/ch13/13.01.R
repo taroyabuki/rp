@@ -11,6 +11,8 @@ my_data <- data.frame(
   row.names = c("A", "B", "C", "D", "E", "F"))
 my_result <- my_data %>% prcomp # 主成分分析の実行
 
+## 13.1 主成分分析
+
 my_result$x # 主成分スコア
 #>          PC1        PC2 ...
 #> A -74.907282  -7.010808 ...
@@ -20,9 +22,13 @@ my_result$x # 主成分スコア
 #> E  17.837474  -1.064998 ...
 #> F   7.806303   5.863266 ...
 
+## 13.1 主成分分析
+
 my_result %>% ggbiplot::ggbiplot(
   labels = row.names(my_data),
   scale = 0)
+
+## 13.1 主成分分析
 
 my_result$rotation
 #>                 PC1         PC2         PC3          PC4       PC5
@@ -31,6 +37,8 @@ my_result$rotation
 #> math     -0.8872612 -0.09764267 -0.05634538 -0.007654992 0.4472136
 #> science   0.1301984  0.70266673  0.33844622 -0.418045446 0.4472136
 #> society   0.2452041 -0.55943466  0.63981523  0.132454751 0.4472136
+
+## 13.1 主成分分析
 
 summary(my_result)
 #> Importance of components:
@@ -67,6 +75,8 @@ tmp <- eigen(S)                      # 固有値と固有ベクトル
 Z %*% tmp$vectors                    # 主成分スコア（結果は割愛）
 cumsum(tmp$values) / sum(tmp$values) # 累積寄与率
 #> [1] 0.8884833 0.9796285 0.9985801 1.0000000 1.0000000
+
+### 13.1.2 補足：行列計算による再現
 
 tmp <- svd(Z)                                                     # 特異値分解
 u <- tmp$u

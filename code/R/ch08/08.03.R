@@ -13,11 +13,15 @@ my_data %>%
   stat_summary(fun = mean, geom = "point", size = 3) +
   xlab(NULL)
 
+## 8.3 標準化
+
 my_model <- train(
   form = LPRICE2 ~ .,
   data = my_data,
   method = "lm",
   preProcess = c("center", "scale"))
+
+## 8.3 標準化
 
 coef(my_model$finalModel) %>%
   as.data.frame
@@ -27,6 +31,8 @@ coef(my_model$finalModel) %>%
 #> DEGREES      0.4063194
 #> HRAIN       -0.2820746
 #> TIME_SV      0.1966549
+
+## 8.3 標準化
 
 my_test <- data.frame(
   WRAIN = 500, DEGREES = 17,

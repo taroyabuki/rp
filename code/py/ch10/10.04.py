@@ -1,8 +1,12 @@
+## 10.4 ロジスティック回帰
+
 import numpy as np
 x = np.arange(-6, 6, 0.1)
 y = 1 / (1 + np.exp(-x))
 import matplotlib.pyplot as plt
 plt.plot(x, y)
+
+## 10.4 ロジスティック回帰
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -21,6 +25,8 @@ my_pipeline = Pipeline([('ohe', OneHotEncoder(drop='first')),
                         ('lr', LogisticRegression(penalty='none'))])
 my_pipeline.fit(X, y)
 
+## 10.4 ロジスティック回帰
+
 my_ohe = my_pipeline.named_steps.ohe
 my_lr  = my_pipeline.named_steps.lr
 
@@ -36,6 +42,8 @@ pd.Series(my_lr.coef_[0],
 #> x1_Male    -2.420090
 #> x2_Child    1.061531
 #> dtype: float64
+
+## 10.4 ロジスティック回帰
 
 my_scores = cross_val_score(
     my_pipeline, X, y,

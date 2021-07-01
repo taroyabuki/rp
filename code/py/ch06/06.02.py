@@ -7,12 +7,16 @@ iris
 #> 0           5.1          3.5           1.4          0.2  setosa
 #> （以下省略）
 
+#### 6.2.2.2 Python
+
 import seaborn as sns
 iris = sns.load_dataset('iris')
 iris.head()
 #>    sepal_length  sepal_width  petal_length  petal_width species
 #> 0           5.1          3.5           1.4          0.2  setosa
 #> （以下省略）
+
+#### 6.2.2.2 Python
 
 import pandas as pd
 from sklearn.datasets import load_iris

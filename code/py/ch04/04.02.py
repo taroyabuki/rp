@@ -1,3 +1,5 @@
+## 4.2 データの可視化
+
 import statsmodels.api as sm
 iris = sm.datasets.get_rdataset('iris', 'datasets').data
 iris.head()
@@ -8,22 +10,34 @@ iris.head()
 #> 3           4.6          3.1           1.5          0.2  setosa
 #> 4           5.0          3.6           1.4          0.2  setosa
 
+### 4.2.1 ヒストグラム
+
 iris.hist('Sepal.Length')
+
+### 4.2.1 ヒストグラム
 
 import pandas as pd
 my_df = pd.DataFrame({'x':[10, 20, 30]})
 my_df.hist('x', bins=2) # 階級数は2
+
+### 4.2.1 ヒストグラム
 
 x = iris['Sepal.Length']
 tmp = np.linspace(min(x), max(x), 10)
 iris.hist('Sepal.Length',
           bins=tmp.round(2))
 
+### 4.2.2 散布図
+
 iris.plot('Sepal.Length',
           'Sepal.Width',
           kind='scatter')
 
+### 4.2.3 箱ひげ図
+
 iris.boxplot()
+
+### 4.2.4 棒グラフとエラーバー
 
 import pandas as pd
 pd.options.display.float_format = (
@@ -39,8 +53,12 @@ my_df
 #> Petal.Length  3.76 1.77 0.14
 #> Petal.Width   1.20 0.76 0.06
 
+### 4.2.4 棒グラフとエラーバー
+
 import matplotlib.pyplot as plt
 my_df.plot(y='mean', kind='bar', yerr='se', capsize=10)
+
+### 4.2.4 棒グラフとエラーバー
 
 my_group = iris.groupby('Species')                    # 品種ごとに，
 my_df = my_group.agg('mean')                          # 各変数の，平均と
@@ -52,7 +70,11 @@ my_se
 #> versicolor          0.07         0.04          0.07         0.03
 #> virginica           0.09         0.05          0.08         0.04
 
+### 4.2.4 棒グラフとエラーバー
+
 my_group.agg('mean').plot(kind='bar', yerr=my_se, capsize=5)
+
+### 4.2.5 モザイクプロット
 
 import pandas as pd
 from statsmodels import graphics
@@ -73,6 +95,8 @@ my_table
 
 graphics.mosaicplot.mosaic(
   my_df, index=['Species', 'w_Sepal'])
+
+### 4.2.6 関数のグラフ
 
 import matplotlib.pyplot as plt
 import numpy as np

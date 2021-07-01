@@ -9,9 +9,13 @@ my_url <- str_c("https://raw.githubusercontent.com",
 tmp <- read_csv(my_url)
 ```
 
+## 11.1 Kerasによる回帰
+
 ```{r}
 my_data <- tmp[sample(nrow(tmp)), ]
 ```
+
+## 11.1 Kerasによる回帰
 
 ```{r}
 X <- my_data %>%
@@ -19,9 +23,13 @@ X <- my_data %>%
 y <- my_data$LPRICE2
 ```
 
+## 11.1 Kerasによる回帰
+
 ```{r}
 curve(activation_relu(x), -3, 3)
 ```
+
+## 11.1 Kerasによる回帰
 
 ```{r}
 my_model <- keras_model_sequential() %>%
@@ -32,17 +40,23 @@ summary(my_model) # ネットワークの概要
 # 割愛（Pythonの結果を参照）
 ```
 
+## 11.1 Kerasによる回帰
+
 ```{r}
 my_model %>% compile(
   loss = "mse",
   optimizer = "rmsprop")
 ```
 
+## 11.1 Kerasによる回帰
+
 ```{r}
 my_cb <- callback_early_stopping(
   patience = 20,
   restore_best_weights = TRUE)
 ```
+
+## 11.1 Kerasによる回帰
 
 ```{r}
 my_history <- my_model %>%
@@ -55,9 +69,13 @@ my_history <- my_model %>%
     verbose = 0)
 ```
 
+## 11.1 Kerasによる回帰
+
 ```{r}
 plot(my_history)
 ```
+
+## 11.1 Kerasによる回帰
 
 ```{r}
 my_history

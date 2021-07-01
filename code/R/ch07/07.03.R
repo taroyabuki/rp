@@ -23,6 +23,8 @@ my_model <- train(form = dist ~ speed, # モデル式（出力変数と入力変
                   data = my_data,      # データ
                   method = "lm")       # 手法
 
+#### 7.3.3.2 訓練
+
 coef(my_model$finalModel)
 #> (Intercept)       speed 
 #> -17.579095    3.932409 
@@ -37,6 +39,8 @@ my_model %>% predict(tmp)
 #### 7.3.3.4 モデルの可視化
 
 f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
+
+#### 7.3.3.4 モデルの可視化
 
 my_data %>%
   ggplot(aes(x = speed, y = dist,

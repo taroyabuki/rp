@@ -14,6 +14,8 @@ my_url <- str_c("https://raw.githubusercontent.com",
 my_data <- read_csv(my_url)
 ```
 
+### 8.7.2 ニューラルネットワークの訓練
+
 ```{r}
 my_model <- train(form = LPRICE2 ~ .,
                   data = my_data,
@@ -22,6 +24,8 @@ my_model <- train(form = LPRICE2 ~ .,
                   trControl = trainControl(method = "LOOCV"))
 plot(my_model$finalModel) # 訓練済ネットワークの描画（結果は割愛）
 ```
+
+### 8.7.2 ニューラルネットワークの訓練
 
 ```{r}
 y  <- my_data$LPRICE2
@@ -49,6 +53,8 @@ my_model <- train(
                          layer2 = 0:2,
                          layer3 = 0))
 ```
+
+### 8.7.3 ニューラルネットワークのチューニング
 
 ```{r}
 y  <- my_data$LPRICE2

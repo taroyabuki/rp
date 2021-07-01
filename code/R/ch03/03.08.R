@@ -19,12 +19,16 @@ x <- 123
 typeof(x)
 #> [1] "double"
 
+### 3.8.2 変数や関数についての調査
+
 library(caret)
 library(tidyverse)
 my_data <- cars
 my_model <- train(form = dist ~ speed, data = my_data, method = "knn")
 my_model$results
 # 結果は割愛
+
+### 3.8.2 変数や関数についての調査
 
 attributes(my_model)
 #> $names
@@ -38,6 +42,8 @@ attributes(my_model)
 #> $class
 #> [1] "train"         "train.formula"
 
+### 3.8.2 変数や関数についての調査
+
 ?log
 # あるいは
 help(log)
@@ -47,6 +53,8 @@ help(log)
 my_v = c(1, NA, 3)
 my_v
 #> [1]  1 NA  3
+
+### 3.8.3 RのNA，Pythonのnan
 
 is.na(my_v[2])
 #> [1] TRUE
