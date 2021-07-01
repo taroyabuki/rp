@@ -24,7 +24,3 @@ array([1, 2, 3, 4])
 from numpy import *
 array([1, 2, 3, 4])
 
-### 3.6.2 Pythonのモジュール
-
-!pip install パッケージ名
-
