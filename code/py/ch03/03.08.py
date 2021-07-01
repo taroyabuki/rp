@@ -23,15 +23,11 @@ x = 123
 type(x)
 #> int
 
-### 3.8.2 変数や関数についての調査
-
 %whos
 #> Variable   Type      Data/Info
 #> ------------------------------
 #> math       module    <module 'math' from '/opt<...>-38-x86_64-linux-gnu.so'>
 #> x          int       123
-
-### 3.8.2 変数や関数についての調査
 
 import math
 ?math.log
@@ -44,8 +40,6 @@ import numpy as np
 my_v = [1, np.nan, 3]
 my_v
 #> [1, nan, 3]
-
-### 3.8.3 RのNA，Pythonのnan
 
 np.isnan(my_v[1])
 #> True

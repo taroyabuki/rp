@@ -20,16 +20,12 @@ my_url = ('https://raw.githubusercontent.com'
 my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
-### 8.7.2 ニューラルネットワークの訓練
-
 my_pipeline = Pipeline([('sc', StandardScaler()),        # 標準化
                         ('mlp', MLPRegressor())])        # ニューラルネットワーク
 my_pipeline.fit(X, y)                                    # 訓練
 
 my_scores = cross_val_score(my_pipeline, X, y,
                             scoring='neg_root_mean_squared_error')
-
-### 8.7.2 ニューラルネットワークの訓練
 
 y_ = my_pipeline.predict(X)
 mean_squared_error(y_, y)**0.5
@@ -57,8 +53,6 @@ my_model = my_search.best_estimator_ # 最良モデル
 
 my_search.best_params_               # チューニング結果
 #> {'mlp__activation': 'tanh', 'mlp__hidden_layer_sizes': 3}
-
-### 8.7.3 ニューラルネットワークのチューニング
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5

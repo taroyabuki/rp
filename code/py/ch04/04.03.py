@@ -27,8 +27,6 @@ x = np.random.uniform(
 x = np.random.random(size=1000)
 plt.hist(x)
 
-### 4.3.2 \myindexj{いちようらんすうれんぞく
-
 tmp = np.random.uniform(
     low=1,     # 最小
     high=7,    # 最大+1
@@ -69,8 +67,6 @@ def f(k):
                       np.std(tmp) / n**0.5], # 標準誤差
                      index=['k', 'mean', 'se'])
 
-#### 4.3.4.1 補足：不偏性の具体例
-
 def g(x):
     return x.var(ddof=1)
 pd.Series([10, 20, 30]).apply(f)
@@ -79,8 +75,6 @@ pd.Series([10, 20, 30]).apply(f)
 #> 1  20.0  9.022280  0.029525
 #> 2  30.0  8.983166  0.023584
 
-#### 4.3.4.1 補足：不偏性の具体例
-
 def g(x):
     return x.std(ddof=1)
 pd.Series([10, 20, 30]).apply(f)
@@ -88,8 +82,6 @@ pd.Series([10, 20, 30]).apply(f)
 #> 0  10.0  2.923114  0.006983
 #> 1  20.0  2.961450  0.004811
 #> 2  30.0  2.968328  0.003977
-
-#### 4.3.4.1 補足：不偏性の具体例
 
 from math import gamma
 

@@ -67,8 +67,6 @@ my_results[my_results.Accuracy == my_results.Accuracy.max()] # 正解率（検�
 #> 50          5                 5                  2  0.973333
 #> 51          5                 5                 20  0.973333
 
-### 9.3.5 補足：木の複雑さの制限
-
 my_model = my_search.best_estimator_
 my_dot = tree.export_graphviz(
     decision_tree=my_model,

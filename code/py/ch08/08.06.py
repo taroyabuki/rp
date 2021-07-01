@@ -30,8 +30,6 @@ my_pipeline = Pipeline([
         l1_ratio=B))])
 my_pipeline.fit(X, y)
 
-### 8.6.1 正則化の実践
-
 my_enet = my_pipeline.named_steps.enet
 my_enet.intercept_
 #> -1.4517651851851852
@@ -43,8 +41,6 @@ pd.Series(my_enet.coef_,
 #> HRAIN     -0.041159
 #> TIME_SV    0.024027
 #> dtype: float64
-
-### 8.6.1 正則化の実践
 
 my_test = pd.DataFrame(
     [[500, 17, 120, 2]])
@@ -88,8 +84,6 @@ my_search.best_params_
 
 my_model = my_search.best_estimator_ # 最良モデル
 
-### 8.6.3 パラメータ$A,\,B$の決定
-
 tmp = my_search.cv_results_                # チューニングの詳細
 my_scores = (-tmp['mean_test_score'])**0.5 # RMSE
 
@@ -100,8 +94,6 @@ my_results = pd.DataFrame(tmp['params']).assign(RMSE=my_scores).pivot(
 
 my_results.plot(style='o-', xlabel='A ( = alpha)', ylabel='RMSE').legend(
     title='B ( = l1_ratio)')
-
-### 8.6.3 パラメータ$A,\,B$の決定
 
 y_ = my_model.predict(X)
 mean_squared_error(y_, y)**0.5

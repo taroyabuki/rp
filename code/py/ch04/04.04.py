@@ -36,8 +36,6 @@ proportion_confint(
 #> (0.024225732468536626,
 #>  0.3967139842509865)
 
-### 4.4.2 推定
-
 a = 0.05 # 有意水準
 tmp = np.linspace(0, 1, 100)
 
@@ -69,8 +67,6 @@ d.ttest_mean(alternative=alt)[1] # p値
 d.tconfint_mean(alpha=a, alternative=alt) # 信頼区間
 #> (-3.9955246743198867, -1.3644753256801117)
 
-### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
-
 c = CompareMeans(DescrStatsW(X), DescrStatsW(Y)) # 対標本でない場合
 
 ve = 'pooled' # 等分散を仮定する（デフォルト）．仮定しないなら'unequal'．
@@ -87,8 +83,6 @@ my_url = ('https://raw.githubusercontent.com/taroyabuki/'
           '/fromzero/master/data/smoker.csv')
 my_data = pd.read_csv(my_url)
 
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
-
 my_data.head()
 #>   alive smoker
 #> 0   Yes     No
@@ -96,8 +90,6 @@ my_data.head()
 #> 2   Yes     No
 #> 3   Yes     No
 #> 4   Yes     No
-
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 my_table = pd.crosstab(
     my_data['alive'],
@@ -107,8 +99,6 @@ my_table
 #> alive
 #> No      117   54
 #> Yes     950  348
-
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 from scipy.stats import chi2_contingency
 chi2_contingency(my_table, correction = False)[1]
@@ -131,13 +121,9 @@ n = 10**5
 result = [sum(np.random.choice(X, len(X), replace=True)) # 手順4
             for _ in range(n)]
 
-#### 4.4.5.1 15回引いて2回当たったくじ
-
 import matplotlib.pyplot as plt
 plt.hist(result,
          bins=range(0, 16))
-
-#### 4.4.5.1 15回引いて2回当たったくじ
 
 np.quantile(result, [0.025, 0.975])
 #> array([0., 5.])
@@ -157,11 +143,7 @@ result = [np.random.choice(Z, len(Z), replace=True).mean() for _ in range(n)]
 np.quantile(result, [0.025, 0.975])
 #> array([-3.88666667, -1.55333333])
 
-#### 4.4.5.2 平均の差の信頼区間
-
 plt.hist(result, bins='sturges')
-
-#### 4.4.5.2 平均の差の信頼区間
 
 result = [np.random.choice(X, len(X), replace=True).mean() -
           np.random.choice(Y, len(Y), replace=True).mean()

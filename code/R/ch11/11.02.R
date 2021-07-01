@@ -5,25 +5,17 @@ library(tidyverse)
 
 my_data <- iris[sample(nrow(iris)), ]
 
-## 11.2 Kerasによる分類
-
 X <- my_data %>%
   select(-Species) %>% scale
 y <- as.integer(my_data$Species) - 1
-
-## 11.2 Kerasによる分類
 
 my_model <- keras_model_sequential() %>%
   layer_dense(units = 3, activation = "relu", input_shape = c(4)) %>%
   layer_dense(units = 3, activation = "softmax")
 
-## 11.2 Kerasによる分類
-
 my_model %>% compile(loss = "sparse_categorical_crossentropy",
                      optimizer = "rmsprop",
                      metrics = c("accuracy"))
-
-## 11.2 Kerasによる分類
 
 my_cb <- callback_early_stopping(
   patience = 20,
@@ -40,8 +32,6 @@ my_history <- my_model %>%
 
 plot(my_history)
 
-## 11.2 Kerasによる分類
-
 my_history
 #> Final epoch (plot to see history):
 #>         loss: 0.04358
@@ -57,8 +47,6 @@ my_history
 -mean(log(c(0.7, 0.6, 0.2, 0.7)))
 #> 0.7084034
 
-### 11.2.1 交差エントロピー
-
 y <- c(2, 1, 0, 1)
 y_1 <- list(c(0.1, 0.1, 0.8),
             c(0.1, 0.7, 0.2),
@@ -68,8 +56,6 @@ y_2 <- list(c(0.1, 0.2, 0.7),
             c(0.2, 0.6, 0.2),
             c(0.2, 0.5, 0.3),
             c(0.2, 0.7, 0.1))
-
-### 11.2.1 交差エントロピー
 
 c(mean(as.array(loss_sparse_categorical_crossentropy(y_true = y, y_pred = y_1))),
   mean(as.array(loss_sparse_categorical_crossentropy(y_true = y, y_pred = y_2))))

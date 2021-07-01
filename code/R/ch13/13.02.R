@@ -11,22 +11,16 @@ my_result <- my_data %>%
   dist("euclidian") %>%
   hclust("complete")
 
-### 13.2.1 階層的クラスタ分析
-
 factoextra::fviz_dend(
   my_result,
   k = 3, # クラスタ数
   rect=T, rect_fill=T)
-
-### 13.2.1 階層的クラスタ分析
 
 factoextra::fviz_dend(
   my_result,
   k = 3,
   rect=T, rect_fill=T,
   type = "phylogenic")
-
-### 13.2.1 階層的クラスタ分析
 
 my_result %>% cutree(3)
 #> A B C D 
@@ -58,8 +52,6 @@ my_data <- data.frame(
 
 my_result <- my_data %>% kmeans(3)
 
-### 13.2.3 非階層的クラスタ分析
-
 my_result$cluster
 #> A B C D 
 #> 2 3 2 1 
@@ -77,8 +69,6 @@ f <- 2:5 %>% map(function(k) {
     ggtitle(sprintf("k = %s", k))
 })
 gridExtra::grid.arrange(f[[1]], f[[2]], f[[3]], f[[4]], ncol = 2)
-
-### 13.2.4 クラスタ数の決定
 
 fviz_nbclust(my_data, kmeans, method = "wss")
 

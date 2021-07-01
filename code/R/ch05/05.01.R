@@ -13,15 +13,11 @@ my_df # 後者を実行した場合
 #> 3    C      70   90      m
 #> 4    D      90  100      f
 
-#### 5.1.1.1 CSVの読み込み
-
 my_url <- str_c("https://raw.githubusercontent.com/taroyabuki",
                 "/fromzero/master/data/exam.csv")
 my_df <- read_csv(my_url)
 # あるいは
 my_df <- read.csv(my_url, stringsAsFactors = FALSE)
-
-#### 5.1.1.1 CSVの読み込み
 
 my_df2 <- read.csv(
   file = "exam.csv",
@@ -41,8 +37,6 @@ my_df %>% write_csv("exam2.csv")
 my_df %>% write.csv(file = "exam2.csv",
   row.names = FALSE) # 行の名前を出力しない．
 
-#### 5.1.1.2 CSVファイルへの書き出し
-
 my_df2 %>% write.csv("exam3.csv")
 
 ### 5.1.2 文字コード
@@ -54,8 +48,6 @@ my_df <- read.csv(file = "exam.csv",
   stringsAsFactors = FALSE,
   fileEncoding = "UTF-8")
 
-### 5.1.2 文字コード
-
 my_df %>% write_csv("exam2.csv")
 # あるいは
 my_df %>% write.csv(file = "exam2.csv", row.names = FALSE, fileEncoding = "UTF-8")
@@ -64,8 +56,6 @@ my_df %>% write.csv(file = "exam2.csv", row.names = FALSE, fileEncoding = "UTF-8
 
 my_url <- "https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv"
 my_tables <- xml2::read_html(my_url) %>% rvest::html_table()
-
-### 5.1.3 ウェブ上の表
 
 my_tables 
 [[1]]
@@ -76,8 +66,6 @@ my_tables
 4 NA    C      70   90      m
 5 NA    D      90  100      f
 
-### 5.1.3 ウェブ上の表
-
 tmp <- my_tables[[1]]
 tmp
   X1   X2      X3   X4     X5
@@ -86,8 +74,6 @@ tmp
 3 NA    B      90   80      m
 4 NA    C      70   90      m
 5 NA    D      90  100      f
-
-### 5.1.3 ウェブ上の表
 
 # 1行目のデータを使って列の名前を付け直す．
 colnames(tmp) <- tmp[1,]
@@ -127,11 +113,7 @@ my_xml <- read_xml(my_url)      # XMLデータの読み込み
 xml_ns(my_xml)                  # 名前空間の確認（d1）
 #> d1 <-> https://www.example.net/ns/1.0
 
-#### 5.1.4.2 XMLデータの読み込み
-
 my_records <- xml_find_all(my_xml, ".//d1:record")
-
-#### 5.1.4.2 XMLデータの読み込み
 
 f <- function(record) {
   tmp <- xml_attrs(record)                    # 属性を全て取り出し，
@@ -140,8 +122,6 @@ f <- function(record) {
   })
   tmp
 }
-
-#### 5.1.4.2 XMLデータの読み込み
 
 my_data <- my_records %>% map_dfr(f)
 my_data$english <- as.numeric(my_data$english)

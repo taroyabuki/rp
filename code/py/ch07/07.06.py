@@ -22,8 +22,6 @@ my_scores
 my_scores.mean()
 #> -0.20629282165364665
 
-### 7.6.3 検証の実践
-
 my_scores = cross_val_score(my_model, X, y, scoring='neg_root_mean_squared_error')
 -my_scores.mean()
 #> 15.58402474583013 # RMSE（検証）
@@ -84,8 +82,6 @@ my_scores2 = cross_val_score(my_model, X, y, cv=LeaveOneOut(),
 (my_scores2**2).mean()**0.5
 #> 15.697306009399101
 
-#### 7.6.5.4 予測性能の指標（RとPythonで同じ結果を得る）
-
 -my_scores2.mean()
 #> 12.059178648637483
 
@@ -109,15 +105,11 @@ my_knn_socres = cross_val_score(
     KNeighborsRegressor(n_neighbors=5),
     X, y, cv=LeaveOneOut(), scoring='neg_mean_squared_error')
 
-### 7.6.6 補足：検証による手法の比較
-
 (-my_lm_scores.mean())**0.5
 #> 15.697306009399101 # 線形回帰分析
 
 (-my_knn_socres.mean())**0.5
 #> 16.07308308943869 # K最近傍法
-
-### 7.6.6 補足：検証による手法の比較
 
 my_df = pd.DataFrame({
     'lm':-my_lm_scores,
@@ -130,11 +122,7 @@ my_df.head()
 #> 3  168.490212  184.96
 #> 4    5.085308    0.00
 
-### 7.6.6 補足：検証による手法の比較
-
 my_df.boxplot().set_ylabel("$r^2$")
-
-### 7.6.6 補足：検証による手法の比較
 
 from statsmodels.stats.weightstats import CompareMeans, DescrStatsW
 d = DescrStatsW(my_df.lm - my_df.knn)

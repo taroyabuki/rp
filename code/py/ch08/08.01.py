@@ -9,8 +9,6 @@ tmp.describe()
 #> mean   19.500000  1970.500000  -1.451765  605.000000  16.522973 ...
 # 以下略
 
-## 8.1 ワインの生育条件と価格
-
 my_data = tmp.iloc[:, 2:].dropna()
 my_data.head()
 #>    LPRICE2  WRAIN  DEGREES ...
@@ -20,17 +18,11 @@ my_data.head()
 #> 5 -1.50926    420  16.1333 ...
 #> 6 -1.71655    582  16.4167 ...
 
-## 8.1 ワインの生育条件と価格
-
 len(my_data)
 #> 27
 
-## 8.1 ワインの生育条件と価格
-
 my_data.to_csv('wine.csv',
                index=False)
-
-## 8.1 ワインの生育条件と価格
 
 #my_data = pd.read_csv('wine.csv') # 作ったファイルを使う場合
 my_url = ('https://raw.githubusercontent.com'

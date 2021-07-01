@@ -20,8 +20,6 @@ my_df = pd.DataFrame([
     columns=['name', 'english',
              'math', 'gender'])
 
-#### 3.4.1.2 データを見た目のとおりに記述する方法
-
 my_df.head()
 # 結果は割愛
 
@@ -58,20 +56,14 @@ my_df2
 my_df2.columns
 #> Index(['X', 'Y'], dtype='object')
 
-#### 3.4.1.5 列と行の名前
-
 my_df2.columns = ['P', 'Q']
 my_df2
 #>    P    Q
 #> 0  1   10
 #> 1  1  100
 
-#### 3.4.1.5 列と行の名前
-
 list(my_df.index)
 #> [0, 1, 2, 3]
-
-#### 3.4.1.5 列と行の名前
 
 my_df2.index = [
     'a', 'b', 'c', 'd', 'e', 'f']
@@ -81,8 +73,6 @@ my_df2
 #> b  1  100
 #> c  2   10
 # 以下略
-
-#### 3.4.1.5 列と行の名前
 
 my_df3 = pd.DataFrame({
     'english': [ 60,  90,  70,  90],
@@ -108,8 +98,6 @@ my_df2 = my_df.append(tmp)
 #### 3.4.2.2 列の追加
 
 my_df2 = my_df.assign(id=[1, 2, 3, 4])
-
-#### 3.4.2.2 列の追加
 
 my_df3 = my_df.copy()       # コピー
 my_df3['id'] = [1, 2, 3, 4] # 更新
@@ -139,13 +127,9 @@ x = my_df[['name', 'math']]
 # あるいは
 x = my_df.loc[:, ['name', 'math']]
 
-#### 3.4.3.3 複数列の取り出し（結果はデータフレーム）
-
 x = my_df.take([0, 2], axis=1)
 # あるいは
 x = my_df.iloc[:, [0, 2]]
-
-#### 3.4.3.3 複数列の取り出し（結果はデータフレーム）
 
 x = my_df.drop(
     columns=['english', 'gender'])
@@ -159,8 +143,6 @@ x = my_df.take([0, 2])
 # あるいは
 x = my_df.iloc[[0, 2], :]
 
-#### 3.4.3.4 複数行の取り出し（結果はデータフレーム）
-
 x = my_df.drop([1, 3])
 
 #### 3.4.3.5 検索
@@ -169,25 +151,17 @@ x = my_df[my_df['gender'] == 'm']
 # あるいは
 x = my_df.query('gender == "m"')
 
-#### 3.4.3.5 検索
-
 x = my_df[(my_df['english'] > 80) & (my_df['gender'] == "m")]
 # あるいは
 x = my_df.query('english > 80 and gender == "m"')
-
-#### 3.4.3.5 検索
 
 x = my_df[my_df['english'] == my_df['english'].max()]
 # あるいは
 tmp = my_df['english'].max()
 x = my_df.query('english == @tmp')
 
-#### 3.4.3.5 検索
-
 my_df2 = my_df.copy() # コピー
 my_df2.loc[my_df['gender'] == 'm', 'gender'] = 'M'
-
-#### 3.4.3.5 検索
 
 my_df2
 #>   name  english  math gender
@@ -199,8 +173,6 @@ my_df2
 #### 3.4.3.6 並べ替え
 
 x = my_df.sort_values('english')
-
-#### 3.4.3.6 並べ替え
 
 x = my_df.sort_values(
     'english', ascending=False)
@@ -224,8 +196,6 @@ A
 #>        [ 90,  80],
 #>        [ 70,  90],
 #>        [ 90, 100]])
-
-#### 3.4.4.2 データフレームと行列
 
 pd.DataFrame(A)
 #>     0    1
@@ -253,8 +223,6 @@ my_df = pd.DataFrame({
   'min':[20, 21, 15],
   'max':[24, 27, 21]})
 
-### 3.4.5 縦型と横型
-
 my_longer = my_df.melt(id_vars='day')
 my_longer
 #>    day variable  value
@@ -264,8 +232,6 @@ my_longer
 #> 3   25      max     24
 #> 4   26      max     27
 #> 5   27      max     21
-
-### 3.4.5 縦型と横型
 
 my_wider = my_longer.pivot(
     index='day',
@@ -277,8 +243,6 @@ my_wider
 #> 25         24   20
 #> 26         27   21
 #> 27         21   15
-
-### 3.4.5 縦型と横型
 
 my_wider.plot(style='o-',
               xticks=my_wider.index,

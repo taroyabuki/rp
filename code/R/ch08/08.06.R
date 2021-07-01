@@ -20,8 +20,6 @@ my_model <- train(
     lambda = A,
     alpha = B))
 
-### 8.6.1 正則化の実践
-
 coef(my_model$finalModel, A)
 #>                         1
 #> (Intercept) -2.8015519302
@@ -29,8 +27,6 @@ coef(my_model$finalModel, A)
 #> DEGREES      0.0832910512
 #> HRAIN       -0.0004147386
 #> TIME_SV      0.0023104647
-
-### 8.6.1 正則化の実践
 
 my_test <- data.frame(
   WRAIN = 500, DEGREES = 17,
@@ -71,15 +67,11 @@ my_model$bestTune
 #>   alpha lambda
 #> 8     0  0.035
 
-### 8.6.3 パラメータ$A,\,B$の決定
-
 tmp <- "B ( = alpha)"
 ggplot(my_model) +
   theme(legend.position = c(0, 1), legend.justification = c(0, 1)) +
   xlab("A ( = lambda)") +
   guides(shape = guide_legend(tmp), color = guide_legend(tmp))
-
-### 8.6.3 パラメータ$A,\,B$の決定
 
 y  <- my_data$LPRICE2
 y_ <- my_model %>% predict(my_data)

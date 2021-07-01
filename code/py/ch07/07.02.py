@@ -3,12 +3,8 @@
 import statsmodels.api as sm
 my_data = sm.datasets.get_rdataset('cars', 'datasets').data
 
-## 7.2 データの確認
-
 my_data.shape
 #> (50, 2)
-
-## 7.2 データの確認
 
 my_data.head()
 #>    speed  dist
@@ -17,8 +13,6 @@ my_data.head()
 #> 2      7     4
 #> 3      7    22
 #> 4      8    16
-
-## 7.2 データの確認
 
 my_data.describe()
 #>            speed        dist
@@ -30,8 +24,6 @@ my_data.describe()
 #> 50%    15.000000   36.000000
 #> 75%    19.000000   56.000000
 #> max    25.000000  120.000000
-
-## 7.2 データの確認
 
 my_data.plot(x='speed', style='o')
 

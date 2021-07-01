@@ -56,8 +56,6 @@ my_data %>% ggplot(aes(x = x, y = probability, color = color)) +
 #>  0.0242 0.3967
 ```
 
-### 4.4.2 推定
-
 ```{r}
 # 前項冒頭のコード
 ```
@@ -89,8 +87,6 @@ t.test(x = X, y = Y,
 #>                   -2.68 
 ```
 
-### 4.4.3 平均の差の検定と推定（\myindexj{tけんてい
-
 ```{r}
 t.test(x = X, y = Y,
        paired = FALSE,   # 対標本ではない（デフォルト）．
@@ -118,8 +114,6 @@ my_url <- str_c("https://raw.githubusercontent.com/taroyabuki",
 my_data <- read_csv(my_url)
 ```
 
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
-
 ```{r}
 head(my_data)
 #>   alive smoker
@@ -131,8 +125,6 @@ head(my_data)
 #> 6   Yes     No
 ```
 
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
-
 ```{r}
 my_table <- table(my_data)
 my_table
@@ -141,8 +133,6 @@ my_table
 #>   No  117  54
 #>   Yes 950 348
 ```
-
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
 
 ```{r}
 chisq.test(my_table, correct = FALSE)
@@ -171,15 +161,11 @@ n <- 10^5
 result <- replicate(n, sum(sample(X, size = length(X), replace = TRUE))) # 手順4
 ```
 
-#### 4.4.5.1 15回引いて2回当たったくじ
-
 ```{r}
 hist(x = result,
      breaks = 0:15,
      right = FALSE)
 ```
-
-#### 4.4.5.1 15回引いて2回当たったくじ
 
 ```{r}
 quantile(result, c(0.025, 0.975))
@@ -204,13 +190,9 @@ quantile(result, c(0.025, 0.975))
 #> -3.880000 -1.566667
 ```
 
-#### 4.4.5.2 平均の差の信頼区間
-
 ```{r}
 hist(result)
 ```
-
-#### 4.4.5.2 平均の差の信頼区間
 
 ```{r}
 result <- replicate(n,

@@ -4,12 +4,8 @@ library(caret)
 library(tidyverse)
 my_data <- cars
 
-## 7.2 データの確認
-
 dim(my_data)
 #> [1] 50  2
-
-## 7.2 データの確認
 
 head(my_data)
 #>   speed dist
@@ -19,8 +15,6 @@ head(my_data)
 #> 4     7   22
 #> 5     8   16
 #> 6     9   10
-
-## 7.2 データの確認
 
 options(digits=3)
 pastecs::stat.desc(my_data)
@@ -39,8 +33,6 @@ pastecs::stat.desc(my_data)
 #> var           27.959  664.06
 #> std.dev        5.288   25.77
 #> coef.var       0.343    0.60
-
-## 7.2 データの確認
 
 my_data %>%
   ggplot(aes(x = speed, y = dist)) +

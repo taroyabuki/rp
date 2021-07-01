@@ -12,14 +12,10 @@ y_      = np.array([1 if 0.5 <= p else 0 for p in y_score])
  sum((y == 1) & (y_ == 1)) / sum(y == 1)] # True Positive Rate
 #> [0.4, 0.8]
 
-### 10.2.1 偽陽性率と真陽性率のトレードオフ（ROC曲線）
-
 my_fpr, my_tpr, _ = roc_curve(y_true=y,
                               y_score=y_score,
                               pos_label=1)
 RocCurveDisplay(fpr=my_fpr, tpr=my_tpr).plot()
-
-### 10.2.1 偽陽性率と真陽性率のトレードオフ（ROC曲線）
 
 auc(x=my_fpr, y=my_tpr)
 #> 0.8
@@ -30,14 +26,10 @@ auc(x=my_fpr, y=my_tpr)
  sum((y == 1) & (y_ == 1)) / sum(y_ == 1)] # Precision
 #> [0.8, 0.6666666666666666]
 
-### 10.2.2 再現率と精度のトレードオフ（PR曲線）
-
 my_precision, my_recall, _ = precision_recall_curve(y_true=y,
                                                     probas_pred=y_score,
                                                     pos_label=1)
 PrecisionRecallDisplay(precision=my_precision, recall=my_recall).plot()
-
-### 10.2.2 再現率と精度のトレードオフ（PR曲線）
 
 auc(x=my_recall, y=my_precision)
 #> 0.8463095238095237

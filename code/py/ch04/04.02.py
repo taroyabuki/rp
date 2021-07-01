@@ -14,13 +14,9 @@ iris.head()
 
 iris.hist('Sepal.Length')
 
-### 4.2.1 ヒストグラム
-
 import pandas as pd
 my_df = pd.DataFrame({'x':[10, 20, 30]})
 my_df.hist('x', bins=2) # 階級数は2
-
-### 4.2.1 ヒストグラム
 
 x = iris['Sepal.Length']
 tmp = np.linspace(min(x), max(x), 10)
@@ -53,12 +49,8 @@ my_df
 #> Petal.Length  3.76 1.77 0.14
 #> Petal.Width   1.20 0.76 0.06
 
-### 4.2.4 棒グラフとエラーバー
-
 import matplotlib.pyplot as plt
 my_df.plot(y='mean', kind='bar', yerr='se', capsize=10)
-
-### 4.2.4 棒グラフとエラーバー
 
 my_group = iris.groupby('Species')                    # 品種ごとに，
 my_df = my_group.agg('mean')                          # 各変数の，平均と
@@ -69,8 +61,6 @@ my_se
 #> setosa              0.05         0.05          0.02         0.01
 #> versicolor          0.07         0.04          0.07         0.03
 #> virginica           0.09         0.05          0.08         0.04
-
-### 4.2.4 棒グラフとエラーバー
 
 my_group.agg('mean').plot(kind='bar', yerr=my_se, capsize=5)
 

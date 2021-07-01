@@ -10,8 +10,6 @@ my_data.head()
 #> 3           4.6          3.1           1.5          0.2  setosa
 #> 4           5.0          3.6           1.4          0.2  setosa
 
-### 9.1.1 データの準備
-
 my_data.describe()
 #>        Sepal.Length  Sepal.Width  Petal.Length  Petal.Width
 #> count    150.000000   150.000000    150.000000   150.000000

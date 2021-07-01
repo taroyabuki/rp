@@ -2,12 +2,8 @@
 
 my_data <- as.vector(AirPassengers)
 
-### 12.2.1 データの準備
-
 n <- length(my_data) # データ数（144）
 k <- 108             # 訓練データ数
-
-### 12.2.1 データの準備
 
 library(tidyverse)
 library(tsibble)
@@ -37,13 +33,9 @@ head(my_df)
 #> 5 1949 5     4   121 train
 #> 6 1949 6     5   135 train
 
-### 12.2.1 データの準備
-
 my_train <- my_df[  1:k , ]
 my_test  <- my_df[-(1:k), ]
 y <- my_test$y
-
-### 12.2.1 データの準備
 
 my_plot <- my_df %>%
   ggplot(aes(x = ds,
@@ -63,8 +55,6 @@ y_ <- my_lm_model %>% predict(my_test)
 y_ %>% postResample(y)
 #>       RMSE   Rsquared        MAE # Rsquaredは決定係数6
 #> 70.6370708  0.2758569 53.3019355
-
-### 12.2.2 線形回帰分析による時系列予測
 
 y_ <- my_lm_model %>%
   predict(my_df)
@@ -97,15 +87,11 @@ head(my_arima_result)
 #> 5 ARIMA(y) 1958 5 N(386, 332)  386.
 #> 6 ARIMA(y) 1958 6 N(453, 393)  453.
 
-#### 12.2.3.2 予測
-
 library(caret)
 y_ <- my_arima_result$.mean
 y_ %>% postResample(y)
 #> RMSE   Rsquared        MAE 
 #> 22.1322287  0.9613352 17.8078083
-
-#### 12.2.3.2 予測
 
 # 予測結果のみでよい場合
 # my_arima_result %>% autoplot
@@ -122,8 +108,6 @@ library(prophet)
 my_prophet_model <- my_train %>%
   prophet(seasonality.mode = "multiplicative")
 
-### 12.2.4 Prophetによる時系列予測
-
 library(prophet)
 my_prophet_result <- my_prophet_model %>% predict(my_test)
 head(my_prophet_result[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
@@ -137,14 +121,10 @@ head(my_prophet_result[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
 #> 5 1958-05-01 00:00:00  402.       393.       411.
 #> 6 1958-06-01 00:00:00  459.       450.       469.
 
-### 12.2.4 Prophetによる時系列予測
-
 y_ <- my_prophet_result$yhat
 y_ %>% postResample(y)
 #>       RMSE   Rsquared        MAE 
 #> 33.1451579  0.9585967 29.1368658 
-
-### 12.2.4 Prophetによる時系列予測
 
 # my_prophet_model %>% plot(my_prophet_result) # 予測結果のみでよい場合
 

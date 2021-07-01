@@ -9,8 +9,6 @@ from random import sample
 h2o.init()
 h2o.no_progress()
 
-### 11.4.1 H2Oの起動と停止
-
 h2o.cluster().shutdown()
 
 ### 11.4.2 H2Oのデータフレーム
@@ -21,8 +19,6 @@ my_data = pd.read_csv(my_url)
 my_frame = h2o.H2OFrame(my_data) # 通常のデータフレームをH2OFrameに変換する．
 # あるいは
 my_frame = h2o.import_file(my_url, header=1) # データを読み込む（1行目はラベル）．
-
-### 11.4.2 H2Oのデータフレーム
 
 my_frame.head(5)
 #>   LPRICE2    WRAIN    DEGREES  ...
@@ -45,12 +41,8 @@ my_model.train(
     y='LPRICE2',
     training_frame=my_frame)
 
-### 11.4.3 AutoMLによる回帰
-
 my_model.leaderboard['rmse'].min()
 #> 0.2704643402377778
-
-### 11.4.3 AutoMLによる回帰
 
 tmp = h2o.as_list(
     my_model.predict(my_frame))
@@ -67,8 +59,6 @@ my_index = sample(range(60000), 6000)
 x_train = x_train[my_index, :, :]
 y_train = y_train[my_index]
 
-### 11.4.4 AutoMLによる分類
-
 tmp = pd.DataFrame(
     x_train.reshape(-1, 28 * 28))
 y = 'y'
@@ -80,21 +70,15 @@ tmp = pd.DataFrame(
     x_test.reshape(-1, 28 * 28))
 my_test = h2o.H2OFrame(tmp)
 
-### 11.4.4 AutoMLによる分類
-
 my_model = H2OAutoML(
     max_runtime_secs=120)
 my_model.train(
     y=y,
     training_frame=my_train)
 
-### 11.4.4 AutoMLによる分類
-
 my_model.leaderboard[
     'mean_per_class_error'].min()
 #> 0.07962009694497166
-
-### 11.4.4 AutoMLによる分類
 
 tmp <- my_model %>%
   predict(my_test) %>%

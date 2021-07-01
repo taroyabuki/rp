@@ -12,14 +12,10 @@ X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 pd.DataFrame(StandardScaler().fit_transform(X),
              columns=X.columns).boxplot(showmeans=True)
 
-## 8.3 標準化
-
 my_pipeline = Pipeline([
     ('sc', StandardScaler()),
     ('lr', LinearRegression())])
 my_pipeline.fit(X, y)
-
-## 8.3 標準化
 
 # 線形回帰の部分だけを取り出す．
 my_lr = my_pipeline.named_steps.lr
@@ -33,8 +29,6 @@ pd.Series(my_lr.coef_,
 #> HRAIN     -0.276802
 #> TIME_SV    0.192979
 #> dtype: float64
-
-## 8.3 標準化
 
 my_test = [[500, 17, 120, 2]]
 my_model.predict(my_test)

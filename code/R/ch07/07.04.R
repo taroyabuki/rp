@@ -9,8 +9,6 @@ y  <- my_data$dist
 y_ <- my_model %>% predict(my_data)
 my_data$y_ <- y_
 
-### 7.4.1 RMSE
-
 my_data$residual <- y - y_
 head(my_data)
 #>   speed dist        y_  residual
@@ -21,15 +19,11 @@ head(my_data)
 #> 5     8   16 13.880175  2.119825
 #> 6     9   10 17.812584 -7.812584
 
-### 7.4.1 RMSE
-
 my_data %>%
   ggplot(aes(x = speed, y = dist)) +
   geom_point() +
   geom_line(aes(x = speed, y = y_)) +
   geom_linerange(mapping = aes(ymin = y_, ymax = dist), linetype = "dotted")
-
-### 7.4.1 RMSE
 
 RMSE(y_, y)
 # あるいは
@@ -43,16 +37,12 @@ R2(pred = y_, obs = y,
    form = "traditional")
 #> [1] 0.6510794
 
-### 7.4.2 決定係数
-
 R2(pred = y_, obs = y,
    form = "corr")
 # あるいは
 summary(
   my_model$finalModel)$r.squared
 #> [1] 0.6510794
-
-### 7.4.2 決定係数
 
 my_test = my_data[1:3, ]
 y  = my_test$dist
@@ -74,15 +64,11 @@ my_data <- cars
 my_idx <- c(2, 11, 27, 34, 39, 44)
 my_sample <- my_data[my_idx, ]
 
-### 7.4.3 当てはまりの良さの指標の問題点
-
 my_model <- train(form = dist ~ poly(speed, degree = 5, raw = TRUE),
                   data = my_sample,
                   method = "lm")
 y  <- my_sample$dist
 y_ <- my_model %>% predict(my_sample)
-
-### 7.4.3 当てはまりの良さの指標の問題点
 
 RMSE(y_, y)
 #> [1] 1.042275e-10 # RMSE
@@ -94,8 +80,6 @@ R2(pred = y_, obs = y,
 R2(pred = y_, obs = y,
    form = "corr")
 #> [1] 1 # 決定係数6
-
-### 7.4.3 当てはまりの良さの指標の問題点
 
 f <- function(x) { my_model %>% predict(data.frame(speed = x)) }
 

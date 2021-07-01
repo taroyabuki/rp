@@ -9,37 +9,23 @@ from sklearn.metrics import confusion_matrix
 
 (x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
 
-### 11.3.1 データの形式
-
 x_train.shape
 #> (60000, 28, 28)
-
-### 11.3.1 データの形式
 
 np.set_printoptions(linewidth=170)
 x_train[4, :, :]
 
-### 11.3.1 データの形式
-
 plt.matshow(x_train[4, :, :])
-
-### 11.3.1 データの形式
 
 y_train
 #> array([5, 0, 4, ..., 5, 6, 8],
 #>       dtype=uint8)
 
-### 11.3.1 データの形式
-
 [x_train.min(), x_train.max()]
 #> [0, 255]
 
-### 11.3.1 データの形式
-
 x_train = x_train / 255
 x_test  = x_test  / 255
-
-### 11.3.1 データの形式
 
 my_index = sample(range(60000), 6000)
 x_train = x_train[my_index, :, :]
@@ -75,8 +61,6 @@ my_model.compile(loss='sparse_categorical_crossentropy',
 my_cb = callbacks.EarlyStopping(patience=5,
                                 restore_best_weights = True)
 
-### 11.3.2 多層パーセプトロン
-
 my_history = my_model.fit(
     x=x_train,
     y=y_train,
@@ -89,12 +73,8 @@ my_history = my_model.fit(
 tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch', style='o-')
 
-### 11.3.2 多層パーセプトロン
-
 y_ = my_model.predict_classes(x_test)
 confusion_matrix(y_true=y_test, y_pred=y_)
-
-### 11.3.2 多層パーセプトロン
 
 #> [[ 962    0    2    1    1    2    7    1    2    2]
 #>  [   0 1123    4    0    0    1    3    0    4    0]
@@ -107,12 +87,8 @@ confusion_matrix(y_true=y_test, y_pred=y_)
 #>  [   8    4    6   12    6    9    9    7  901   12]
 #>  [   9    8    0    8   31    4    1   14    7  927]]
 
-### 11.3.2 多層パーセプトロン
-
 (y_test == y_).mean()
 #> 0.942
-
-### 11.3.2 多層パーセプトロン
 
 my_model.evaluate(x=x_test, y=y_test)
 #> [0.20125965774059296, 
@@ -162,8 +138,6 @@ from keras.callbacks import EarlyStopping
 my_cb = EarlyStopping(patience=5,
                       restore_best_weights = True)
 
-#### 11.3.3.1 単純なCNN
-
 my_history = my_model.fit(
     x=x_train2d,
     y=y_train,
@@ -175,8 +149,6 @@ my_history = my_model.fit(
 
 tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch', style='o-')
-
-#### 11.3.3.1 単純なCNN
 
 my_model.evaluate(x=x_test2d, y=y_test)
 #> [0.1359061449766159,
@@ -203,8 +175,6 @@ my_model.compile(loss = 'sparse_categorical_crossentropy',
 my_cb = callbacks.EarlyStopping(patience=5,
                                 restore_best_weights = True)
 
-#### 11.3.3.2 LeNet
-
 my_history = my_model.fit(
     x=x_train2d,
     y=y_train,
@@ -216,8 +186,6 @@ my_history = my_model.fit(
 
 tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch', style='o-')
-
-#### 11.3.3.2 LeNet
 
 my_model.evaluate(x=x_test2d, y=y_test)
 #> [0.07139696925878525,
@@ -242,8 +210,6 @@ my_result.head()
 #> 3520  0.999926   4  6  3520
 #> 9729  0.999881   6  5  9729
 #> 2896  0.999765   0  8  2896
-
-#### 11.3.3.3 補足：LeNetが自信満々で間違う例
 
 for i in range(5):
     plt.subplot(1, 5, i + 1)

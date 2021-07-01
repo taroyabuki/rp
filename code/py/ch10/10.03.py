@@ -12,8 +12,6 @@ my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/titanic.csv')
 my_data = pd.read_csv(my_url)
 
-## 10.3 タイタニック
-
 my_data.head()
 #>   Class   Sex    Age Survived
 #> 0   1st  Male  Child      Yes
@@ -53,8 +51,6 @@ my_scores = cross_val_score(
     n_jobs=-1)
 my_scores.mean()
 #> 0.7832803271240345
-
-### 10.3.4 決定木の評価
 
 tmp = pd.DataFrame(
     my_pipeline.predict_proba(X),

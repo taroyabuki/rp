@@ -11,8 +11,6 @@ X, y = my_data.iloc[:, 0:4], my_data.Species
 my_model = tree.DecisionTreeClassifier(max_depth=2)
 my_model.fit(X, y)
 
-### 9.2.1 分類木の作成と利用
-
 my_dot = tree.export_graphviz(
     decision_tree=my_model,
     out_file=None,                 # ファイルに出力しない．
@@ -21,14 +19,10 @@ my_dot = tree.export_graphviz(
     filled=True)                   # 色を塗る．
 graphviz.Source(my_dot)
 
-### 9.2.1 分類木の作成と利用
-
 my_test = pd.DataFrame([[5.0, 3.5, 1.5, 0.5],
                         [6.5, 3.0, 5.0, 2.0]])
 my_model.predict(my_test)
 #> array(['setosa', 'virginica'], dtype=object)
-
-### 9.2.1 分類木の作成と利用
 
 pd.DataFrame(
     my_model.predict_proba(my_test),

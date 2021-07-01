@@ -13,13 +13,9 @@ my_result = hierarchy.linkage(
     metric='euclidean',
     method='complete')
 
-### 13.2.1 階層的クラスタ分析
-
 hierarchy.dendrogram(
     my_result,
     labels=my_data.index)
-
-### 13.2.1 階層的クラスタ分析
 
 hierarchy.cut_tree(my_result, 3)
 #> array([[0], [1], [0], [2]])
@@ -52,8 +48,6 @@ my_data = pd.DataFrame(
 
 my_result = KMeans(
     n_clusters=3).fit(my_data)
-
-### 13.2.3 非階層的クラスタ分析
 
 my_result.labels_
 #> array([1, 0, 1, 2], dtype=int32)

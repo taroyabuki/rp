@@ -58,8 +58,6 @@ my_loocv <- function(maxdepth, minbucket, minsplit) {
        Accuracy = my_model$results$Accuracy)
 }
 
-### 9.3.5 補足：木の複雑さの制限
-
 my_params <- expand.grid(
   maxdepth = 2:5,
   minbucket = 1:7,
@@ -79,16 +77,12 @@ my_results %>% filter(Accuracy == max(Accuracy)) # 正解率（検証）の最�
 #> 5        4         5       20    0.973
 #> 6        5         5       20    0.973
 
-### 9.3.5 補足：木の複雑さの制限
-
 my_model <- train(form = Species ~ ., data = my_data, method = "rpart2",
                   trControl = trainControl(method ="none"),
                   tuneGrid = data.frame(maxdepth = 3),
                   control = rpart::rpart.control(cp = 0.01,
                                                  minbucket = 5,
                                                  minsplit = 2))
-
-### 9.3.5 補足：木の複雑さの制限
 
 rpart.plot::rpart.plot(
   my_model$finalModel, extra = 1)

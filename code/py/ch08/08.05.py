@@ -16,8 +16,6 @@ my_data2 = my_data.assign(v1=[i % 2 for i in range(n)],
                           v2=[i % 3 for i in range(n)])
 X, y = my_data2.drop(columns=['LPRICE2']), my_data2['LPRICE2']
 
-## 8.5 変数選択
-
 my_sfs = SequentialFeatureSelector(
     estimator=LinearRegression(),
     direction='forward', # 変数増加法

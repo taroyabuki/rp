@@ -3,12 +3,8 @@
 from pmdarima.datasets import airpassengers
 my_data = airpassengers.load_airpassengers()
 
-### 12.2.1 データの準備
-
 n = len(my_data) # データ数（144）
 k = 108          # 訓練データ数
-
-### 12.2.1 データの準備
 
 my_ds = pd.date_range(
     start='1949/01/01',
@@ -27,13 +23,9 @@ my_df.head()
 #> 1949-04-01 1949-04-01  3  129.0
 #> 1949-05-01 1949-05-01  4  121.0
 
-### 12.2.1 データの準備
-
 my_train = my_df[        :k]
 my_test  = my_df[-(n - k): ]
 y = my_test.y
-
-### 12.2.1 データの準備
 
 import matplotlib.pyplot as plt
 plt.plot(my_train.y, label='train')
@@ -56,8 +48,6 @@ y_ = my_lm_model.predict(X)
  r2_score(y_true=y, y_pred=y_),  # 決定係数1（方法1）
  my_lm_model.score(X, y)]        # 決定係数1（方法2）
 #> [70.63707081783771, 0.18448078010854552, 0.18448078010854552]
-
-### 12.2.2 線形回帰分析による時系列予測
 
 y_ = my_lm_model.predict(my_df[['x']])
 tmp = pd.DataFrame(y_, index=my_df.index)
@@ -90,14 +80,10 @@ my_df.head()
 #> 1958-04-01  378.774472  346.695454  410.853490
 #> 1958-05-01  385.777732  350.270765  421.284700
 
-#### 12.2.3.2 予測
-
 from sklearn.metrics import mean_squared_error, r2_score
 [mean_squared_error(y, y_)**0.5, # RMSE（テスト）
  r2_score(y_true=y, y_pred=y_)]  # 決定係数B（テスト）
 #> [22.132236727738697, 0.9199392874179217]
-
-#### 12.2.3.2 予測
 
 import matplotlib.pyplot as plt
 plt.plot(my_train[['y']], label='train')
@@ -115,8 +101,6 @@ from fbprophet import Prophet
 my_prophet_model = Prophet(seasonality_mode='multiplicative')
 my_prophet_model.fit(my_train)
 
-### 12.2.4 Prophetによる時系列予測
-
 my_prophet_result = my_prophet_model.predict(my_test)
 my_prophet_result[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
 #>           ds        yhat  yhat_lower  yhat_upper
@@ -126,14 +110,10 @@ my_prophet_result[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
 #> 3 1958-04-01  398.481739  389.244105  406.742333
 #> 4 1958-05-01  402.595604  393.721421  411.331761
 
-### 12.2.4 Prophetによる時系列予測
-
 from sklearn.metrics import mean_squared_error, r2_score
 [mean_squared_error(y, y_)**0.5, # RMSE（テスト）
  r2_score(y_true=y, y_pred=y_)]  # 決定係数（テスト）
 #> [33.795549086036466, 0.8133242729288646]
-
-### 12.2.4 Prophetによる時系列予測
 
 # my_prophet_model.plot(my_prophet_result) # 予測結果のみでよい場合
 

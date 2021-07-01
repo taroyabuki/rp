@@ -8,8 +8,6 @@ my_url <- str_c("https://raw.githubusercontent.com",
                 "/taroyabuki/fromzero/master/data/titanic.csv")
 my_data <- read_csv(my_url)
 
-## 10.3 タイタニック
-
 head(my_data)
 #> # A tibble: 6 x 4
 #>   Class Sex   Age   Survived
@@ -36,8 +34,6 @@ rpart.plot::rpart.plot(my_model$finalModel, extra = 1)
 my_model$results
 #>   maxdepth  Accuracy     Kappa
 #> 1        2 0.7832803 0.4096365
-
-### 10.3.4 決定木の評価
 
 y <- my_data$Survived
 tmp <- my_model %>% predict(newdata = my_data, type = "prob")
@@ -66,8 +62,6 @@ my_model1$results
 #>   maxdepth  Accuracy     Kappa
 #> 1        2 0.7137665 0.2373133
 
-### 10.3.5 補足：質的入力変数の扱い
-
 my_data2 <- my_data %>%
   dummyVars(formula = Survived ~ Class) %>%
   predict(my_data) %>%
@@ -81,8 +75,6 @@ rpart.plot::rpart.plot(my_model2$finalModel, extra = 1)
 my_model2$results
 #>   maxdepth  Accuracy     Kappa
 #> 1        2 0.7137665 0.2373133
-
-### 10.3.5 補足：質的入力変数の扱い
 
 my_model3 <- train(form = Survived ~ Class, data = my_data, method = "rpart2",
                    tuneGrid = data.frame(maxdepth = 2),

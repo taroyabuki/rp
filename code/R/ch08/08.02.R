@@ -11,8 +11,6 @@ my_model <- train(form = LPRICE2 ~ WRAIN + DEGREES + HRAIN + TIME_SV,
                   method = "lm",
                   trControl = trainControl(method = "LOOCV"))
 
-## 8.2 重回帰分析
-
 coef(my_model$finalModel) %>%
   as.data.frame
 #>                         .
@@ -22,16 +20,12 @@ coef(my_model$finalModel) %>%
 #> HRAIN        -0.003860554
 #> TIME_SV       0.023847413
 
-## 8.2 重回帰分析
-
 my_test <- data.frame(
   WRAIN = 500, DEGREES = 17,
   HRAIN = 120, TIME_SV = 2)
 my_model %>% predict(my_test)
 #>         1 
 #> -1.498843 
-
-## 8.2 重回帰分析
 
 y  <- my_data$LPRICE2
 y_ <- my_model %>%
@@ -47,8 +41,6 @@ R2(pred = y_, obs = y,
 R2(pred = y_, obs = y,
    form = "corr")
 #> [1] 0.8275278 # 決定係数6（訓練）
-
-## 8.2 重回帰分析
 
 my_model$results
 #>   intercept      RMSE  Rsquared       MAE

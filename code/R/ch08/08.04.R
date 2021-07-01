@@ -20,8 +20,6 @@ head(my_data2)
 #> 5  -1.72    582    16.4   187      25     0     1
 #> 6  -0.418   485    17.5   187      24     1     2
 
-## 8.4 入力変数の数とモデルの良さ
-
 my_model2 <- train(form = LPRICE2 ~ ., data = my_data2, method = "lm",
                    trControl = trainControl(method = "LOOCV"))
 y  <- my_data2$LPRICE2

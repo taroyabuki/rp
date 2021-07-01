@@ -21,8 +21,6 @@ my_data2.head()
 #> 3 -1.50926    420  16.1333    110       26   1   0
 #> 4 -1.71655    582  16.4167    187       25   0   1
 
-## 8.4 入力変数の数とモデルの良さ
-
 X, y = my_data2.drop(columns=['LPRICE2']), my_data2['LPRICE2']
 my_model2 = LinearRegression().fit(X, y)
 

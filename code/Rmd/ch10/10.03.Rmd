@@ -10,8 +10,6 @@ my_url <- str_c("https://raw.githubusercontent.com",
 my_data <- read_csv(my_url)
 ```
 
-## 10.3 タイタニック
-
 ```{r}
 head(my_data)
 #> # A tibble: 6 x 4
@@ -47,8 +45,6 @@ my_model$results
 #> 1        2 0.7832803 0.4096365
 ```
 
-### 10.3.4 決定木の評価
-
 ```{r}
 y <- my_data$Survived
 tmp <- my_model %>% predict(newdata = my_data, type = "prob")
@@ -80,8 +76,6 @@ my_model1$results
 #> 1        2 0.7137665 0.2373133
 ```
 
-### 10.3.5 補足：質的入力変数の扱い
-
 ```{r}
 my_data2 <- my_data %>%
   dummyVars(formula = Survived ~ Class) %>%
@@ -97,8 +91,6 @@ my_model2$results
 #>   maxdepth  Accuracy     Kappa
 #> 1        2 0.7137665 0.2373133
 ```
-
-### 10.3.5 補足：質的入力変数の扱い
 
 ```{r}
 my_model3 <- train(form = Survived ~ Class, data = my_data, method = "rpart2",

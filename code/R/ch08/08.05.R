@@ -9,8 +9,6 @@ n <- nrow(my_data)
 my_data2 <- my_data %>% mutate(v1 = 0:(n - 1) %% 2,
                                v2 = 0:(n - 1) %% 3)
 
-## 8.5 変数選択
-
 my_model <- train(form = LPRICE2 ~ .,
                   data = my_data2,
                   method = "leapForward", # 変数増加法

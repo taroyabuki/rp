@@ -28,8 +28,6 @@ my_model.fit(X, y)
 # まとめて実行してもよい．
 # my_model = LinearRegression().fit(X, y)
 
-#### 7.3.3.2 訓練
-
 [my_model.intercept_, my_model.coef_]
 #> -17.579094890510973 [3.93240876]
 
@@ -46,8 +44,6 @@ tmp = pd.DataFrame({'speed':np.linspace(min(my_data.speed),
                                         max(my_data.speed),
                                         100)})
 tmp['model'] = my_model.predict(tmp)
-
-#### 7.3.3.4 モデルの可視化
 
 pd.concat([my_data, tmp]).plot(
   x='speed', style=['o', '-'])
