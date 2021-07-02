@@ -94,7 +94,7 @@ t.test(x = X, y = Y,
 #> mean of x mean of y 
 #>  30.21333  32.89333 
 
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
+### 4.4.4 独立性の検定（カイ2乗検定）
 
 my_url <- str_c("https://raw.githubusercontent.com/taroyabuki",
                 "/fromzero/master/data/smoker.csv")

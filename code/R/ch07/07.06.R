@@ -52,6 +52,10 @@ R2(pred = y_, obs = y,
    form = "corr")
 #> [1] 0.6510794
 
+postResample(pred = y_, obs = y)
+#>       RMSE   Rsquared        MAE 
+#> 15.0688560  0.6510794 11.5801191 
+
 #### 7.6.5.3 予測性能の指標（簡単に求められるもの）
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "lm")

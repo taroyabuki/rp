@@ -40,8 +40,7 @@ R2(pred = y_, obs = y,
 R2(pred = y_, obs = y,
    form = "corr")
 # あるいは
-summary(
-  my_model$finalModel)$r.squared
+summary(my_model$finalModel)$r.squared
 #> [1] 0.6510794
 
 my_test = my_data[1:3, ]

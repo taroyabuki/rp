@@ -31,7 +31,7 @@ my_lr.intercept_[0]
 
 tmp = my_ohe.get_feature_names()
 pd.Series(my_lr.coef_[0],
-          index = tmp)
+          index=tmp)
 #> x0_2nd     -1.018069
 #> x0_3rd     -1.777746
 #> x0_Crew    -0.857708

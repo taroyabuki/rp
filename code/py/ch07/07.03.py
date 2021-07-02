@@ -40,6 +40,8 @@ my_model.predict(tmp)
 #### 7.3.3.4 モデルの可視化
 
 import numpy as np
+import pandas as pd
+
 tmp = pd.DataFrame({'speed':np.linspace(min(my_data.speed),
                                         max(my_data.speed),
                                         100)})

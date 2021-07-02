@@ -78,7 +78,7 @@ c.ttest_ind(alternative=alt, usevar=ve)[1] # p値
 c.tconfint_diff(alpha=a, alternative=alt, usevar=ve) # 信頼区間
 #> (-4.170905570517185, -1.1890944294828283)
 
-### 4.4.4 独立性の検定（\myBindex{カイ2乗検定
+### 4.4.4 独立性の検定（カイ2乗検定）
 
 import pandas as pd
 my_url = ('https://raw.githubusercontent.com/taroyabuki/'

@@ -13,7 +13,7 @@ my_model$results
 ```
 
 ```{r}
-my_params <- expand.grid(k = 1:15) # data.frame(k = 1:15)も可
+my_params <- expand.grid(k = 1:15)
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                   tuneGrid = my_params,

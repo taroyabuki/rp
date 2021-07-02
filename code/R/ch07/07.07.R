@@ -10,7 +10,7 @@ my_model$results
 #> 2 7 16.19047 0.6601173 12.68464 3.165330 0.09990158 2.329326
 #> 3 9 16.30276 0.6556700 12.84811 3.367423 0.09645747 2.471620
 
-my_params <- expand.grid(k = 1:15) # data.frame(k = 1:15)も可
+my_params <- expand.grid(k = 1:15)
 
 my_model <- train(form = dist ~ speed, data = my_data, method = "knn",
                   tuneGrid = my_params,
