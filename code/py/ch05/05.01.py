@@ -1,3 +1,7 @@
+### 5.1.1 CSV
+
+!wget https://raw.githubusercontent.com/taroyabuki/fromzero/master/data/exam.csv
+
 #### 5.1.1.1 CSVの読み込み
 
 import pandas as pd
@@ -26,7 +30,7 @@ my_df2
 #### 5.1.1.2 CSVファイルへの書き出し
 
 my_df.to_csv('exam2.csv',
-    index=False) # 行の名前を出力しない．
+    index=False) # 行名を出力しない．
 
 my_df2.to_csv('exam3.csv')
 
@@ -84,7 +88,7 @@ import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 
 my_url = ('https://raw.githubusercontent.com'
-          '/fromzero/master/data/exam.xml')
+          '/taroyabuki/fromzero/master/data/exam.xml')
 with urlopen(my_url) as f:
     my_tree = ET.parse(f)       # XMLデータの読み込み
 

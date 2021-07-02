@@ -1,6 +1,11 @@
-#### 5.1.1.1 CSVの読み込み
+### 5.1.1 CSV
 
 library(tidyverse)
+system(str_c("wget https://raw.githubusercontent.com/taroyabuki",
+             "/fromzero/master/data/exam.csv"))
+
+#### 5.1.1.1 CSVの読み込み
+
 my_df <- read_csv("exam.csv")
 # あるいは
 my_df <- read.csv("exam.csv",
@@ -35,7 +40,7 @@ my_df2
 my_df %>% write_csv("exam2.csv")
 # あるいは
 my_df %>% write.csv(file = "exam2.csv",
-  row.names = FALSE) # 行の名前を出力しない．
+  row.names = FALSE) # 行名を出力しない．
 
 my_df2 %>% write.csv("exam3.csv")
 
@@ -59,22 +64,22 @@ my_url <- "https://github.com/taroyabuki/fromzero/blob/master/data/exam.csv"
 my_tables <- xml2::read_html(my_url) %>% rvest::html_table()
 
 my_tables 
-[[1]]
-  X1   X2      X3   X4     X5
-1 NA name english math gender
-2 NA    A      60   70      f
-3 NA    B      90   80      m
-4 NA    C      70   90      m
-5 NA    D      90  100      f
+#> [[1]]
+#>   X1   X2      X3   X4     X5
+#> 1 NA name english math gender
+#> 2 NA    A      60   70      f
+#> 3 NA    B      90   80      m
+#> 4 NA    C      70   90      m
+#> 5 NA    D      90  100      f
 
 tmp <- my_tables[[1]]
 tmp
-  X1   X2      X3   X4     X5
-1 NA name english math gender
-2 NA    A      60   70      f
-3 NA    B      90   80      m
-4 NA    C      70   90      m
-5 NA    D      90  100      f
+#>   X1   X2      X3   X4     X5
+#> 1 NA name english math gender
+#> 2 NA    A      60   70      f
+#> 3 NA    B      90   80      m
+#> 4 NA    C      70   90      m
+#> 5 NA    D      90  100      f
 
 # 1行目のデータを使って列の名前を付け直す．
 colnames(tmp) <- tmp[1,]
@@ -82,11 +87,11 @@ colnames(tmp) <- tmp[1,]
 # 1行目と1列目を削除する．
 my_data <- tmp[-1 ,-1]
 my_data
-  name english math gender
-2    A      60   70      f
-3    B      90   80      m
-4    C      70   90      m
-5    D      90  100      f
+#>   name english math gender
+#> 2    A      60   70      f
+#> 3    B      90   80      m
+#> 4    C      70   90      m
+#> 5    D      90  100      f
 
 #### 5.1.4.1 JSONデータの読み込み
 
