@@ -42,6 +42,7 @@ my_model.score(X, y)
 r2_score(y_true=y, y_pred=y_)
 #> 0.6510793807582509
 
+import numpy as np
 np.corrcoef(y, y_)[0, 1]**2
 #> 0.6510793807582511
 

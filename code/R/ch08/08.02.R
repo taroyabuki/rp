@@ -28,8 +28,7 @@ my_model %>% predict(my_test)
 #> -1.498843 
 
 y  <- my_data$LPRICE2
-y_ <- my_model %>%
-  predict(my_data)
+y_ <- my_model %>% predict(my_data)
 
 RMSE(y_, y)
 #> [1] 0.2586167 # RMSE（訓練）
@@ -49,8 +48,7 @@ my_model$results
 ### 8.2.1 補足：行列計算による再現
 
 M <- my_data[, -1] %>%
-  mutate(b0 = 1) %>%
-  as.matrix
+  mutate(b0 = 1) %>% as.matrix
 b <- MASS::ginv(M) %*% y
 matrix(b,
        dimnames = list(colnames(M)))

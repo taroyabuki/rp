@@ -1,5 +1,6 @@
 ## 8.3 標準化
 
+library(caret)
 library(tidyverse)
 my_url <- str_c("https://raw.githubusercontent.com",
                 "/taroyabuki/fromzero/master/data/wine.csv")

@@ -79,10 +79,10 @@ my_search = GridSearchCV(
     cv=LeaveOneOut(),
     scoring='neg_mean_squared_error',
     n_jobs=-1).fit(X, y)
-my_search.best_params_
-#> {'enet__alpha': 0.075, 'enet__l1_ratio': 0.0}
-
 my_model = my_search.best_estimator_ # 最良モデル
+
+my_search.best_params_               # 最良パラメータ
+#> {'enet__alpha': 0.075, 'enet__l1_ratio': 0.0}
 
 tmp = my_search.cv_results_                # チューニングの詳細
 my_scores = (-tmp['mean_test_score'])**0.5 # RMSE
@@ -95,10 +95,6 @@ my_results = pd.DataFrame(tmp['params']).assign(RMSE=my_scores).pivot(
 my_results.plot(style='o-', xlabel='A ( = alpha)', ylabel='RMSE').legend(
     title='B ( = l1_ratio)')
 
-y_ = my_model.predict(X)
-mean_squared_error(y_, y)**0.5
-#> 0.2627174747098049  # RMSE（訓練）
-
 (-my_search.best_score_)**0.5
-#> 0.31839530644830927 # RMSE（検証）
+#> 0.31945619679509646
 

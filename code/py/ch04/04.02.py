@@ -19,6 +19,7 @@ my_df = pd.DataFrame(
     {'x':[10, 20, 30]})
 my_df.hist('x', bins=2) # 階級数は2
 
+import numpy as np
 x = iris['Sepal.Length']
 tmp = np.linspace(min(x), max(x), 10)
 iris.hist('Sepal.Length',

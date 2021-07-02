@@ -13,11 +13,14 @@ RUN Rscript -e ' \
     "factoextra", \
     "forecast", \
     "furrr", \
+    "ggfortify", \
     "ggrepel", \
+    "glmnetUtils", \
     "gplots", \
     "gridExtra", \
     "igraph", \
     "MLmetrics", \
+    "neuralnet", \
     "pastecs", \
     "prophet", \
     "PRROC", \
@@ -58,9 +61,8 @@ WORKDIR /home/rstudio
 #  fable \
 #  feasts \
 #  glmnet \
-#  glmnetUtils \
-#  ggfortify \
-#  neuralnet \
+#   \
+#   \
 #  ploty \
 #  pryr \
 #  tsibble \

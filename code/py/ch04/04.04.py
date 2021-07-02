@@ -12,6 +12,8 @@ binom_test(count=2,                 # 当たった回数
 
 #### 4.4.1.1 補足：p値とは何か
 
+import numpy as np
+import pandas as pd
 from scipy import stats
 
 t = 4 / 10                        # 当たる確率

@@ -12,11 +12,11 @@ x <- runif(min = 0,  # 最小
            n = 1000) # 乱数の数
 hist(x)
 
-x <- runif(min = 1,      # 最小
-           max = 7,      # 最大+1
-           n = 1000) %>% # 乱数の数
-  as.integer             # 整数に変換
-hist(x, breaks = 0:6)    # 結果は割愛
+x <- as.integer(      # 整数に変換
+  runif(min = 1,      # 最小
+        max = 7,      # 最大+1
+        n = 1000))    # 乱数の数
+hist(x, breaks = 0:6) # 結果は割愛
 
 ### 4.3.3 二項乱数
 

@@ -17,12 +17,7 @@ my_model <- train(form = LPRICE2 ~ .,
                   trControl = trainControl(method = "LOOCV"))
 plot(my_model$finalModel) # 訓練済ネットワークの描画（結果は割愛）
 
-y  <- my_data$LPRICE2
-y_ <- my_model %>% predict(my_data)
-RMSE(y_, y)      # RMSE（訓練）
-#> [1] 0.2200265
-
-my_model$results # RMSE（検証）
+my_model$results
 #>   layer1 layer2 layer3      RMSE ...
 #> 1      1      0      0 0.3504016 ...
 #> 2      3      0      0 0.4380399 ...
@@ -40,12 +35,7 @@ my_model <- train(
                          layer2 = 0:2,
                          layer3 = 0))
 
-y  <- my_data$LPRICE2
-y_ <- my_model %>% predict(my_data)
-RMSE(y_, y)          # RMSE（訓練）
-#> [1] 0.1336863
-
-my_model$results %>% # RMSE（検証）
+my_model$results %>%
   filter(RMSE == min(RMSE))
 #>   layer1 layer2 layer3      RMSE ...
 #> 1      2      0      0 0.3165704 ...

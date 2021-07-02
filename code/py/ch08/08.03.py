@@ -1,6 +1,7 @@
 ## 8.3 標準化
 
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 my_url = ('https://raw.githubusercontent.com'
@@ -9,8 +10,8 @@ my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
 # StandardScalerで標準化した結果をデータフレームに戻してから描画する．
-pd.DataFrame(StandardScaler().fit_transform(X),
-             columns=X.columns).boxplot(showmeans=True)
+pd.DataFrame(StandardScaler().fit_transform(X), columns=X.columns
+            ).boxplot(showmeans=True)
 
 my_pipeline = Pipeline([
     ('sc', StandardScaler()),
@@ -31,6 +32,6 @@ pd.Series(my_lr.coef_,
 #> dtype: float64
 
 my_test = [[500, 17, 120, 2]]
-my_model.predict(my_test)
+my_pipeline.predict(my_test)
 #> array([-1.49884253])
 

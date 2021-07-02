@@ -88,13 +88,7 @@ ggplot(my_model) +
 ```
 
 ```{r}
-y  <- my_data$LPRICE2
-y_ <- my_model %>% predict(my_data)
-
-RMSE(y_, y)          # RMSE（訓練）
-#> [1] 0.2627595
-
-my_model$results %>% # RMSE（検証）
+my_model$results %>%
   filter(RMSE == min(RMSE))
 #>   alpha lambda      RMSE ...
 #> 1     0 0.0595 0.3117092 ...
