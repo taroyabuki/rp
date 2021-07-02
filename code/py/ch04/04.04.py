@@ -12,6 +12,8 @@ binom_test(count=2,                 # 当たった回数
 
 #### 4.4.1.1 補足：p値とは何か
 
+from scipy import stats
+
 t = 4 / 10                        # 当たる確率
 n = 15                            # くじを引いた回数
 x = np.array(range(0, n + 1))     # 当たった回数
@@ -60,8 +62,8 @@ alt = 'two-sided' # 両側検定（デフォルト）
                   # 左片側検定なら'smaller'
                   # 右片側検定なら'larger'
 
-d = DescrStatsW(X - Y)           # 対標本の場合
-d.ttest_mean(alternative=alt)[1] # p値
+d = DescrStatsW(np.array(X) - np.array(Y)) # 対標本の場合
+d.ttest_mean(alternative=alt)[1]           # p値
 #> 0.0006415571512322235
 
 d.tconfint_mean(alpha=a, alternative=alt) # 信頼区間

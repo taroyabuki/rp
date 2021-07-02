@@ -10,13 +10,13 @@ help(log)
 
 ### 3.8.3 RのNA，Pythonのnan
 
-my_v = c(1, NA, 3)
-my_v
+v = c(1, NA, 3)
+v
 #> [1]  1 NA  3
 
-is.na(my_v[2])
+is.na(v[2])
 #> [1] TRUE
 
-my_v[2] == NA # 誤り
+v[2] == NA # 誤り
 #> [1] NA
 

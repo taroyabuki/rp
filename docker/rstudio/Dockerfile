@@ -9,6 +9,7 @@ RUN Rscript -e ' \
     "doParallel", \
     "e1071", \
     "epitools", \
+    "exactci", \
     "factoextra", \
     "forecast", \
     "furrr", \
@@ -54,7 +55,6 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
 WORKDIR /home/rstudio
 
 # 必要かも
-#  exactci \
 #  fable \
 #  feasts \
 #  glmnet \

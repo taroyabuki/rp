@@ -18,13 +18,13 @@ help(math.log)
 ### 3.8.3 RのNA，Pythonのnan
 
 import numpy as np
-my_v = [1, np.nan, 3]
-my_v
+v = [1, np.nan, 3]
+v
 #> [1, nan, 3]
 
-np.isnan(my_v[1])
+np.isnan(v[1])
 #> True
 
-my_v[1] == np.nan # 誤り
+v[1] == np.nan # 誤り
 #> False
 

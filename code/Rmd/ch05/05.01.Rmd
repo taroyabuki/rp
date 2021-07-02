@@ -7,7 +7,7 @@ my_df <- read_csv("exam.csv")
 my_df <- read.csv("exam.csv",
   stringsAsFactors = FALSE)
 
-my_df # 後者を実行した場合
+my_df
 #>   name english math gender
 #> 1    A      60   70      f
 #> 2    B      90   80      m
@@ -63,7 +63,8 @@ my_df <- read.csv(file = "exam.csv",
 ```{r}
 my_df %>% write_csv("exam2.csv")
 # あるいは
-my_df %>% write.csv(file = "exam2.csv", row.names = FALSE, fileEncoding = "UTF-8")
+my_df %>% write.csv(file = "exam2.csv", row.names = FALSE,
+                    fileEncoding = "UTF-8")
 ```
 
 ### 5.1.3 ウェブ上の表

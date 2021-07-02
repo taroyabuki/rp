@@ -104,18 +104,14 @@ mosaicplot(
   data = my_df)
 
 library(vcd)
-mosaic(formula = ~w_Sepal + Species, data = my_df, labeling = labeling_values)
+vcd::mosaic(formula = ~w_Sepal + Species, data = my_df,
+            labeling = labeling_values)
 
 ### 4.2.6 関数のグラフ
 
 curve(x^3 - x, -2, 2)
 
 ### 4.2.7 ggplot2 (R)
-
-データフレーム %>%
-  ggplot(aes(x = 横軸に使う列の名前, y = 縦軸に使う列の名前, その他)) +
-  描画要素1(オプション) +
-  描画要素2(オプション) + ...
 
 x <- iris$Sepal.Length
 tmp <- seq(min(x), max(x),

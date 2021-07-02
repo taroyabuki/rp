@@ -40,7 +40,7 @@ my_enc %>% predict(my_df)
 #> 3  3       0       0       1
 
 my_df2 <- data.frame(
-  id = c(4, 5, 6),
+  id =    c( 4,   5,   6 ),
   class = c("B", "C", "B"))
 my_enc %>% predict(my_df2)
 #>   id class.A class.B class.C

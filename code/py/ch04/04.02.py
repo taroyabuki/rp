@@ -15,7 +15,8 @@ iris.head()
 iris.hist('Sepal.Length')
 
 import pandas as pd
-my_df = pd.DataFrame({'x':[10, 20, 30]})
+my_df = pd.DataFrame(
+    {'x':[10, 20, 30]})
 my_df.hist('x', bins=2) # 階級数は2
 
 x = iris['Sepal.Length']
@@ -65,7 +66,8 @@ my_group.agg('mean').plot(kind='bar', yerr=my_se, capsize=5)
 
 ### 4.2.5 モザイクプロット
 
-from statsmodels import graphics
+from statsmodels.graphics.mosaicplot \
+import mosaic
 
 my_df = pd.DataFrame({
     'Species':iris.Species,
@@ -81,8 +83,8 @@ my_table
 #> versicolor     42      8
 #> virginica      33     17
 
-graphics.mosaicplot.mosaic(
-  my_df, index=['Species', 'w_Sepal'])
+mosaic(my_df,
+       index=['Species', 'w_Sepal'])
 
 my_table.columns = [str(x) for x in my_table.columns]
 my_table.index   = [str(x) for x in my_table.index]
