@@ -1,6 +1,7 @@
 ### 9.2.1 分類木の作成と利用
 
 library(caret)
+library(tidyverse)
 my_data <- iris
 my_model <- train(form = Species ~ ., data = my_data, method = "rpart")
 

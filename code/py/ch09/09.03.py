@@ -1,5 +1,6 @@
 ### 9.3.1 混同行列
 
+import graphviz
 import pandas as pd
 import statsmodels.api as sm
 from sklearn import tree
@@ -58,7 +59,8 @@ my_search = GridSearchCV(
 tmp = my_search.cv_results_
 my_results = pd.DataFrame(tmp['params']).assign(
     Accuracy = tmp['mean_test_score'])
-my_results[my_results.Accuracy == my_results.Accuracy.max()] # 正解率（検証）の最大値
+# 正解率（検証）の最大値
+my_results[my_results.Accuracy == my_results.Accuracy.max()]
 #>     max_depth  min_samples_leaf  min_samples_split  Accuracy
 #> 22          3                 5                  2  0.973333
 #> 23          3                 5                 20  0.973333

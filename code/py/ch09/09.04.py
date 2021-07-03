@@ -30,19 +30,21 @@ my_search = GridSearchCV(
                 'colsample_bytree':[0.6, 0.8],
                 'min_child_weight':[1],
                 'subsample'       :[0.5, 0.75, 1]},
-    cv=LeaveOneOut(),
+    cv=5, # 5分割交差検証
     n_jobs=1).fit(X, y) # n_jobs=-1ではない．
 my_search.best_params_
 #> {'colsample_bytree': 0.6,
+#>  'gamma': 0,
 #>  'learning_rate': 0.3,
 #>  'max_depth': 1,
+#>  'min_child_weight': 1,
 #>  'n_estimators': 50,
-#>  'subsample': 0.5}
+#>  'subsample': 0.75}
 
 my_search.best_score_
-#> 0.9533333333333334
+#> 0.9666666666666668
 
-### 9.4.3 変数の重要度
+### 9.4.3 入力変数の重要度
 
 my_model = RandomForestClassifier().fit(X, y)
 tmp = pd.Series(my_model.feature_importances_, index=X.columns)

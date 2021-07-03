@@ -33,7 +33,7 @@ max(my_model$results$Accuracy)
 
 my_model <- train(form = Species ~ ., data = my_data, method = "xgbTree",
                   na.action = na.pass,
-                  trControl = trainControl(method = "LOOCV"))
+                  trControl = trainControl(method = "cv", number = 5))
 max(my_model$results$Accuracy)
-#> [1] 0.96
+#> [1] 0.966666666666667
 

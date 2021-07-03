@@ -35,7 +35,7 @@ my_scores.mean()
 
 ### 9.5.3 方針2：欠損があっても使える手法で学習する．
 
-my_scores = cross_val_score(xgboost.XGBClassifier(), X, y, cv=LeaveOneOut())
+my_scores = cross_val_score(xgboost.XGBClassifier(), X, y, cv=5)
 my_scores.mean()
-#> 0.9533333333333334
+#> 0.9666666666666668
 
