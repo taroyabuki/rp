@@ -20,6 +20,8 @@ my_data.head()
 #> 3   1st  Male  Child      Yes
 #> 4   1st  Male  Child      Yes
 
+### 10.3.1 質的入力変数の扱い方
+
 ### 10.3.2 決定木の訓練
 
 X, y = my_data.iloc[:, 0:3], my_data.Survived
@@ -65,4 +67,6 @@ my_auc
 #> 0.7114886868858494
 
 RocCurveDisplay(fpr=my_fpr, tpr=my_tpr, roc_auc=my_auc).plot()
+
+### 10.3.5 補足：質的入力変数の扱い
 

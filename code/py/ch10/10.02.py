@@ -1,3 +1,5 @@
+## 10.2 トレードオフ
+
 ### 10.2.1 偽陽性率と真陽性率のトレードオフ（ROC曲線）
 
 import numpy as np
@@ -8,8 +10,8 @@ y       = np.array([  0,   1,   1,   0,   1,   0,    1,   0,   0,   1])
 y_score = np.array([0.7, 0.8, 0.3, 0.4, 0.9, 0.6, 0.99, 0.1, 0.2, 0.5])
 y_      = np.array([1 if 0.5 <= p else 0 for p in y_score])
 
-[sum((y == 0) & (y_ == 1)) / sum(y == 0), # False Positive Rate
- sum((y == 1) & (y_ == 1)) / sum(y == 1)] # True Positive Rate
+[sum((y == 0) & (y_ == 1)) / sum(y == 0), # FPR
+ sum((y == 1) & (y_ == 1)) / sum(y == 1)] # TPR
 #> [0.4, 0.8]
 
 my_fpr, my_tpr, _ = roc_curve(y_true=y,

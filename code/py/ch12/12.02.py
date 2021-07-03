@@ -1,3 +1,5 @@
+## 12.2 時系列データの予測
+
 ### 12.2.1 データの準備
 
 from pmdarima.datasets import airpassengers
@@ -55,6 +57,8 @@ plt.plot(my_train[['y']], label='train')
 plt.plot(my_test[['y']],  label='test')
 plt.plot(tmp, label='model')
 plt.legend()
+
+### 12.2.3 SARIMAによる時系列予測
 
 #### 12.2.3.1 モデルの構築
 

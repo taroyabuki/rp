@@ -1,3 +1,9 @@
+## 7.6 検証
+
+### 7.6.1 訓練データ・検証データ・テストデータ
+
+### 7.6.2 検証とは何か
+
 ### 7.6.3 検証の実践
 
 library(caret)
@@ -26,6 +32,8 @@ my_model$results
 library(doParallel)
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
+
+### 7.6.5 指標のまとめ
 
 #### 7.6.5.1 準備
 

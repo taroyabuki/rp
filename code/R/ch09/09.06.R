@@ -1,4 +1,10 @@
+## 9.6 他の分類手法
+
 ### 9.6.1 K最近傍法
+
+library(caret)
+library(tidyverse)
+my_data <- iris
 
 my_model <- train(form = Species ~ ., data = my_data, method = "knn",
                   trControl = trainControl(method = "LOOCV"))

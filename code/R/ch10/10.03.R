@@ -19,6 +19,8 @@ head(my_data)
 #> 5 1st   Male  Child Yes     
 #> 6 1st   Male  Adult No
 
+### 10.3.1 質的入力変数の扱い方
+
 ### 10.3.2 決定木の訓練
 
 my_model <- train(form = Survived ~ ., data = my_data, method = "rpart2",
@@ -79,7 +81,7 @@ my_model2$results
 my_model3 <- train(form = Survived ~ Class, data = my_data, method = "rpart2",
                    tuneGrid = data.frame(maxdepth = 2),
                    trControl = trainControl(method = "LOOCV"))
-rpart.plot::rpart.plot(my_model1$finalMode3, extra = 1)
+rpart.plot::rpart.plot(my_model3$finalModel, extra = 1)
 my_model3$results
 #>   maxdepth  Accuracy     Kappa
 #> 1        2 0.6915039 0.2674485

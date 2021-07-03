@@ -1,3 +1,5 @@
+## 10.1 2値分類の性能指標
+
 ### 10.1.1 陽性と陰性
 
 y       <- c(  0,   1,   1,   0,   1,   0,    1,   0,   0,   1)
@@ -10,7 +12,7 @@ y_
 library(caret)
 confusionMatrix(data      = as.factor(y_), # 予測
                 reference = as.factor(y),  # 正解
-                positive = "1",            # 何を陽性とするか
+                positive = "1",            # 「1」を陽性とする．
                 mode = "everything")       # 全ての指標を求める．
 #> Confusion Matrix and Statistics
 #> 

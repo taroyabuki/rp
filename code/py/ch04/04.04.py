@@ -1,3 +1,5 @@
+## 4.4 統計的推測
+
 ### 4.4.1 検定
 
 from statsmodels.stats.proportion import binom_test, proportion_confint
@@ -107,6 +109,8 @@ my_table
 from scipy.stats import chi2_contingency
 chi2_contingency(my_table, correction = False)[1]
 #> 0.18860725715300422
+
+### 4.4.5 ブートストラップ
 
 #### 4.4.5.1 15回引いて2回当たったくじ
 

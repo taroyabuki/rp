@@ -1,3 +1,5 @@
+## 9.6 他の分類手法
+
 ### 9.6.1 K最近傍法
 
 import statsmodels.api as sm

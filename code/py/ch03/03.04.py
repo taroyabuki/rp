@@ -1,3 +1,5 @@
+## 3.4 データフレーム
+
 ### 3.4.1 データフレームの作成
 
 import pandas as pd
@@ -86,6 +88,8 @@ my_df3
 #> C       70    90      m
 #> D       90   100      f
 
+### 3.4.2 データの追加
+
 #### 3.4.2.1 行の追加（データフレームの結合）
 
 tmp = pd.DataFrame({
@@ -102,6 +106,8 @@ my_df2 = my_df.assign(id=[1, 2, 3, 4])
 my_df3 = my_df.copy()       # コピー
 my_df3['id'] = [1, 2, 3, 4] # 更新
 my_df3 # 結果の確認（割愛）
+
+### 3.4.3 データの取り出し
 
 #### 3.4.3.1 観測値の取り出し
 
@@ -176,6 +182,8 @@ x = my_df.sort_values('english')
 
 x = my_df.sort_values(
     'english', ascending=False)
+
+### 3.4.4 補足：行列
 
 #### 3.4.4.1 行列の生成
 

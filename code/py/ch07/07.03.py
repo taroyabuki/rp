@@ -1,3 +1,7 @@
+## 7.3 回帰分析
+
+### 7.3.1 回帰分析とは何か
+
 ### 7.3.2 線形単回帰分析
 
 import seaborn as sns
@@ -9,6 +13,8 @@ ax.vlines(x=21.5, ymin=-5, ymax=67,   linestyles='dotted')
 ax.hlines(y=67,   xmin=4,  xmax=21.5, linestyles='dotted')
 ax.set_xlim(4, 25)
 ax.set_ylim(-5, 125)
+
+### 7.3.3 回帰分析の実践
 
 #### 7.3.3.1 データの用意
 

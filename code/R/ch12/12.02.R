@@ -1,3 +1,5 @@
+## 12.2 時系列データの予測
+
 ### 12.2.1 データの準備
 
 my_data <- as.vector(AirPassengers)
@@ -61,6 +63,8 @@ y_ <- my_lm_model %>%
 tmp <- my_df %>%
   mutate(y = y_, label = "model")
 my_plot + geom_line(data = tmp)
+
+### 12.2.3 SARIMAによる時系列予測
 
 #### 12.2.3.1 モデルの構築
 

@@ -1,3 +1,7 @@
+## 7.3 回帰分析
+
+### 7.3.1 回帰分析とは何か
+
 ### 7.3.2 線形単回帰分析
 
 library(tidyverse)
@@ -10,6 +14,8 @@ my_data %>% ggplot(aes(x = speed, y = dist)) +
   stat_smooth(formula = y ~ x, method = "lm") +
   geom_pointrange(data = tmp, aes(ymin = -9, ymax = dist),  linetype = "dotted") +
   geom_pointrange(data = tmp, aes(xmin =  0, xmax = speed), linetype = "dotted")
+
+### 7.3.3 回帰分析の実践
 
 #### 7.3.3.1 データの用意
 

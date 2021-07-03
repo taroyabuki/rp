@@ -100,3 +100,5 @@ x = np.linspace(-2, 2, 100)
 y = x**3 - x
 plt.plot(x, y)
 
+### 4.2.7 ggplot2 (R)
+

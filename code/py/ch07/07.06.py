@@ -1,3 +1,9 @@
+## 7.6 検証
+
+### 7.6.1 訓練データ・検証データ・テストデータ
+
+### 7.6.2 検証とは何か
+
 ### 7.6.3 検証の実践
 
 import statsmodels.api as sm
@@ -25,6 +31,10 @@ my_scores.mean()
 my_scores = cross_val_score(my_model, X, y, scoring='neg_root_mean_squared_error')
 -my_scores.mean()
 #> 15.58402474583013 # RMSE（検証）
+
+### 7.6.4 検証の並列化
+
+### 7.6.5 指標のまとめ
 
 #### 7.6.5.1 準備
 

@@ -1,3 +1,5 @@
+## 4.4 統計的推測
+
 ### 4.4.1 検定
 
 library(exactci)
@@ -122,6 +124,8 @@ chisq.test(my_table, correct = FALSE)
 #>
 #> data:  my_data
 #> X-squared = 1.7285, df = 1, p-value = 0.1886
+
+### 4.4.5 ブートストラップ
 
 #### 4.4.5.1 15回引いて2回当たったくじ
 

@@ -98,3 +98,5 @@ my_results.plot(style='o-', xlabel='A ( = alpha)', ylabel='RMSE').legend(
 (-my_search.best_score_)**0.5
 #> 0.31945619679509646
 
+### 8.6.4 補足：RとPythonで結果を同じにする方法
+
