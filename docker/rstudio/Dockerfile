@@ -61,8 +61,6 @@ WORKDIR /home/rstudio
 #  fable \
 #  feasts \
 #  glmnet \
-#   \
-#   \
 #  ploty \
 #  pryr \
 #  tsibble \
