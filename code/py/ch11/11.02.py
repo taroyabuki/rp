@@ -42,10 +42,15 @@ tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch')
 
 tmp.iloc[-1, ]
-#> loss            0.057278
-#> accuracy        0.991071
-#> val_loss        0.100445
-#> val_accuracy    0.947368
+#> loss            0.067497
+#> accuracy        0.973214
+#> val_loss        0.143529
+#> val_accuracy    0.921053
+
+tmp = my_model.predict(X)
+y_ = np.argmax(tmp, axis=-1)
+(y_ == y).mean()
+#> 0.96
 
 ### 11.2.1 交差エントロピー
 

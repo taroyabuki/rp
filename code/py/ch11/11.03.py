@@ -75,8 +75,10 @@ my_history = my_model.fit(
 tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch', style='o-')
 
-y_ = my_model.predict_classes(x_test)
-confusion_matrix(y_true=y_test, y_pred=y_)
+tmp = my_model.predict(x_test)
+y_ = np.argmax(tmp, axis=-1)
+confusion_matrix(y_true=y_test,
+                 y_pred=y_)
 
 #> [[ 962    0    2    1    1    2    7    1    2    2]
 #>  [   0 1123    4    0    0    1    3    0    4    0]

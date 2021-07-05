@@ -11,6 +11,8 @@ plt.plot(x, y)
 ### 8.7.2 ニューラルネットワークの訓練
 
 import pandas as pd
+import warnings
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import cross_val_score, GridSearchCV, LeaveOneOut
 from sklearn.pipeline import Pipeline
@@ -21,12 +23,14 @@ my_url = ('https://raw.githubusercontent.com'
 my_data = pd.read_csv(my_url)
 X, y = my_data.drop(columns=['LPRICE2']), my_data['LPRICE2']
 
-my_pipeline = Pipeline([('sc', StandardScaler()), # 標準化
-                        ('mlp', MLPRegressor())]) # ニューラルネットワーク
-my_pipeline.fit(X, y)                             # 訓練
+warnings.simplefilter("ignore", ConvergenceWarning)  # 警告を表示しない．
+my_pipeline = Pipeline([('sc', StandardScaler()),    # 標準化
+                        ('mlp', MLPRegressor())])    # ニューラルネットワーク
+my_pipeline.fit(X, y)                                # 訓練
 
 my_scores = cross_val_score(my_pipeline, X, y, cv=LeaveOneOut(),
                             scoring='neg_mean_squared_error')
+warnings.simplefilter("default", ConvergenceWarning) # 警告を表示する．
 
 (-my_scores.mean())**0.5
 #> 0.41735891601426384

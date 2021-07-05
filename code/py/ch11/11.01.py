@@ -3,15 +3,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import sklearn
 from keras import activations, callbacks, layers, models
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils import shuffle
 
 my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/wine.csv')
 tmp = pd.read_csv(my_url)
 
-my_data = sklearn.utils.shuffle(tmp)
+my_data = shuffle(tmp)
 
 my_scaler = StandardScaler()
 X = my_scaler.fit_transform(
@@ -61,7 +61,11 @@ tmp = pd.DataFrame(my_history.history)
 tmp.plot(xlabel='epoch')
 
 tmp.iloc[-1, ]
-#> loss        0.058252
-#> val_loss    0.085878
+#> loss        0.192743
+#> val_loss    0.342249
 #> Name: 499, dtype: float64
+
+y_ = my_model.predict(X)
+((y_.ravel() - y)**2).mean()
+#> 0.23050613964540986
 

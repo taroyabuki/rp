@@ -78,7 +78,8 @@ my_params <- expand.grid(
 
 library(furrr)
 plan(multisession) # 並列処理の準備
-my_results <- my_params %>% future_pmap_dfr(my_loocv) # 実行
+my_results <- my_params %>% future_pmap_dfr(my_loocv, # 実行
+  .options = furrr_options(seed = TRUE))
 
 my_results %>% filter(Accuracy == max(Accuracy)) # 正解率（検証）の最大値
 #>   maxdepth minbucket minsplit Accuracy

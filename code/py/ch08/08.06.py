@@ -2,16 +2,14 @@
 
 import numpy as np
 import pandas as pd
+import warnings
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import ElasticNet, enet_path
 from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import zscore
-
-# 収束に関する警告を非表示にする．
-import warnings
-from sklearn.exceptions import ConvergenceWarning
-warnings.simplefilter('ignore', ConvergenceWarning)
+warnings.simplefilter('ignore', ConvergenceWarning) # 警告を表示しない．
 
 my_url = ('https://raw.githubusercontent.com'
           '/taroyabuki/fromzero/master/data/wine.csv')
@@ -49,8 +47,7 @@ my_pipeline.predict(my_test)
 
 ### 8.6.2 ペナルティの強さと係数の関係
 
-As = np.e**np.arange(
-    2, -5.5, -0.1)
+As = np.e**np.arange(2, -5.5, -0.1)
 B = 0.1
 
 _, my_path, _ = enet_path(

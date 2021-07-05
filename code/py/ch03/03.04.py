@@ -74,7 +74,7 @@ my_df2
 #> a  1   10
 #> b  1  100
 #> c  2   10
-# 以下略
+# 以下省略
 
 my_df3 = pd.DataFrame({
     'english': [ 60,  90,  70,  90],

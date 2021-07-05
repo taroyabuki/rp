@@ -4,6 +4,7 @@
 
 import numpy as np
 import statsmodels.api as sm
+import warnings
 import xgboost
 from sklearn import tree
 from sklearn.impute import SimpleImputer
@@ -37,7 +38,11 @@ my_scores.mean()
 
 ### 9.5.3 方針2：欠損があっても使える手法で学習する．
 
-my_scores = cross_val_score(xgboost.XGBClassifier(), X, y, cv=5)
+warnings.simplefilter('ignore', UserWarning) # 警告を表示しない．
+my_scores = cross_val_score(
+    xgboost.XGBClassifier(eval_metric='mlogloss'), X, y, cv=5)
+warnings.simplefilter('default', UserWarning) # 警告を表示する．
+
 my_scores.mean()
 #> 0.9666666666666668
 

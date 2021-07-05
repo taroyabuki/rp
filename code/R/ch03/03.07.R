@@ -99,6 +99,7 @@ library(furrr)
 plan(multisession) # 準備
 
 v <- c(5, 10, 100)
-v %>% future_map_dbl(f1)
+v %>% future_map_dbl(f1, .options =
+  furrr_options(seed = TRUE))
 # 結果は割愛
 

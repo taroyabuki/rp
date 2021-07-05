@@ -14,5 +14,5 @@ my_data.describe()
 #>        Sepal.Length  Sepal.Width  Petal.Length  Petal.Width
 #> count    150.000000   150.000000    150.000000   150.000000
 #> mean       5.843333     3.057333      3.758000     1.199333
-# 以下略
+# 以下省略
 

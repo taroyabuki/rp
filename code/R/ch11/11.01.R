@@ -2,7 +2,6 @@
 
 library(keras)
 library(tidyverse)
-
 my_url <- str_c("https://raw.githubusercontent.com",
                 "/taroyabuki/fromzero/master/data/wine.csv")
 tmp <- read_csv(my_url)
@@ -30,8 +29,8 @@ my_cb <- callback_early_stopping(
   patience = 20,
   restore_best_weights = TRUE)
 
-my_history <- my_model %>%
-  fit(x = X,
+my_history <- my_model %>% fit(
+    x = X,
     y = y,
     validation_split = 0.25,
     batch_size = 10,
@@ -43,6 +42,10 @@ plot(my_history)
 
 my_history
 #> Final epoch (plot to see history):
-#>     loss: 0.1218
-#> val_loss: 0.1129
+#>     loss: 0.06124
+#> val_loss: 0.1132
+
+y_ <- my_model %>% predict(X)
+mean((y_ - y)^2)**0.5
+#> [1] 0.2724372
 

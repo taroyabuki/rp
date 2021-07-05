@@ -17,7 +17,7 @@ my_model <- train(form = LPRICE2 ~ .,
                   method = "neuralnet",              # ニューラルネットワーク
                   preProcess = c("center", "scale"), # 標準化
                   trControl = trainControl(method = "LOOCV"))
-plot(my_model$finalModel) # 訓練済ネットワークの描画（結果は割愛）
+plot(my_model$finalModel) # 訓練済ネットワークの描画
 
 my_model$results
 #>   layer1 layer2 layer3      RMSE ...

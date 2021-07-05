@@ -54,7 +54,8 @@ my_history <- my_model %>%
 
 plot(my_history)
 
-y_ <- my_model %>% predict_classes(x_test)
+tmp <- my_model %>% predict(x_test)
+y_ <- apply(tmp, 1, which.max) - 1
 table(y_, y_test)
 
 #>    y_test

@@ -2,7 +2,6 @@
 
 library(keras)
 library(tidyverse)
-
 my_data <- iris[sample(nrow(iris)), ]
 
 X <- my_data %>%
@@ -34,10 +33,15 @@ plot(my_history)
 
 my_history
 #> Final epoch (plot to see history):
-#>         loss: 0.04358
-#>     accuracy: 0.9911
-#>     val_loss: 0.0863
-#> val_accuracy: 0.9737
+#>         loss: 0.06206
+#>     accuracy: 0.9732
+#>     val_loss: 0.1269
+#> val_accuracy: 0.9211
+
+tmp <- my_model %>% predict(X)
+y_ <- apply(tmp, 1, which.max) - 1
+mean(y_ == y)
+#> [1] 0.9666667
 
 ### 11.2.1 交差エントロピー
 

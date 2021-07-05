@@ -4,6 +4,7 @@
 
 import pandas as pd
 import statsmodels.api as sm
+import warnings
 import xgboost
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, LeaveOneOut
@@ -23,8 +24,9 @@ my_search.cv_results_['mean_test_score']
 
 ### 9.4.2 ブースティング
 
+warnings.simplefilter('ignore', UserWarning) # 警告を表示しない．
 my_search = GridSearchCV(
-    xgboost.XGBClassifier(),
+    xgboost.XGBClassifier(eval_metric='mlogloss'),
     param_grid={'n_estimators'    :[50, 100, 150],
                 'max_depth'       :[1, 2, 3],
                 'learning_rate'   :[0.3, 0.4],
@@ -34,6 +36,8 @@ my_search = GridSearchCV(
                 'subsample'       :[0.5, 0.75, 1]},
     cv=5, # 5分割交差検証
     n_jobs=1).fit(X, y) # n_jobs=-1ではない．
+warnings.simplefilter('default', UserWarning) # 警告を表示する．
+
 my_search.best_params_
 #> {'colsample_bytree': 0.6,
 #>  'gamma': 0,

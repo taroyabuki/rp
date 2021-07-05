@@ -65,9 +65,12 @@ my_data <- cars
 my_idx <- c(2, 11, 27, 34, 39, 44)
 my_sample <- my_data[my_idx, ]
 
+options(warn = -1) # 警告を表示しない．
 my_model <- train(form = dist ~ poly(speed, degree = 5, raw = TRUE),
                   data = my_sample,
                   method = "lm")
+options(warn = 0)  # 警告を表示する．
+
 y  <- my_sample$dist
 y_ <- my_model %>% predict(my_sample)
 
