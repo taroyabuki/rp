@@ -16,7 +16,6 @@ RUN pip install \
 
 RUN pip install fbprophet
 
-#RUN Rscript -e 'devtools::install_version("foreign", version = "0.8.76", repos = "http://cran.us.r-project.org");\
 RUN Rscript -e ' \
   Sys.setenv(DOWNLOAD_STATIC_LIBV8=1); \
   install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/"); \
