@@ -9,8 +9,6 @@ library(tidyverse)
 h2o.init()
 h2o.no_progress()
 
-h2o.shutdown(prompt = FALSE)
-
 ### 11.4.2 H2Oのデータフレーム
 
 my_url <- str_c("https://raw.githubusercontent.com",
@@ -81,8 +79,7 @@ min(my_model@leaderboard$
 #> [1] 0.0806190885648608
 
 tmp <- my_model %>%
-  predict(my_test) %>%
-  as.data.frame
+  predict(my_test) %>% as.data.frame
 y_ <- tmp$predict
 
 mean(y_ == y_test)

@@ -4,14 +4,12 @@
 
 import h2o
 import pandas as pd
+import tensorflow as tf
 from h2o.automl import H2OAutoML
-from keras import datasets
 from random import sample
 
 h2o.init()
 h2o.no_progress()
-
-h2o.cluster().shutdown()
 
 ### 11.4.2 H2Oのデータフレーム
 
@@ -56,7 +54,7 @@ pd.DataFrame({
 
 ### 11.4.4 AutoMLによる分類
 
-(x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 my_index = sample(range(60000), 6000)
 x_train = x_train[my_index, :, :]
 y_train = y_train[my_index]
@@ -80,13 +78,12 @@ my_model.train(
 
 my_model.leaderboard[
     'mean_per_class_error'].min()
-#> 0.07962009694497166
+#> 0.06803754348177862
 
-tmp <- my_model %>%
-  predict(my_test) %>%
-  as.data.frame
-y_ <- tmp$predict
+tmp = h2o.as_list(
+    my_model.predict(my_test))
+y_ = tmp.predict
 
-mean(y_ == y_test)
-#> [1] 0.9306
+(y_ == y_test).mean()
+#> 0.938
 

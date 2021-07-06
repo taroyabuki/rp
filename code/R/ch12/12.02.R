@@ -48,18 +48,13 @@ my_plot
 
 ### 12.2.2 線形回帰分析による時系列予測
 
-# 訓練
 library(caret)
 my_lm_model <- train(form = y ~ x, data = my_train, method = "lm")
-
-# テスト
 y_ <- my_lm_model %>% predict(my_test)
-y_ %>% postResample(y)
-#>       RMSE   Rsquared        MAE # Rsquaredは決定係数6
-#> 70.6370708  0.2758569 53.3019355
+caret::RMSE(y, y_) # RMSE（テスト）
+#> [1] 70.63707
 
-y_ <- my_lm_model %>%
-  predict(my_df)
+y_ <- my_lm_model %>% predict(my_df)
 tmp <- my_df %>%
   mutate(y = y_, label = "model")
 my_plot + geom_line(data = tmp)
@@ -78,8 +73,8 @@ my_arima_model
 
 #### 12.2.3.2 予測
 
-my_arima_result <- my_arima_model %>% forecast(h = "3 years")
-head(my_arima_result)
+tmp <- my_arima_model %>% forecast(h = "3 years")
+head(tmp)
 #> # A fable: 6 x 4 [1M]
 #> # Key:     .model [1]
 #> .model       ds           y .mean
@@ -91,16 +86,14 @@ head(my_arima_result)
 #> 5 ARIMA(y) 1958 5 N(386, 332)  386.
 #> 6 ARIMA(y) 1958 6 N(453, 393)  453.
 
-library(caret)
-y_ <- my_arima_result$.mean
-y_ %>% postResample(y)
-#> RMSE   Rsquared        MAE 
-#> 22.1322287  0.9613352 17.8078083
+y_ <- tmp$.mean
+caret::RMSE(y_, y)
+#> [1] 22.13223
 
 # 予測結果のみでよい場合
-# my_arima_result %>% autoplot
+#tmp %>% autoplot
 
-my_arima_result %>% autoplot +
+tmp %>% autoplot +
   geom_line(data = my_df,
             aes(x = ds,
                 y = y,
@@ -112,9 +105,8 @@ library(prophet)
 my_prophet_model <- my_train %>%
   prophet(seasonality.mode = "multiplicative")
 
-library(prophet)
-my_prophet_result <- my_prophet_model %>% predict(my_test)
-head(my_prophet_result[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
+tmp <- my_prophet_model %>% predict(my_test)
+head(tmp[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
 #> # A tibble: 6 x 4
 #>   ds                   yhat yhat_lower yhat_upper
 #>   <dttm>              <dbl>      <dbl>      <dbl>
@@ -125,15 +117,13 @@ head(my_prophet_result[, c("ds", "yhat", "yhat_lower", "yhat_upper")])
 #> 5 1958-05-01 00:00:00  402.       393.       411.
 #> 6 1958-06-01 00:00:00  459.       450.       469.
 
-y_ <- my_prophet_result$yhat
-y_ %>% postResample(y)
-#>       RMSE   Rsquared        MAE 
-#> 33.1451579  0.9585967 29.1368658 
+y_ <- tmp$yhat
+caret::RMSE(y_, y)
+#> [1] 33.68719
 
-# my_prophet_model %>% plot(my_prophet_result) # 予測結果のみでよい場合
+# my_prophet_model %>% plot(tmp) # 予測結果のみでよい場合
 
-my_aes = aes(x = as.POSIXct(ds))
-my_prophet_model %>% plot(my_prophet_result) +
-  geom_line(data = my_train, my_aes) +
-  geom_line(data = my_test,  my_aes, color = "red")
+my_prophet_model %>% plot(tmp) +
+  geom_line(data = my_train, aes(x = as.POSIXct(ds))) +
+  geom_line(data = my_test,  aes(x = as.POSIXct(ds)), color = "red")
 

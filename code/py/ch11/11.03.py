@@ -5,11 +5,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 from random import sample
-from keras import callbacks, datasets, layers, models
+from keras import callbacks, layers, models
 from sklearn.metrics import confusion_matrix
 
-(x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
 x_train.shape
 #> (60000, 28, 28)
