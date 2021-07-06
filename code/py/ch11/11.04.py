@@ -10,6 +10,7 @@ from random import sample
 
 h2o.init()
 h2o.no_progress()
+# h2o.cluster().shutdown() # 停止
 
 ### 11.4.2 H2Oのデータフレーム
 

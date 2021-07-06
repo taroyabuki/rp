@@ -9,6 +9,7 @@ library(tidyverse)
 
 h2o.init()
 h2o.no_progress()
+# h2o.shutdown(prompt = FALSE) # 停止
 ```
 
 ### 11.4.2 H2Oのデータフレーム
