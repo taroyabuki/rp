@@ -13,15 +13,13 @@ my_result <- my_data %>%
   dist("euclidian") %>%
   hclust("complete")
 
-factoextra::fviz_dend(
-  my_result,
+my_result %>% factoextra::fviz_dend(
   k = 3, # クラスタ数
-  rect=T, rect_fill=T)
+  rect = TRUE, rect_fill = TRUE)
 
-factoextra::fviz_dend(
-  my_result,
+my_result %>% factoextra::fviz_dend(
   k = 3,
-  rect=T, rect_fill=T,
+  rect = TRUE, rect_fill = TRUE,
   type = "phylogenic")
 
 my_result %>% cutree(3)

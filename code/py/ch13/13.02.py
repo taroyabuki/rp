@@ -15,8 +15,7 @@ my_result = hierarchy.linkage(
     metric='euclidean',
     method='complete')
 
-hierarchy.dendrogram(
-    my_result,
+hierarchy.dendrogram(my_result,
     labels=my_data.index)
 
 hierarchy.cut_tree(my_result, 3)
