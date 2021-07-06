@@ -27,6 +27,7 @@ RUN Rscript -e ' \
     "exactci", \
     "fable", \
     "factoextra", \
+    "feasts", \
     "furrr", \
     "ggrepel", \
     "gridExtra", \

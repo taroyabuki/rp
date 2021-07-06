@@ -10,7 +10,9 @@ RUN Rscript -e ' \
     "e1071", \
     "epitools", \
     "exactci", \
+    "fable", \
     "factoextra", \
+    "feasts", \
     "forecast", \
     "furrr", \
     "ggfortify", \
@@ -18,6 +20,7 @@ RUN Rscript -e ' \
     "glmnetUtils", \
     "gplots", \
     "gridExtra", \
+    "h2o", \
     "igraph", \
     "MLmetrics", \
     "neuralnet", \
@@ -27,6 +30,7 @@ RUN Rscript -e ' \
     "psych", \
     "randomForest", \
     "rpart.plot", \
+    "tsibble", \
     "vcd", \
     "xgboost", \
     "haleyjeppson/ggmosaic", \
@@ -42,6 +46,7 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && apt-get update \
   && apt-get install -y \
     curl \
+    default-jdk \
     dnsutils \
     iputils-ping \
     less \
@@ -56,11 +61,3 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
   && yes | unminimize
 
 WORKDIR /home/rstudio
-
-# 必要かも
-#  fable \
-#  feasts \
-#  glmnet \
-#  ploty \
-#  pryr \
-#  tsibble \
