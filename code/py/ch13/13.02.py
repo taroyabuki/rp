@@ -93,5 +93,7 @@ my_result['cluster'] = KMeans(n_clusters=3).fit(my_data).labels_
 #    hierarchy.linkage(my_data, method='complete'), 3)[:,0]
 
 sns.scatterplot(x='PC1', y='PC2', data=my_result, legend=False,
-                hue='cluster', style='Species', palette='bright')
+                hue='cluster',   # 色でクラスタを表現する．
+                style='Species', # 形で品種を表現する．
+                palette='bright')
 
