@@ -43,8 +43,7 @@ my_pipeline = Pipeline([
                          max_iter=5000))]) # 改善しなくなるまでの反復数
 my_layers = (1, 3, 5,                                         # 隠れ層1層の場合
              (1, 1), (3, 1), (5, 1), (1, 2), (3, 2), (5, 2))  # 隠れ層2層の場合
-my_params = {'mlp__activation': ('logistic', 'tanh', 'relu'), # 活性化関数
-             'mlp__hidden_layer_sizes': my_layers}            # 隠れ層の構造
+my_params = {'mlp__hidden_layer_sizes': my_layers}
 my_search = GridSearchCV(estimator=my_pipeline,
                          param_grid=my_params,
                          cv=LeaveOneOut(),
@@ -53,8 +52,8 @@ my_search = GridSearchCV(estimator=my_pipeline,
 my_model = my_search.best_estimator_ # 最良モデル
 
 my_search.best_params_               # 最良パラメータ
-#> {'mlp__activation': 'tanh', 'mlp__hidden_layer_sizes': 3}
+#> {'mlp__hidden_layer_sizes': 5}
 
 (-my_search.best_score_)**0.5
-#> 0.2832501479521093
+#> 0.3759690731968538
 
