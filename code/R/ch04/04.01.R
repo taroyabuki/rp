@@ -51,12 +51,12 @@ quantile(x)
 x <- c(165, 170, 175, 180, 185)
 n <- length(x)
 
-var(x)
+var(x)                # 不偏分散
 #> [1] 62.5
 
-var(x) * (n - 1) / n
+var(x) * (n - 1) / n  # 標本分散
 # あるいは
-mean((x - mean(x))^2)
+mean((x - mean(x))^2) # 標本分散
 #> [1] 50
 
 # √不偏分散

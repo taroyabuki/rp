@@ -40,7 +40,8 @@ my_result['explained_var']
 ### 13.1.1 標準化＋主成分分析
 
 tmp = zscore(my_data, ddof=1) # 標準化
-my_result = my_model.fit_transform(tmp)
+my_result = my_model.fit_transform(
+    tmp)
 my_result['PC'] # 主成分スコア
 #>           PC1       PC2 ...
 #> 1.0  3.673722  0.568850 ...

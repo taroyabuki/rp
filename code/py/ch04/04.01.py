@@ -62,15 +62,17 @@ s.describe()
 x = [165, 170, 175, 180, 185]
 n = len(x)
 
-np.var(x)
+np.var(x, ddof=1)       # 不偏分散
 # あるいは
-np.var(x, ddof=0)
-#> 50.0
-
-np.var(x, ddof=1)
-# あるいは
-np.var(x) * n / (n - 1)
+np.var(x) * n / (n - 1) # 不偏分散
 #> 62.5
+
+np.var(x)                    # 標本分散
+# あるいは
+np.var(x, ddof=0)            # 標本分散
+# あるいは
+((x - np.mean(x))**2).mean() # 標本分散
+#> 50.0
 
 # √不偏分散
 np.std(x, ddof=1)
